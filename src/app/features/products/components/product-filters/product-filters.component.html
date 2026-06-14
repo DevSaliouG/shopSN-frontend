@@ -1,0 +1,190 @@
+<div class="bg-white rounded-xl border border-gray-200 p-4 md:p-5">
+  
+  <!-- En-tête avec titre et compteur -->
+  <div class="flex items-center justify-between mb-5 pb-3 border-b border-gray-100">
+    <div class="flex items-center gap-2">
+      <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+      </svg>
+      <h3 class="font-semibold text-gray-900">Filtres</h3>
+      @if (activeFiltersCount() > 0) {
+        <span class="bg-green-100 text-green-700 text-xs font-medium px-2 py-0.5 rounded-full">
+          {{ activeFiltersCount() }}
+        </span>
+      }
+    </div>
+    
+    @if (activeFiltersCount() > 0) {
+      <button
+        (click)="resetFilters()"
+        class="text-xs text-green-600 hover:text-green-700 font-medium transition-colors"
+      >
+        Réinitialiser
+      </button>
+    }
+  </div>
+  
+  <!-- Filtre par catégorie -->
+  <div class="mb-6">
+    <h4 class="text-sm font-medium text-gray-900 mb-3 flex items-center gap-2">
+      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+      </svg>
+      Catégories
+    </h4>
+    
+    @if (isLoading()) {
+      <div class="space-y-2">
+        @for (i of [1,2,3,4]; track i) {
+          <div class="h-8 bg-gray-100 rounded animate-pulse"></div>
+        }
+      </div>
+    } @else {
+      <div class="space-y-1.5 max-h-64 overflow-y-auto">
+        <!-- Toutes les catégories -->
+        <button
+          (click)="selectCategory('')"
+          class="w-full text-left px-3 py-2 rounded-lg transition-all duration-200 flex items-center justify-between group"
+          [class.bg-green-50]="selectedCategory() === ''"
+          [class.text-green-700]="selectedCategory() === ''"
+          [class.hover:bg-gray-50]="selectedCategory() !== ''"
+        >
+          <span class="text-sm" [class.font-medium]="selectedCategory() === ''">
+            Toutes les catégories
+          </span>
+          @if (selectedCategory() === '') {
+            <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+          }
+        </button>
+        
+        <!-- Liste des catégories -->
+        @for (category of categories(); track category.id) {
+          <button
+            (click)="selectCategory(category.slug)"
+            class="w-full text-left px-3 py-2 rounded-lg transition-all duration-200 flex items-center justify-between group"
+            [class.bg-green-50]="selectedCategory() === category.slug"
+            [class.text-green-700]="selectedCategory() === category.slug"
+            [class.hover:bg-gray-50]="selectedCategory() !== category.slug"
+          >
+            <span class="text-sm" [class.font-medium]="selectedCategory() === category.slug">
+              {{ category.nom }}
+            </span>
+            <div class="flex items-center gap-2">
+              @if (category.produits_count) {
+                <span class="text-xs text-gray-400">{{ category.produits_count }}</span>
+              }
+              @if (selectedCategory() === category.slug) {
+                <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+              }
+            </div>
+          </button>
+        }
+      </div>
+    }
+  </div>
+  
+  <!-- Filtre par prix -->
+  <div class="mb-6">
+    <h4 class="text-sm font-medium text-gray-900 mb-3 flex items-center gap-2">
+      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      Prix
+    </h4>
+    
+    <div class="space-y-4">
+      <!-- Slider de prix (optionnel) -->
+      <div class="relative">
+        <input
+          type="range"
+          [min]="sliderMin()"
+          [max]="sliderMax()"
+          [value]="sliderValue().max"
+          (input)="onSliderChange($event)"
+          class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-green-600"
+          step="10000"
+        />
+        <div class="flex justify-between text-xs text-gray-500 mt-1">
+          <span>{{ sliderMin() | number }} FCFA</span>
+          <span>{{ sliderMax() | number }} FCFA</span>
+        </div>
+      </div>
+      
+      <!-- Inputs prix min/max -->
+      <div class="flex gap-3">
+        <div class="flex-1">
+          <label class="block text-xs text-gray-500 mb-1">Prix min</label>
+          <div class="relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">FCFA</span>
+            <input
+              type="number"
+              [value]="prixMin() || ''"
+              (input)="onPrixMinChange($event)"
+              placeholder="0"
+              class="w-full pl-12 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            />
+          </div>
+        </div>
+        <div class="flex-1">
+          <label class="block text-xs text-gray-500 mb-1">Prix max</label>
+          <div class="relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">FCFA</span>
+            <input
+              type="number"
+              [value]="prixMax() || ''"
+              (input)="onPrixMaxChange($event)"
+              placeholder="Illimité"
+              class="w-full pl-12 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Filtre disponibilité -->
+  <div class="mb-6">
+    <h4 class="text-sm font-medium text-gray-900 mb-3 flex items-center gap-2">
+      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+      </svg>
+      Disponibilité
+    </h4>
+    
+    <label class="flex items-center gap-3 cursor-pointer group">
+      <div class="relative">
+        <input
+          type="checkbox"
+          [checked]="enStockOnly()"
+          (change)="toggleEnStock()"
+          class="sr-only peer"
+        />
+        <div class="w-5 h-5 border-2 rounded transition-all peer-checked:bg-green-500 peer-checked:border-green-500 peer-focus:ring-2 peer-focus:ring-green-200">
+          <svg class="w-4 h-4 text-white absolute top-0.5 left-0.5 hidden peer-checked:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+      </div>
+      <span class="text-sm text-gray-700 group-hover:text-gray-900 transition-colors">
+        Produits en stock uniquement
+      </span>
+    </label>
+  </div>
+  
+  <!-- Séparateur -->
+  <div class="border-t border-gray-100 my-4"></div>
+  
+  <!-- Bouton appliquer (pour mobile) -->
+  @if (isMobile()) {
+    <button
+      (click)="emitFiltersChange()"
+      class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2.5 rounded-lg transition-colors"
+    >
+      Appliquer les filtres
+    </button>
+  }
+</div>

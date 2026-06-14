@@ -1,0 +1,376 @@
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="container mx-auto px-4 max-w-6xl">
+    <!-- En-tête -->
+    <div class="mb-8">
+      <h1 class="text-2xl font-bold text-gray-900">Mon Profil</h1>
+      <p class="text-gray-500 mt-1">Gérez vos informations personnelles</p>
+    </div>
+    @if (isLoading()) {
+      <app-loading-spinner [size]="'large'" [text]="'Chargement du profil...'" />
+    } @else {
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-1">
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
+            <div class="flex flex-col items-center text-center mb-6">
+              <div class="relative group">
+                <div
+                  class="w-32 h-32 rounded-full bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center overflow-hidden"
+                >
+                  @if (avatarUrl()) {
+                    <img
+                      [src]="avatarUrl()"
+                      [alt]="userFullName()"
+                      class="w-full h-full object-cover"
+                    />
+                  } @else {
+                    <span class="text-4xl font-bold text-green-600">{{ userInitials() }}</span>
+                  }
+                </div>
+
+                <label
+                  class="absolute inset-0 bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer flex items-center justify-center"
+                >
+                  <svg
+                    class="w-8 h-8 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                  </svg>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    class="hidden"
+                    (change)="onFileSelected($event)"
+                  />
+                </label>
+              </div>
+
+              <h2 class="mt-4 text-xl font-semibold text-gray-900">{{ userFullName() }}</h2>
+              <p class="text-sm text-gray-500">{{ user()?.email }}</p>
+              <p class="text-xs text-gray-400 mt-1">
+                Membre depuis {{ formatDate(user()?.created_at || '') }}
+              </p>
+
+              @if (avatarUrl() !== '/assets/images/default-avatar.png') {
+                <button
+                  (click)="deleteAvatar()"
+                  class="mt-3 text-xs text-red-500 hover:text-red-600 transition-colors"
+                >
+                  Supprimer l'avatar
+                </button>
+              }
+            </div>
+
+            @if (userStats()) {
+              <div class="border-t border-gray-100 pt-4">
+                <h3 class="text-sm font-medium text-gray-700 mb-3">Statistiques</h3>
+                <div class="space-y-2">
+                  <div class="flex justify-between text-sm">
+                    <span class="text-gray-500">Favoris</span>
+                    <span class="font-semibold text-green-600">{{
+                      userStats()?.total_favorites || 0
+                    }}</span>
+                  </div>
+                  <div class="flex justify-between text-sm">
+                    <span class="text-gray-500">Commandes</span>
+                    <span class="font-semibold">{{ userStats()?.total_orders || 0 }}</span>
+                  </div>
+                  <div class="flex justify-between text-sm">
+                    <span class="text-gray-500">Produits vus</span>
+                    <span class="font-semibold">{{ userStats()?.total_views || 0 }}</span>
+                  </div>
+                </div>
+              </div>
+            }
+
+            <div class="border-t border-gray-100 pt-4 mt-4">
+              <nav class="space-y-1">
+                <a
+                  routerLink="/favoris"
+                  class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                    />
+                  </svg>
+                  Mes favoris
+                </a>
+                <a
+                  routerLink="/commandes"
+                  class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                    />
+                  </svg>
+                  Mes commandes
+                </a>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-2 space-y-6">
+          @if (successMessage()) {
+            <div
+              class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg flex items-center justify-between"
+            >
+              <span>{{ successMessage() }}</span>
+              <button (click)="successMessage.set(null)" class="text-green-700">✕</button>
+            </div>
+          }
+
+          @if (errorMessage()) {
+            <div
+              class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center justify-between"
+            >
+              <span>{{ errorMessage() }}</span>
+              <button (click)="errorMessage.set(null)" class="text-red-700">✕</button>
+            </div>
+          }
+
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Informations personnelles</h3>
+
+            <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="space-y-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Nom *</label>
+                  <input
+                    type="text"
+                    formControlName="nom"
+                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    [class.border-red-500]="getFieldError('nom')"
+                  />
+                  @if (getFieldError('nom')) {
+                    <p class="text-xs text-red-500 mt-1">{{ getFieldError('nom') }}</p>
+                  }
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Prénom *</label>
+                  <input
+                    type="text"
+                    formControlName="prenom"
+                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    [class.border-red-500]="getFieldError('prenom')"
+                  />
+                  @if (getFieldError('prenom')) {
+                    <p class="text-xs text-red-500 mt-1">{{ getFieldError('prenom') }}</p>
+                  }
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                <input
+                  type="email"
+                  formControlName="email"
+                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  [class.border-red-500]="getFieldError('email')"
+                />
+                @if (getFieldError('email')) {
+                  <p class="text-xs text-red-500 mt-1">{{ getFieldError('email') }}</p>
+                }
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
+                <input
+                  type="tel"
+                  formControlName="phone"
+                  placeholder="77 123 45 67"
+                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  [class.border-red-500]="getFieldError('phone')"
+                />
+                @if (getFieldError('phone')) {
+                  <p class="text-xs text-red-500 mt-1">{{ getFieldError('phone') }}</p>
+                }
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
+                <textarea
+                  formControlName="adresse"
+                  rows="2"
+                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  placeholder="Votre adresse complète"
+                ></textarea>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Ville</label>
+                  <input
+                    type="text"
+                    formControlName="ville"
+                    placeholder="Dakar"
+                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Code postal</label>
+                  <input
+                    type="text"
+                    formControlName="code_postal"
+                    placeholder="10000"
+                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Pays</label>
+                  <input
+                    type="text"
+                    formControlName="pays"
+                    placeholder="Sénégal"
+                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
+
+              <div class="flex justify-end pt-4">
+                <button
+                  type="submit"
+                  [disabled]="isSaving() || profileForm.pristine"
+                  class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  @if (isSaving()) {
+                    <span class="flex items-center gap-2">
+                      <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                        <circle
+                          class="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          stroke-width="4"
+                        ></circle>
+                        <path
+                          class="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                        ></path>
+                      </svg>
+                      Enregistrement...
+                    </span>
+                  } @else {
+                    Enregistrer les modifications
+                  }
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-semibold text-gray-900">Changement de mot de passe</h3>
+              <button
+                (click)="showPasswordForm.set(!showPasswordForm())"
+                class="text-green-600 hover:text-green-700 text-sm font-medium"
+              >
+                {{ showPasswordForm() ? 'Annuler' : 'Changer mon mot de passe' }}
+              </button>
+            </div>
+
+            @if (showPasswordForm()) {
+              <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1"
+                    >Mot de passe actuel *</label
+                  >
+                  <input
+                    type="password"
+                    formControlName="current_password"
+                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    [class.border-red-500]="
+                      passwordForm.get('current_password')?.touched &&
+                      passwordForm.get('current_password')?.invalid
+                    "
+                  />
+                  @if (
+                    passwordForm.get('current_password')?.touched &&
+                    passwordForm.get('current_password')?.hasError('required')
+                  ) {
+                    <p class="text-xs text-red-500 mt-1">Le mot de passe actuel est obligatoire</p>
+                  }
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1"
+                    >Nouveau mot de passe *</label
+                  >
+                  <input
+                    type="password"
+                    formControlName="password"
+                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    [class.border-red-500]="
+                      passwordForm.get('password')?.touched && passwordForm.get('password')?.invalid
+                    "
+                  />
+                  <div class="text-xs text-gray-500 mt-1">
+                    Doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère
+                    spécial
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1"
+                    >Confirmer le mot de passe *</label
+                  >
+                  <input
+                    type="password"
+                    formControlName="password_confirmation"
+                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    [class.border-red-500]="
+                      passwordForm.get('password_confirmation')?.touched &&
+                      passwordForm.hasError('mismatch')
+                    "
+                  />
+                  @if (
+                    passwordForm.get('password_confirmation')?.touched &&
+                    passwordForm.hasError('mismatch')
+                  ) {
+                    <p class="text-xs text-red-500 mt-1">Les mots de passe ne correspondent pas</p>
+                  }
+                </div>
+
+                <div class="flex justify-end pt-4">
+                  <button
+                    type="submit"
+                    [disabled]="passwordForm.invalid"
+                    class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Mettre à jour le mot de passe
+                  </button>
+                </div>
+              </form>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

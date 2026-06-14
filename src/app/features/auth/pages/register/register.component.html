@@ -1,0 +1,273 @@
+<div class="min-h-screen bg-gradient-to-br from-green-50 to-white py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full mx-auto bg-white p-8 rounded-2xl shadow-xl">
+    
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-bold text-gray-900">Créer un compte</h2>
+      <p class="mt-2 text-sm text-gray-600">
+        ou 
+        <a routerLink="/connexion" class="font-medium text-green-600 hover:text-green-500">
+          connectez-vous à votre compte
+        </a>
+      </p>
+    </div>
+
+    <!-- Erreur générale -->
+    @if (serverErrors()['general']) {
+      <div class="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+        {{ serverErrors()['general'][0] }}
+      </div>
+    }
+
+    <!-- Formulaire -->
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5">
+      
+      <!-- Nom -->
+      <div>
+        <label for="nom" class="block text-sm font-medium text-gray-700">
+          Nom <span class="text-red-500">*</span>
+        </label>
+        <input
+          id="nom"
+          type="text"
+          formControlName="nom"
+          placeholder="Diop"
+          class="mt-1 w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+          [ngClass]="{
+            'border-red-400 bg-red-50': nom?.invalid && nom?.touched,
+            'border-green-400 bg-green-50': nom?.valid && nom?.touched,
+            'border-gray-300': !nom?.touched
+          }"
+        />
+        
+        @if (nom?.invalid && nom?.touched) {
+          <p class="mt-1 text-red-500 text-sm">
+            @if (nom?.errors?.['required']) { Le nom est obligatoire }
+            @else if (nom?.errors?.['minlength']) { Minimum 2 caractères }
+            @else if (nom?.errors?.['maxlength']) { Maximum 100 caractères }
+          </p>
+        }
+        
+        @if (hasServerError('nom')) {
+          <p class="mt-1 text-red-500 text-sm">{{ getServerError('nom') }}</p>
+        }
+      </div>
+
+      <!-- Prénom -->
+      <div>
+        <label for="prenom" class="block text-sm font-medium text-gray-700">
+          Prénom <span class="text-red-500">*</span>
+        </label>
+        <input
+          id="prenom"
+          type="text"
+          formControlName="prenom"
+          placeholder="Mamadou"
+          class="mt-1 w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+          [ngClass]="{
+            'border-red-400 bg-red-50': prenom?.invalid && prenom?.touched,
+            'border-green-400 bg-green-50': prenom?.valid && prenom?.touched,
+            'border-gray-300': !prenom?.touched
+          }"
+        />
+        
+        @if (prenom?.invalid && prenom?.touched) {
+          <p class="mt-1 text-red-500 text-sm">
+            @if (prenom?.errors?.['required']) { Le prénom est obligatoire }
+            @else if (prenom?.errors?.['minlength']) { Minimum 2 caractères }
+            @else if (prenom?.errors?.['maxlength']) { Maximum 100 caractères }
+          </p>
+        }
+        
+        @if (hasServerError('prenom')) {
+          <p class="mt-1 text-red-500 text-sm">{{ getServerError('prenom') }}</p>
+        }
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">
+          Adresse email <span class="text-red-500">*</span>
+        </label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="mamadou@exemple.sn"
+          class="mt-1 w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+          [ngClass]="{
+            'border-red-400 bg-red-50': email?.invalid && email?.touched,
+            'border-green-400 bg-green-50': email?.valid && email?.touched,
+            'border-gray-300': !email?.touched
+          }"
+        />
+        
+        @if (email?.invalid && email?.touched) {
+          <p class="mt-1 text-red-500 text-sm">
+            @if (email?.errors?.['required']) { L'email est obligatoire }
+            @else if (email?.errors?.['email']) { Veuillez saisir un email valide }
+          </p>
+        }
+        
+        @if (hasServerError('email')) {
+          <p class="mt-1 text-red-500 text-sm">{{ getServerError('email') }}</p>
+        }
+      </div>
+
+      <!-- Mot de passe -->
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700">
+          Mot de passe <span class="text-red-500">*</span>
+        </label>
+        <div class="relative mt-1">
+          <input
+            [type]="showPassword() ? 'text' : 'password'"
+            id="password"
+            formControlName="password"
+            placeholder="••••••••"
+            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors pr-12"
+            [ngClass]="{
+              'border-red-400 bg-red-50': password?.invalid && password?.touched,
+              'border-green-400 bg-green-50': password?.valid && password?.touched,
+              'border-gray-300': !password?.touched
+            }"
+          />
+          <button
+            type="button"
+            (click)="togglePasswordVisibility()"
+            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            [attr.aria-label]="showPassword() ? 'Masquer le mot de passe' : 'Afficher le mot de passe'"
+          >
+            {{ showPassword() ? '🙈' : '👁️' }}
+          </button>
+        </div>
+        
+        <!-- Liste des exigences du mot de passe -->
+        @if (password?.touched && password?.invalid) {
+          <div class="mt-2 space-y-1">
+            @for (error of getPasswordErrors(); track error) {
+              <p class="text-red-500 text-xs flex items-center gap-1">
+                <span class="text-red-500">✗</span> {{ error }}
+              </p>
+            }
+          </div>
+        }
+        
+        @if (hasServerError('password')) {
+          <p class="mt-1 text-red-500 text-sm">{{ getServerError('password') }}</p>
+        }
+      </div>
+
+      <!-- Confirmation mot de passe -->
+      <div>
+        <label for="password_confirmation" class="block text-sm font-medium text-gray-700">
+          Confirmer le mot de passe <span class="text-red-500">*</span>
+        </label>
+        <div class="relative mt-1">
+          <input
+            [type]="showConfirmPassword() ? 'text' : 'password'"
+            id="password_confirmation"
+            formControlName="password_confirmation"
+            placeholder="••••••••"
+            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors pr-12"
+            [ngClass]="{
+              'border-red-400 bg-red-50': registerForm.errors?.['passwordMismatch'] && passwordConfirmation?.touched,
+              'border-green-400 bg-green-50': passwordConfirmation?.valid && passwordConfirmation?.touched,
+              'border-gray-300': !passwordConfirmation?.touched
+            }"
+          />
+          <button
+            type="button"
+            (click)="toggleConfirmPasswordVisibility()"
+            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+          >
+            {{ showConfirmPassword() ? '🙈' : '👁️' }}
+          </button>
+        </div>
+        
+        @if (registerForm.errors?.['passwordMismatch'] && passwordConfirmation?.touched) {
+          <p class="mt-1 text-red-500 text-sm">Les mots de passe ne correspondent pas</p>
+        }
+        
+        @if (hasServerError('password_confirmation')) {
+          <p class="mt-1 text-red-500 text-sm">{{ getServerError('password_confirmation') }}</p>
+        }
+      </div>
+
+      <!-- Conditions générales -->
+      <div class="flex items-start">
+        <div class="flex items-center h-5">
+          <input
+            type="checkbox"
+            formControlName="acceptTerms"
+            (change)="updateAcceptedTerms($event)"
+            class="rounded border-gray-300 text-green-600 focus:ring-green-500"
+          />
+        </div>
+        <div class="ml-3 text-sm">
+          <label class="text-gray-600">
+            J'accepte les 
+            <a href="/conditions-generales" target="_blank" class="text-green-600 hover:text-green-500">
+              conditions générales d'utilisation
+            </a>
+            et la 
+            <a href="/confidentialite" target="_blank" class="text-green-600 hover:text-green-500">
+              politique de confidentialité
+            </a>
+          </label>
+        </div>
+      </div>
+      @if (acceptTermsCtrl?.invalid && acceptTermsCtrl?.touched) {
+        <p class="text-red-500 text-sm">Vous devez accepter les conditions générales</p>
+      }
+
+      <!-- Bouton d'inscription -->
+      <button
+        type="submit"
+        [disabled]="authService.isLoading() || registerForm.invalid"
+        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+      >
+        @if (authService.isLoading()) {
+          <span class="flex items-center">
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Création du compte...
+          </span>
+        } @else {
+          'Créer mon compte'
+        }
+      </button>
+    </form>
+
+    <!-- Séparation -->
+    <div class="relative my-6">
+      <div class="absolute inset-0 flex items-center">
+        <div class="w-full border-t border-gray-300"></div>
+      </div>
+      <div class="relative flex justify-center text-sm">
+        <span class="px-2 bg-white text-gray-500">Ou inscrivez-vous avec</span>
+      </div>
+    </div>
+
+    <!-- Boutons sociaux -->
+    <div class="grid grid-cols-2 gap-3">
+      <button class="w-full flex justify-center items-center gap-2 py-2 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+        <svg class="w-5 h-5" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        Google
+      </button>
+      <button class="w-full flex justify-center items-center gap-2 py-2 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+        <svg class="w-5 h-5" fill="#1877F2" viewBox="0 0 24 24">
+          <path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.5c-1.5 0-1.96.93-1.96 1.89v2.26h3.32l-.53 3.49h-2.8V24C19.62 23.1 24 18.1 24 12.07z"/>
+        </svg>
+        Facebook
+      </button>
+    </div>
+  </div>
+</div>

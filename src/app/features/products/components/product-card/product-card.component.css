@@ -1,0 +1,24 @@
+:host {
+  display: block;
+}
+
+/* Animation hover améliorée */
+.group:hover .group-hover\:scale-105 {
+  transform: scale(1.05);
+}
+
+/* Transition fluide pour tous les éléments */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Style pour les badges */
+.badge {
+  backdrop-filter: blur(4px);
+}
+
+/* Optimisation des performances */
+img {
+  will-change: transform;
+  transform: translateZ(0);
+}

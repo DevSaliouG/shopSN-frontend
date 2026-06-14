@@ -1,0 +1,52 @@
+:host {
+  display: block;
+}
+
+/* Animation pour le message toast */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+/* Animation pour les cartes */
+.grid > div {
+  animation: fadeInUp 0.3s ease-out;
+  animation-fill-mode: backwards;
+}
+
+@for $i from 1 through 20 {
+  .grid > div:nth-child({$i}) {
+    animation-delay: calc({$i} * 0.05s);
+  }
+}
+
+/* Transition pour le bouton de suppression */
+button {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+/* Support des préférences de réduction de mouvement */
+@media (prefers-reduced-motion: reduce) {
+  .grid > div,
+  .animate-fade-in-up {
+    animation: none;
+  }
+  
+  button:active {
+    transform: none;
+  }
+}

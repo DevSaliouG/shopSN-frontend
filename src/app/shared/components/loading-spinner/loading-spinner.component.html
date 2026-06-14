@@ -1,0 +1,31 @@
+@if (overlay()) {
+  <div [class]="overlayClass()" class="flex items-center justify-center">
+    <div [class]="containerClass()" class="space-y-3">
+      <div
+        [class]="spinnerSize() + ' ' + spinnerBorder() + ' ' + spinnerColor()"
+        class="rounded-full animate-spin"
+        role="status"
+        [attr.aria-label]="text() || 'Chargement en cours...'"
+      ></div>
+      @if (text()) {
+        <p [class]="textSize()" class="text-gray-600 font-medium text-center">
+          {{ text() }}
+        </p>
+      }
+    </div>
+  </div>
+} @else {
+  <div [class]="containerClass()" class="space-y-3">
+    <div
+      [class]="spinnerSize() + ' ' + spinnerBorder() + ' ' + spinnerColor()"
+      class="rounded-full animate-spin"
+      role="status"
+      [attr.aria-label]="text() || 'Chargement en cours...'"
+    ></div>
+    @if (text()) {
+      <p [class]="textSize()" class="text-gray-500 text-center">
+        {{ text() }}
+      </p>
+    }
+  </div>
+}

@@ -1,0 +1,316 @@
+<div class="home-container">
+  
+  <!-- Hero Section -->
+  <section class="hero-section relative overflow-hidden bg-gradient-to-br from-green-600 to-green-800 text-white">
+    <!-- Arrière-plan décoratif -->
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-10 left-10 w-32 h-32 bg-white rounded-full blur-3xl"></div>
+      <div class="absolute bottom-10 right-10 w-64 h-64 bg-white rounded-full blur-3xl"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 py-12 md:py-20 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        
+        <!-- Texte hero -->
+        <div class="text-center lg:text-left animate-fade-in-up">
+          <span class="inline-block bg-white/20 backdrop-blur-sm rounded-full px-4 py-1 text-sm font-medium mb-4">
+            🇸🇳 La boutique sénégalaise en ligne
+          </span>
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
+            Votre shopping à portée de clic
+          </h1>
+          <p class="text-lg md:text-xl text-green-100 mb-8 max-w-lg mx-auto lg:mx-0">
+            Découvrez des milliers de produits et commandez facilement via WhatsApp. Livraison rapide au Sénégal.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <a
+              routerLink="/produits"
+              class="px-6 py-3 bg-white text-green-700 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+            >
+              Découvrir nos produits
+            </a>
+            <a
+              [href]="getWhatsAppUrl()"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-6 py-3 bg-[#25D366] text-white font-semibold rounded-xl hover:bg-[#128C7E] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 inline-flex items-center justify-center gap-2"
+            >
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+              </svg>
+              Commander sur WhatsApp
+            </a>
+          </div>
+          
+          <!-- Statistiques -->
+          <div class="grid grid-cols-3 gap-4 mt-12 pt-8 border-t border-white/20">
+            <div>
+              <div class="text-2xl font-bold">500+</div>
+              <div class="text-sm text-green-200">Produits</div>
+            </div>
+            <div>
+              <div class="text-2xl font-bold">50+</div>
+              <div class="text-sm text-green-200">Vendeurs</div>
+            </div>
+            <div>
+              <div class="text-2xl font-bold">1000+</div>
+              <div class="text-sm text-green-200">Clients</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Image hero -->
+        <div class="hidden lg:block animate-float">
+          <img
+            src="/assets/images/hero-shopping.svg"
+            alt="Shopping illustration"
+            class="w-full max-w-md mx-auto"
+            loading="eager"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Catégories Section -->
+  <section class="py-12 md:py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-8">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+          Catégories populaires
+        </h2>
+        <p class="text-gray-500 max-w-md mx-auto">
+          Explorez nos catégories et trouvez ce dont vous avez besoin
+        </p>
+      </div>
+      
+      @if (isLoadingCategories()) {
+        <div class="flex justify-center py-12">
+          <app-loading-spinner [size]="'medium'" [text]="'Chargement des catégories...'" />
+        </div>
+      } @else {
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4">
+          @for (category of categories(); track category.id) {
+            <a
+              [routerLink]="['/categorie', category.slug]"
+              class="category-card group text-center p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1"
+            >
+              <div class="w-16 h-16 mx-auto bg-gradient-to-br from-green-100 to-green-50 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                </svg>
+              </div>
+              <span class="text-sm font-medium text-gray-700 group-hover:text-green-600 transition-colors">
+                {{ category.nom }}
+              </span>
+            </a>
+          }
+        </div>
+      }
+      
+      <div class="text-center mt-8">
+        <a
+          routerLink="/produits"
+          class="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-medium"
+        >
+          Voir toutes les catégories
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Produits Populaires Section -->
+  <section class="py-12 md:py-16">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-between items-center mb-8 flex-wrap gap-4">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-bold text-gray-900">
+            🔥 Produits populaires
+          </h2>
+          <p class="text-gray-500 mt-1">
+            Les produits les plus recherchés du moment
+          </p>
+        </div>
+        <a
+          routerLink="/produits"
+          class="text-green-600 hover:text-green-700 font-medium inline-flex items-center gap-1"
+        >
+          Voir tout
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+      
+      @if (isLoadingPopular()) {
+        <div class="flex justify-center py-12">
+          <app-loading-spinner [size]="'medium'" [text]="'Chargement des produits...'" />
+        </div>
+      } @else if (popularProducts().length === 0) {
+        <div class="text-center py-12">
+          <p class="text-gray-500">Aucun produit populaire pour le moment.</p>
+        </div>
+      } @else {
+        <div class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          @for (product of popularProducts(); track product.id; let i = $index) {
+            <div
+              class="animate-on-scroll"
+              [id]="'popular-' + product.id"
+              [style.animation-delay]="getAnimationDelay(i)"
+            >
+              <app-product-card [product]="product" />
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- Bannière Promo -->
+  <section class="py-12">
+    <div class="container mx-auto px-4">
+      <div class="bg-gradient-to-r from-green-600 to-green-700 rounded-2xl overflow-hidden shadow-xl">
+        <div class="grid grid-cols-1 md:grid-cols-2">
+          <div class="p-8 md:p-12 text-white">
+            <span class="inline-block bg-white/20 rounded-full px-3 py-1 text-sm mb-4">
+              🎁 Offre spéciale
+            </span>
+            <h3 class="text-2xl md:text-3xl font-bold mb-3">
+              Livraison gratuite
+            </h3>
+            <p class="text-green-100 mb-6">
+              Pour toute commande supérieure à 50 000 FCFA, bénéficiez de la livraison gratuite à Dakar et ses environs.
+            </p>
+            <a
+              routerLink="/produits"
+              class="inline-block px-6 py-3 bg-white text-green-700 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300"
+            >
+              Profiter de l'offre
+            </a>
+          </div>
+          <div class="relative hidden md:block overflow-hidden">
+            <img
+              src="/assets/images/promo-banner.png"
+              alt="Promotion"
+              class="absolute inset-0 w-full h-full object-cover opacity-50"
+            />
+            <div class="absolute inset-0 bg-gradient-to-l from-transparent to-green-700/50"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Produits Récents Section -->
+  <section class="py-12 md:py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-between items-center mb-8 flex-wrap gap-4">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-bold text-gray-900">
+            📦 Nouveautés
+          </h2>
+          <p class="text-gray-500 mt-1">
+            Les derniers produits ajoutés sur la plateforme
+          </p>
+        </div>
+        <a
+          routerLink="/produits?sort=recent"
+          class="text-green-600 hover:text-green-700 font-medium inline-flex items-center gap-1"
+        >
+          Voir tout
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+      
+      @if (isLoadingRecent()) {
+        <div class="flex justify-center py-12">
+          <app-loading-spinner [size]="'medium'" [text]="'Chargement des nouveautés...'" />
+        </div>
+      } @else if (recentProducts().length === 0) {
+        <div class="text-center py-12">
+          <p class="text-gray-500">Aucun nouveau produit pour le moment.</p>
+        </div>
+      } @else {
+        <div class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          @for (product of recentProducts(); track product.id; let i = $index) {
+            <div
+              class="animate-on-scroll"
+              [id]="'recent-' + product.id"
+              [style.animation-delay]="getAnimationDelay(i)"
+            >
+              <app-product-card [product]="product" />
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- Newsletter Section -->
+  <section class="py-12 md:py-16 bg-green-700">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">
+        📧 Restez informé
+      </h2>
+      <p class="text-green-100 mb-6 max-w-md mx-auto">
+        Inscrivez-vous à notre newsletter pour recevoir nos offres exclusives et nouveautés.
+      </p>
+      
+      @if (newsletterSuccess()) {
+        <div class="bg-green-500 text-white rounded-lg p-4 max-w-md mx-auto mb-4 animate-fade-in-up">
+          ✅ Merci pour votre inscription !
+        </div>
+      }
+      
+      <div class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+        <input
+          type="email"
+          [(ngModel)]="newsletterEmail"
+          placeholder="Votre adresse email"
+          class="flex-1 px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-green-400 outline-none"
+          [disabled]="isSubscribing()"
+        />
+        <button
+          (click)="subscribeNewsletter()"
+          [disabled]="isSubscribing()"
+          class="px-6 py-3 bg-white text-green-700 font-semibold rounded-lg hover:bg-gray-100 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          @if (isSubscribing()) {
+            <span class="flex items-center gap-2">
+              <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+              </svg>
+              Inscription...
+            </span>
+          } @else {
+            S'inscrire
+          }
+        </button>
+      </div>
+      
+      @if (newsletterError()) {
+        <p class="text-red-200 text-sm mt-2">{{ newsletterError() }}</p>
+      }
+    </div>
+  </section>
+
+  <!-- WhatsApp Floating Button (Mobile) -->
+  <a
+    [href]="getWhatsAppUrl()"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="fixed bottom-6 right-6 bg-[#25D366] text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 z-50 lg:hidden"
+    aria-label="Contactez-nous sur WhatsApp"
+  >
+    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+    </svg>
+  </a>
+</div>

@@ -1,0 +1,95 @@
+:host {
+  display: block;
+}
+
+/* Animation d'apparition des produits */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Application de l'animation aux cartes produits avec délai basé sur l'index */
+app-product-card {
+  animation: fadeInUp 0.4s ease-out forwards;
+  animation-delay: calc(var(--animation-order, 0) * 0.05s);
+  opacity: 0;
+}
+
+/* Scrollbar personnalisée pour la sidebar */
+aside::-webkit-scrollbar {
+  width: 6px;
+}
+
+aside::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+aside::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+aside::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* Header sticky amélioré avec backdrop blur */
+.sticky {
+  backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.95);
+  border-bottom-color: rgba(229, 231, 235, 0.5);
+}
+
+/* Transition pour le bouton retour en haut */
+.fixed button {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fixed button:hover {
+  transform: scale(1.1);
+}
+
+/* Overlay mobile */
+.fixed.inset-0 {
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.5;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  app-product-card {
+    animation-delay: 0s; /* Pas de délai sur mobile pour plus de réactivité */
+  }
+}
+
+/* Support des préférences de réduction de mouvement */
+@media (prefers-reduced-motion: reduce) {
+  app-product-card {
+    animation: none;
+    opacity: 1;
+  }
+  
+  .fixed button:hover {
+    transform: none;
+  }
+}
