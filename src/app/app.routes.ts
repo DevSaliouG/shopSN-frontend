@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './features/guards/auth.guard';
+import { CategoryPageComponent } from './features/categories/category-page.component';
+import { adminGuard } from './features/guards/admin.guard';
 // import { authGuard } from './core/guards/auth.guard';
 // import { adminGuard } from './core/guards/admin.guard';
 
@@ -13,10 +15,10 @@ export const routes: Routes = [
     path: 'produits',
     loadChildren: () => import('./features/products/products.routes').then(m => m.PRODUCTS_ROUTES)
   },
-  // {
-  //   path: 'categorie/:slug',
-  //   loadComponent: () => import('./features/categories/category-page.component').then(m => m.CategoryPageComponent)
-  // },
+  {
+    path: 'categorie/:slug',
+    component: CategoryPageComponent
+  },
   // {
   //   path: 'recherche',
   //   // loadComponent: () => import('./features/search/search.component').then(m => m.SearchComponent)
@@ -47,11 +49,11 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./features/user/pages/favorites/favorites.component').then(m => m.FavoritesComponent)
   },
-  // {
-  //   path: 'admin',
-  //   canActivate: [authGuard, adminGuard],
-  //   loadChildren: () => import('./features/admin/admin.routes').then(m => m.ADMIN_ROUTES)
-  // },
+  {
+    path: 'admin',
+    canActivate: [authGuard, adminGuard],
+    loadChildren: () => import('./features/admin/admin.routes').then(m => m.ADMIN_ROUTES)
+  },
   // {
   //   path: 'contact',
   //   loadComponent: () => import('./features/contact/contact.component').then(m => m.ContactComponent)

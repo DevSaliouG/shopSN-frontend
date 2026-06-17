@@ -6,7 +6,6 @@
 import { Component, inject, OnInit, OnDestroy, signal, HostListener, ChangeDetectionStrategy, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { ProductStore } from '../../store/product.store';
@@ -22,7 +21,6 @@ import { ProductFilters } from '../../../models/product.model';
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
     FormsModule,
     ProductCardComponent,
     ProductFiltersComponent,

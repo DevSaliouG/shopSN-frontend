@@ -9,18 +9,22 @@ export interface Category {
   slug: string;
   description: string | null;
   image_url: string | null;
+  parent_id?: number | null;        // ← Ajout pour les sous-catégories
+  children?: Category[];            // ← Optionnel pour l'arborescence
+  products_count?: number;           // ← Alias de produits_count
+  produits_count?: number;          // ← Garder compatibilité
   created_at: string;
   updated_at: string;
-  produits_count?: number;
 }
 
 export interface ProductImage {
   id: number;
   product_id: number;
-  url: string;
-  thumbnail_url: string;
+  chemin: string;        //  Utiliser 'chemin' au lieu de 'url'
+  url?: string;          //  Optionnel : généré par l'accesseur
+  thumbnail_url?: string; // Optionnel : généré par l'accesseur
   principale: boolean;
-  alt_text: string | null;
+  alt_text?: string | null;
   ordre: number;
   created_at: string;
   updated_at: string;
@@ -34,10 +38,11 @@ export interface Product {
   description: string;
   description_courte: string | null;
   prix: number;
-  prix_format: string;      // "250 000 FCFA"
+  prix_format: string;
   stock: number;
   statut: 'actif' | 'inactif' | 'rupture';
   populaire: boolean;
+  featured?: boolean;
   whatsapp_message: string | null;
   whatsapp_url: string;
   vues: number;

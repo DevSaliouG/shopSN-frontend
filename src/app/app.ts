@@ -2,12 +2,19 @@ import { afterNextRender, Component, Inject, PLATFORM_ID, signal } from '@angula
 import { RouterOutlet } from '@angular/router';
 import { register } from 'swiper/element/bundle';
 import { BrowserUtils } from './core/utils/browser.utils';
+import { Header } from './shared/components/header/header';
+import { FooterComponent } from './shared/components/footer/footer.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.css',
+  imports: [RouterOutlet, Header, FooterComponent],
+ template: `
+    <app-header />
+    <main class="min-h-screen">
+      <router-outlet />
+    </main>
+    <app-footer />
+  `
 })
 export class App {
   protected readonly title = signal('shopSN-frontend');

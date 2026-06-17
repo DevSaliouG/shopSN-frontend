@@ -1,19 +1,8 @@
-/**
- * Composant de chargement (Spinner)
- * Affiche un indicateur de chargement animé
- *
- * Fonctionnalités:
- * - Plusieurs tailles (small, medium, large)
- * - Plusieurs couleurs (primary, white, gray)
- * - Mode overlay (fond semi-transparent)
- * - Texte optionnel
- * - Accessibilité (aria-label)
- */
-
+// src/app/shared/components/loading-spinner/loading-spinner.component.ts
 import { Component, input, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-export type SpinnerSize = 'small' | 'medium' | 'large';
+export type SpinnerSize = 'sm' | 'small' | 'medium' | 'large';
 export type SpinnerColor = 'primary' | 'white' | 'gray' | 'success';
 
 @Component({
@@ -25,18 +14,15 @@ export type SpinnerColor = 'primary' | 'white' | 'gray' | 'success';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoadingSpinnerComponent {
-  // Inputs avec valeurs par défaut
   size = input<SpinnerSize>('medium');
   color = input<SpinnerColor>('primary');
   text = input<string>('');
   overlay = input<boolean>(false);
   fullScreen = input<boolean>(false);
 
-  /**
-   * Taille du spinner en pixels
-   */
   readonly spinnerSize = computed(() => {
     switch (this.size()) {
+      case 'sm':
       case 'small':
         return 'w-5 h-5';
       case 'large':
@@ -46,11 +32,9 @@ export class LoadingSpinnerComponent {
     }
   });
 
-  /**
-   * Bordure du spinner (taille)
-   */
   readonly spinnerBorder = computed(() => {
     switch (this.size()) {
+      case 'sm':
       case 'small':
         return 'border-2';
       case 'large':
@@ -60,9 +44,6 @@ export class LoadingSpinnerComponent {
     }
   });
 
-  /**
-   * Couleur du spinner
-   */
   readonly spinnerColor = computed(() => {
     switch (this.color()) {
       case 'white':
@@ -76,11 +57,9 @@ export class LoadingSpinnerComponent {
     }
   });
 
-  /**
-   * Taille du texte
-   */
   readonly textSize = computed(() => {
     switch (this.size()) {
+      case 'sm':
       case 'small':
         return 'text-sm';
       case 'large':
@@ -90,9 +69,6 @@ export class LoadingSpinnerComponent {
     }
   });
 
-  /**
-   * Classes CSS pour l'overlay
-   */
   readonly overlayClass = computed(() => {
     if (!this.overlay()) return '';
     return this.fullScreen()
@@ -100,9 +76,6 @@ export class LoadingSpinnerComponent {
       : 'absolute inset-0 bg-white/80 z-10';
   });
 
-  /**
-   * Conteneur principal
-   */
   readonly containerClass = computed(() => {
     const classes = ['flex', 'flex-col', 'items-center', 'justify-center'];
     if (this.overlay()) {

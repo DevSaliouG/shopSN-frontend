@@ -26,6 +26,7 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([jwtInterceptor, errorInterceptor])
     ),
     
+    
     provideClientHydration(),
     
     // Injection de l'environnement

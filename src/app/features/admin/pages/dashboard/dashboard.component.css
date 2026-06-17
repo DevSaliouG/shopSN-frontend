@@ -1,0 +1,299 @@
+:host {
+  display: block;
+  background-color: #f7f9fc;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #1e293b;
+}
+
+.dashboard-wrapper {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* --- EN-TETE LUXE & CONTEMPORAIN --- */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.meta-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+}
+
+.revenue-trend-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.main-revenue-figure {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #0f172a;
+  margin: 0;
+}
+
+.trend-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.trend-indicator.up {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.user-welcome-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background-color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  border: 1px solid #e2e8f0;
+}
+
+.pulse-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #10b981;
+  border-radius: 50%;
+  position: relative;
+}
+
+/* --- GRILLE ASYMETRIQUE PREMIUM (image_fb2169.png) --- */
+.stats-asymmetric-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 3rem;
+}
+
+/* Style de Base des Blocs Métriques */
+.metric-block {
+  border-radius: 1.5rem;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 140px;
+  color: #ffffff;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.metric-block:hover {
+  transform: translateY(-4px);
+}
+
+.block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.block-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0.9;
+  letter-spacing: 0.02em;
+}
+
+.block-vector-icon {
+  opacity: 0.8;
+}
+
+.huge-counter {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+  margin: 0.75rem 0 0.25rem 0;
+  letter-spacing: -0.02em;
+}
+
+.block-subtext {
+  font-size: 0.75rem;
+  opacity: 0.75;
+  font-weight: 500;
+}
+
+/* Couleurs spécifiques basées sur la maquette */
+.block-blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+.block-coral { background: linear-gradient(135deg, #f43f5e, #be123c); }
+.block-purple { background: linear-gradient(135deg, #a855f7, #6b21a8); }
+
+/* Quatrième bloc d'équilibrage moderne */
+.block-dark {
+  background-color: #ffffff;
+  color: #0f172a;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.01);
+}
+.block-dark .block-title { color: #64748b; }
+.block-dark .block-vector-icon { color: #94a3b8; }
+.block-dark .huge-counter { color: #0f172a; }
+.block-dark .block-subtext { color: #64748b; }
+
+/* Ajustement intelligent du layout de la grille */
+@media (max-width: 1024px) {
+  .stats-asymmetric-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .stats-asymmetric-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- MODULE DE LOGICIEL / TABLEAU --- */
+.data-table-section {
+  background-color: #ffffff;
+  border-radius: 1.5rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.01);
+  overflow: hidden;
+}
+
+.table-section-header {
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.table-section-header h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.sub-label {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin: 0.25rem 0 0 0;
+}
+
+.responsive-table-scroll {
+  overflow-x: auto;
+}
+
+.clean-dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.clean-dashboard-table th {
+  background-color: #f8fafc;
+  padding: 1rem 2rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.clean-dashboard-table td {
+  padding: 1.25rem 2rem;
+  font-size: 0.85rem;
+  color: #334155;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.table-interactive-row {
+  transition: background-color 0.2s ease;
+}
+
+.table-interactive-row:hover {
+  background-color: #f8fafc;
+}
+
+.id-cell {
+  font-family: monospace;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.name-cell {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.category-tag {
+  background-color: #f1f5f9;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  color: #475569;
+  font-weight: 500;
+}
+
+.price-cell {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Badges de Statuts Épurés (Sans effet Sticker) */
+.status-pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.pill-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+.pill-actif { background-color: #dcfce7; color: #166534; }
+.pill-actif .pill-dot { background-color: #166534; }
+
+.pill-inactif { background-color: #fee2e2; color: #991b1b; }
+.pill-inactif .pill-dot { background-color: #991b1b; }
+
+.pill-rupture { background-color: #fef3c7; color: #92400e; }
+.pill-rupture .pill-dot { background-color: #92400e; }
+
+/* --- ERREURS ET LOADING BANNERS --- */
+.error-banner-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: #fef2f2;
+  border: 1px solid #fee2e2;
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+  margin-bottom: 2rem;
+}
+
+.error-icon-box { color: #ef4444; }
+.error-message-text { font-size: 0.85rem; color: #991b1b; font-weight: 600; margin: 0; }
+.empty-state-container { padding: 3rem; text-align: center; color: #94a3b8; font-size: 0.85rem; }

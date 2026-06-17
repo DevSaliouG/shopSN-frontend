@@ -1,24 +1,21 @@
 :host {
   display: block;
+  height: 100%;
 }
 
-/* Animation hover améliorée */
-.group:hover .group-hover\:scale-105 {
-  transform: scale(1.05);
+/* Optimisation des animations de transition globale */
+article {
+  will-change: transform, box-shadow;
+  backface-visibility: hidden;
 }
 
-/* Transition fluide pour tous les éléments */
-* {
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Style pour les badges */
-.badge {
-  backdrop-filter: blur(4px);
-}
-
-/* Optimisation des performances */
+/* Amélioration de la fluidité des images */
 img {
   will-change: transform;
   transform: translateZ(0);
+}
+
+/* Effet Smooth Bézier personnalisé appliqué à l'ensemble du bloc */
+* {
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1) !important;
 }

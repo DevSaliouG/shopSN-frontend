@@ -1,7 +1,7 @@
 /**
  * Page de connexion
  * Formulaire réactif typé avec validation complète
- * 
+ *
  * Fonctionnalités:
  * - Validation en temps réel
  * - Gestion des erreurs serveur
@@ -20,7 +20,7 @@ import { AuthService } from '../../../services/auth.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   private readonly fb = inject(FormBuilder);
@@ -36,12 +36,16 @@ export class LoginComponent {
   loginForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
-    rememberMe: [false]
+    rememberMe: [false],
   });
 
   // Getters pour accès facile dans le template
-  get email() { return this.loginForm.get('email'); }
-  get password() { return this.loginForm.get('password'); }
+  get email() {
+    return this.loginForm.get('email');
+  }
+  get password() {
+    return this.loginForm.get('password');
+  }
 
   /**
    * Soumission du formulaire de connexion
@@ -54,31 +58,43 @@ export class LoginComponent {
 
     this.serverError.set(null);
 
-    this.authService.login({
-      email: this.email?.value,
-      password: this.password?.value
-    }).subscribe({
-      next: () => {
-        // Récupère l'URL de redirection ou va vers la page d'accueil
-        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-        this.router.navigateByUrl(returnUrl);
-      },
-      error: (error) => {
-        if (error.status === 401) {
-          this.serverError.set('Email ou mot de passe incorrect.');
-        } else if (error.error?.message) {
-          this.serverError.set(error.error.message);
-        } else {
-          this.serverError.set('Erreur de connexion. Veuillez réessayer.');
-        }
-      }
-    });
+    this.authService
+      .login({
+        email: this.email?.value,
+        password: this.password?.value,
+      })
+      .subscribe({
+        next: () => {
+          // 1. On récupère le returnUrl SANS lui assigner de valeur par défaut immédiate
+          const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+
+          if (returnUrl) {
+            // Si l'utilisateur tentait d'accéder à une page précise avant d'être redirigé
+            this.router.navigateByUrl(returnUrl);
+          } else if (this.authService.isAdmin()) {
+            // Si c'est un admin et qu'aucune page spécifique n'était demandée : direction l'admin
+            this.router.navigate(['/admin']);
+          } else {
+            // Sinon, direction la page d'accueil pour les utilisateurs standards
+            this.router.navigate(['/']);
+          }
+        },
+        error: (error) => {
+          if (error.status === 401) {
+            this.serverError.set('Email ou mot de passe incorrect.');
+          } else if (error.error?.message) {
+            this.serverError.set(error.error.message);
+          } else {
+            this.serverError.set('Erreur de connexion. Veuillez réessayer.');
+          }
+        },
+      });
   }
 
   /**
    * Bascule l'affichage du mot de passe
    */
   togglePasswordVisibility(): void {
-    this.showPassword.update(value => !value);
+    this.showPassword.update((value) => !value);
   }
 }

@@ -11,7 +11,9 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { ProductService } from '../../services/product.service';
 import { Product, ProductFilters, PaginationMeta, ApiResponse } from '../../models/product.model';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ProductStore {
@@ -40,6 +42,7 @@ export class ProductStore {
   readonly pagination = this._pagination.asReadonly();
   readonly filters = this._filters.asReadonly();
   readonly error = this._error.asReadonly();
+  private http = inject(HttpClient);
 
   // ==================== COMPUTED SIGNALS (Dérivations) ====================
 
@@ -117,7 +120,7 @@ export class ProductStore {
         }
         this._isLoading.set(false);
       },
-      error: (error) => {
+      error: (error: { message: any; }) => {
         this._error.set(error.message || 'Erreur lors du chargement des produits');
         this._isLoading.set(false);
         this._products.set([]);
@@ -309,5 +312,58 @@ export class ProductStore {
    */
   getRecentProducts(): Observable<ApiResponse<Product[]>> {
     return this.productService.getRecentProducts();
+  }
+
+  getProductsByCategory(
+    slug: string,
+    params: {
+      page: number;
+      sort?: string;
+      search?: string;
+      minPrice?: number | null;
+      maxPrice?: number | null;
+      inStock?: boolean;
+    },
+  ): Observable<{
+    data: Product[];
+    totalPages: number;
+    totalProducts: number;
+    categoryName: string;
+  }> {
+    let httpParams = new HttpParams().set('page', params.page).set('category', slug);
+
+    if (params.sort) httpParams = httpParams.set('sort', params.sort);
+    if (params.search) httpParams = httpParams.set('q', params.search);
+    if (params.minPrice != null) httpParams = httpParams.set('prix_min', params.minPrice);
+    if (params.maxPrice != null) httpParams = httpParams.set('prix_max', params.maxPrice);
+    if (params.inStock) httpParams = httpParams.set('en_stock', 'true');
+
+    return this.http
+      .get<ApiResponse<Product[]>>(`${environment.apiUrl}/api/products`, { params: httpParams })
+      .pipe(
+        map((response) => {
+          const meta = response.meta;
+          // Gère le cas où total/last_page sont des tableaux (bug backend)
+          const total = Array.isArray(meta?.total)
+            ? (meta.total as number[])[0]
+            : (meta?.total ?? 0);
+          const lastPage = Array.isArray(meta?.last_page)
+            ? (meta.last_page as number[])[0]
+            : (meta?.last_page ?? 1);
+
+          // Détermine le nom de la catégorie (priorité au premier produit)
+          let categoryName = slug;
+          if (response.data && response.data.length > 0 && response.data[0].category) {
+            categoryName = response.data[0].category.nom;
+          }
+
+          return {
+            data: response.data,
+            totalPages: lastPage,
+            totalProducts: total,
+            categoryName: categoryName,
+          };
+        }),
+      );
   }
 }

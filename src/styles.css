@@ -1,5 +1,7 @@
 /* TailwindCSS v4 - Import principal */
-@import 'tailwindcss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Configuration personnalisée avec la nouvelle syntaxe @theme */
 @theme {
@@ -28,6 +30,25 @@
   --animate-float: float 4s ease-in-out infinite;
   --animate-bounce-in: bounceIn 0.5s ease-out;
   --animate-slide-up: slideUp 0.4s ease-out;
+}
+
+:root {
+  --color-primary: #1e3a2f;
+  --color-primary-light: #2c5444;
+  --color-whatsapp: #25D366;
+  --color-bg: #ffffff;
+  --color-bg-alt: #f8f9fa;
+  --color-text: #1a1a1a;
+  --color-text-muted: #666666;
+  --color-border: #eaeaea;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+  --shadow-lg: 0 20px 40px rgba(0,0,0,0.12);
+  --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 /* Keyframes des animations */

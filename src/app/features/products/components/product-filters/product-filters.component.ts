@@ -23,7 +23,7 @@ export class ProductFiltersComponent implements OnInit, OnDestroy {
   private readonly categoryService = inject(CategoryService);
   
   // Inputs - Utilisation du type ProductFilters cohérent
-  currentFilters = input<ProductFilters>({});
+  currentFilters  = input<ProductFilters>({});
   isMobile = input<boolean>(false);
   
   // Output - Émet le même type ProductFilters

@@ -1,0 +1,199 @@
+<div class="category-page">
+  <!-- Header avec nom de la catégorie et compteur -->
+  <div class="page-header sticky-top">
+    <div class="container">
+      <div class="header-row">
+        <div class="header-info">
+          <a routerLink="/" class="back-link">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Retour
+          </a>
+          <h1 class="category-title">{{ categoryName() }}</h1>
+          @if (totalProducts > 0) {
+            <p class="product-count">
+              {{ totalProducts }} produit{{ totalProducts > 1 ? 's' : '' }} trouvé{{
+                totalProducts > 1 ? 's' : ''
+              }}
+            </p>
+          }
+        </div>
+
+        <div class="header-actions">
+          <!-- Bouton filtres mobile -->
+          <button
+            (click)="toggleFilters()"
+            class="btn-filter-toggle"
+            [class.active]="showFilters()"
+          >
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+              />
+            </svg>
+            Filtres
+            @if (productStore.activeFiltersCount() && productStore.activeFiltersCount() > 0) {
+              <span class="badge">{{ productStore.activeFiltersCount() }}</span>
+            }
+          </button>
+
+          <!-- Tri -->
+          <select
+            (change)="onSortChange($event)"
+            [value]="filters().sort ?? ''"
+            class="sort-select"
+          >
+            @for (option of sortOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+
+          <!-- Mode d'affichage -->
+          <div class="view-toggle-group">
+            <button
+              (click)="changeViewMode('grid')"
+              class="view-toggle-btn"
+              [class.active]="viewMode() === 'grid'"
+              title="Affichage grille"
+            >
+              <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                />
+              </svg>
+            </button>
+            <button
+              (click)="changeViewMode('list')"
+              class="view-toggle-btn"
+              [class.active]="viewMode() === 'list'"
+              title="Affichage liste"
+            >
+              <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 10h16M4 14h16M4 18h16"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container catalog-layout">
+    <div class="layout-row">
+      <!-- Sidebar filtres (masquée sur mobile) -->
+      @if (shouldShowFilters()) {
+        <aside class="filters-sidebar" [class.visible]="showFilters()">
+          <app-product-filters
+            [currentFilters]="filters()"
+            (filtersChange)="applyFilters($event)"
+            [isMobile]="!isLargeScreen()"
+          />
+        </aside>
+      }
+
+      <!-- Contenu principal -->
+      <main class="main-content">
+        <!-- Chargement -->
+        @if (isLoading()) {
+          <app-loading-spinner [size]="'large'" [text]="'Chargement des produits...'" />
+        }
+
+        <!-- Erreur -->
+        @else if (error()) {
+          <app-empty-state
+            [icon]="'error'"
+            [title]="'Erreur de chargement'"
+            [message]="error()"
+            [actionLabel]="'Réessayer'"
+            [actionIcon]="'refresh'"
+            (action)="refresh()"
+          />
+        }
+
+        <!-- Produits présents -->
+        @else if (hasProducts()) {
+          <!-- Vue grille -->
+          @if (viewMode() === 'grid') {
+            <div class="product-grid">
+              @for (product of products(); track product.id; let i = $index) {
+                <div class="product-item" [style.--animation-order]="i">
+                  <app-product-card [product]="product" />
+                </div>
+              }
+            </div>
+          }
+
+          <!-- Vue liste -->
+          @else {
+            <div class="product-list">
+              @for (product of products(); track product.id) {
+                <app-product-card [product]="product" [isListView]="true" />
+              }
+            </div>
+          }
+
+          <!-- Pagination -->
+          @if (totalPages() > 1) {
+            <div class="pagination">
+              <app-pagination
+                [currentPage]="currentPage()"
+                [totalPages]="totalPages()"
+                (pageChange)="onPageChange($event)"
+              />
+            </div>
+          }
+        }
+
+        <!-- Aucun produit -->
+        @else {
+          <app-empty-state
+            [icon]="'search'"
+            [title]="'Aucun produit'"
+            [message]="'Aucun produit ne correspond à vos critères dans cette catégorie.'"
+            [actionLabel]="'Voir toutes les catégories'"
+            [actionIcon]="'category'"
+            (action)="router.navigate(['/'])"
+          />
+        }
+      </main>
+    </div>
+  </div>
+
+  <!-- Bouton retour en haut -->
+  @if (hasProducts() && !isLoading()) {
+    <button (click)="scrollToTop()" class="back-to-top" aria-label="Retour en haut">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M5 10l7-7m0 0l7 7m-7-7v18"
+        />
+      </svg>
+    </button>
+  }
+
+  <!-- Overlay mobile -->
+  @if (showFilters() && !isLargeScreen()) {
+    <div class="overlay" (click)="closeFilters()"></div>
+  }
+</div>

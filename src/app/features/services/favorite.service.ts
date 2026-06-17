@@ -6,7 +6,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { ApiResponse, Product } from '../models/product.model';
+import { ApiResponse, Product, ProductImage } from '../models/product.model';
 import { Favorite } from '../models/user.model';
 import { ENVIRONMENT } from '../../app.config';
 
@@ -95,6 +95,41 @@ export class FavoriteService {
    * Assure que l'objet produit a toutes les propriétés requises par le type Product
    * @param product - Produit partiel reçu de l'API
    */
+
+
+  // Fonction utilitaire pour obtenir l'URL de l'image
+  private getImageUrl(image: any): string {
+    if (!image) return '/assets/images/placeholder.webp';
+    
+    // Si l'URL est déjà présente, l'utiliser
+    if (image.url) return image.url;
+    
+    // Sinon, construire l'URL à partir du chemin
+    if (image.chemin) {
+      return `${this.env.apiUrl}/storage/${image.chemin}`;
+    }
+    
+    return '/assets/images/placeholder.webp';
+  }
+
+  // Fonction pour transformer une image
+  private transformImage(img: any, productId: number): ProductImage {
+    const url = this.getImageUrl(img);
+    
+    return {
+      id: img.id,
+      product_id: productId,
+      chemin: img.chemin || '',
+      url: url,
+      thumbnail_url: img.thumbnail_url || url,
+      principale: img.principale || false,
+      alt_text: img.alt_text || null,
+      ordre: img.ordre || 0,
+      created_at: img.created_at || new Date().toISOString(),
+      updated_at: img.updated_at || new Date().toISOString()
+    };
+  }
+
   private ensureCompleteProduct(product: any): Product {
     return {
       id: product.id,
@@ -120,38 +155,31 @@ export class FavoriteService {
         created_at: '',
         updated_at: ''
       } : undefined,
-      images: product.images ? product.images.map((img: any) => ({
-        id: img.id,
-        product_id: product.id,
-        url: img.url,
-        thumbnail_url: img.thumbnail_url || img.url,
-        principale: img.principale || false,
-        alt_text: img.alt_text || null,
-        ordre: img.ordre || 0,
-        created_at: '',
-        updated_at: ''
-      })) : [],
-      main_image: product.main_image ? {
-        id: product.main_image.id,
-        product_id: product.id,
-        url: product.main_image.url,
-        thumbnail_url: product.main_image.thumbnail_url || product.main_image.url,
-        principale: true,
-        alt_text: product.main_image.alt_text || null,
-        ordre: 0,
-        created_at: '',
-        updated_at: ''
-      } : undefined,
+      images: product.images ? product.images.map((img: any) => this.transformImage(img, product.id)) : [],
+      main_image: product.main_image ? this.transformImage(product.main_image, product.id) : undefined,
       created_at: product.created_at || new Date().toISOString(),
       updated_at: product.updated_at || new Date().toISOString(),
       deleted_at: null
     };
   }
 
+   /**
+   * Formate le prix en FCFA
+   */
+  
+  private formatPrice(price: number): string {
+    return new Intl.NumberFormat('fr-SN', {
+      style: 'currency',
+      currency: 'XOF',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(price);
+  }
+
+
   /**
    * Formate le prix en FCFA
    */
-  private formatPrice(price: number): string {
-    return new Intl.NumberFormat('fr-SN').format(price) + ' FCFA';
-  }
+  
+  
 }

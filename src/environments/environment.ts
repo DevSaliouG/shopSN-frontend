@@ -10,6 +10,12 @@ export const environment = {
   // API Configuration
   apiUrl: 'http://localhost:8000',
   apiTimeout: 30000, // 30 secondes
+  assetsUrl: 'http://localhost:4200/assets',
+  imagePlaceholders: {
+    hero: 'https://picsum.photos/id/20/800/600',
+    placeholder: 'https://picsum.photos/400/400',
+    avatar: 'https://randomuser.me/api/portraits/women/68.jpg'
+  },
   
   // Application
   appName: 'ShopSN',

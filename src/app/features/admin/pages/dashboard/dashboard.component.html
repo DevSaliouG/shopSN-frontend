@@ -1,0 +1,154 @@
+<div class="dashboard-wrapper">
+  
+  <!-- En-tête Supérieur -->
+  <header class="dashboard-header">
+    <div class="header-left">
+      <div class="revenue-overview">
+        <span class="meta-label">Chiffre d'affaires</span>
+        <div class="revenue-trend-row">
+          <h1 class="main-revenue-figure">{{ stats().revenue | fcfa }}</h1>
+          <span class="trend-indicator up">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"/></svg>
+            18%
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="header-right">
+      <span class="user-welcome-tag">
+        <span class="pulse-dot"></span>
+        {{ authService.userFullName() }}
+      </span>
+    </div>
+  </header>
+
+  <!-- Gestion des États : Chargement -->
+  @if (isLoading()) {
+    <div class="state-container py-12">
+      <app-loading-spinner size="large" text="Calcul des indicateurs..." />
+    </div>
+  }
+
+  <!-- Gestion des États : Erreur -->
+  @if (error()) {
+    <div class="error-banner-card">
+      <div class="error-icon-box">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+      </div>
+      <p class="error-message-text">{{ error() }}</p>
+    </div>
+  }
+
+  <!-- Affichage du Dashboard Principal -->
+  @if (!isLoading() && !error()) {
+    
+    <!-- Grille de blocs asymétriques colorés -->
+    <section class="stats-asymmetric-grid" aria-label="Données clés">
+      
+      <!-- Bloc Bleu : Commandes livrées -->
+      <article class="metric-block block-blue">
+        <div class="block-header">
+          <span class="block-title">Commandes livrées</span>
+          <div class="block-vector-icon">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+          </div>
+        </div>
+        <div class="block-body">
+          <p class="huge-counter">{{ stats().totalOrders }}</p>
+          <span class="block-subtext">+8% ce mois</span>
+        </div>
+      </article>
+
+      <!-- Bloc Rouge Corail : Commandes en attente -->
+      <article class="metric-block block-coral">
+        <div class="block-header">
+          <span class="block-title">Commandes en attente</span>
+          <div class="block-vector-icon">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+        </div>
+        <div class="block-body">
+          <p class="huge-counter">09</p>
+          <span class="block-subtext">Action requise</span>
+        </div>
+      </article>
+
+      <!-- Bloc Violet : Nouveaux produits -->
+      <article class="metric-block block-purple">
+        <div class="block-header">
+          <span class="block-title">Nouveaux produits</span>
+          <div class="block-vector-icon">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg>
+          </div>
+        </div>
+        <div class="block-body">
+          <p class="huge-counter">{{ stats().totalProducts }}</p>
+          <span class="block-subtext">+12% ce mois</span>
+        </div>
+      </article>
+
+      <!-- Bloc Neutre : Utilisateurs actifs -->
+      <article class="metric-block block-dark">
+        <div class="block-header">
+          <span class="block-title">Utilisateurs actifs</span>
+          <div class="block-vector-icon">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>
+          </div>
+        </div>
+        <div class="block-body">
+          <p class="huge-counter">{{ stats().totalUsers }}</p>
+          <span class="block-subtext">+5% ce mois</span>
+        </div>
+      </article>
+    </section>
+
+    <!-- Section Table / Flux Récent -->
+    <section class="data-table-section">
+      <div class="table-section-header">
+        <div class="header-title-container">
+          <h2>Activité récente</h2>
+          <p class="sub-label">Flux d'intégration et statuts des derniers produits enregistrés</p>
+        </div>
+      </div>
+
+      @if (!hasRecentProducts()) {
+        <div class="empty-state-container">
+          <p class="empty-text">Aucune activité récente sur les produits.</p>
+        </div>
+      } @else {
+        <div class="responsive-table-scroll">
+          <table class="clean-dashboard-table">
+            <thead>
+              <tr>
+                <th scope="col">ID Réf.</th>
+                <th scope="col">Désignation</th>
+                <th scope="col">Catégorie</th>
+                <th scope="col">Prix catalogue</th>
+                <th scope="col">Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (product of stats().recentProducts; track product.id) {
+                <tr class="table-interactive-row">
+                  <td class="id-cell">#{{ product.id }}</td>
+                  <td class="name-cell">{{ product.nom }}</td>
+                  <td class="category-cell">
+                    <span class="category-tag">{{ product.category?.nom || 'Non spécifié' }}</span>
+                  </td>
+                  <td class="price-cell">{{ product.prix | fcfa }}</td>
+                  <td>
+                    <span class="status-pill-badge" [ngClass]="'pill-' + product.statut">
+                      <span class="pill-dot"></span>
+                      {{ product.statut }}
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+  }
+</div>
