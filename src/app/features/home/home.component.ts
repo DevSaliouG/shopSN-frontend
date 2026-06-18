@@ -19,17 +19,14 @@ import {
   OnDestroy,
   signal,
   ChangeDetectionStrategy,
-  PLATFORM_ID,
-  Inject,
 } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ProductStore } from '../products/store/product.store';
 import { CategoryService } from '../services/category.service';
 import { ProductCardComponent } from '../products/components/product-card/product-card.component';
-import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner/loading-spinner.component';
+import { HeroSectionComponent } from './components/hero-section.component';
 import { SeoService } from '../../core/services/seo.service';
 import { WhatsAppUtil } from '../../shared/utils/whatsapp.util';
 import { Subject, takeUntil } from 'rxjs';
@@ -38,7 +35,7 @@ import { Category, Product, ApiResponse } from '../models/product.model';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, ProductCardComponent, LoadingSpinnerComponent],
+  imports: [CommonModule, RouterLink, FormsModule, ProductCardComponent, HeroSectionComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,7 +44,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   private readonly productStore = inject(ProductStore);
   private readonly categoryService = inject(CategoryService);
   private readonly seoService = inject(SeoService);
-  @Inject(PLATFORM_ID) private readonly platformId: any;
 
   // État
   categories = signal<Category[]>([]);
@@ -59,38 +55,23 @@ export class HomeComponent implements OnInit, OnDestroy {
   error = signal<string | null>(null);
 
   // Newsletter
-  newsletterEmail = signal<string>('');
+  newsletterEmail = '';
   isSubscribing = signal<boolean>(false);
   newsletterSuccess = signal<boolean>(false);
   newsletterError = signal<string | null>(null);
 
-  // Animations - Désactivées par défaut sur serveur
   private destroy$ = new Subject<void>();
-  private observer: IntersectionObserver | null = null;
 
   ngOnInit(): void {
-    // Configuration SEO
     this.seoService.setHomeMeta();
-
-    // Chargement des données (fonctionne partout)
     this.loadCategories();
     this.loadPopularProducts();
     this.loadRecentProducts();
-
-    // Initialisation de l'observateur UNIQUEMENT dans le navigateur
-    if (isPlatformBrowser(this.platformId)) {
-      this.initIntersectionObserver();
-    }
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-
-    // Nettoyage de l'observateur uniquement s'il existe
-    if (this.observer && isPlatformBrowser(this.platformId)) {
-      this.observer.disconnect();
-    }
   }
 
   /**
@@ -154,48 +135,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Initialise l'observateur d'intersection pour les animations au scroll
-   * (Uniquement appelé dans le navigateur)
-   */
-  private initIntersectionObserver(): void {
-    // Vérification supplémentaire pour éviter l'erreur
-    if (typeof IntersectionObserver === 'undefined') {
-      return;
-    }
-
-    this.observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('revealed');
-            this.observer?.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.1, rootMargin: '50px' },
-    );
-
-    // Observer les éléments après un court délai pour s'assurer que le DOM est prêt
-    setTimeout(() => {
-      const elements = document.querySelectorAll('.animate-on-scroll');
-      elements.forEach((element) => {
-        this.observer?.observe(element);
-      });
-    }, 100);
-  }
-
-  /**
    * Met à jour l'email de la newsletter
    */
-  updateNewsletterEmail(value: string): void {
-    this.newsletterEmail.set(value);
-  }
-
-  /**
-   * Inscription à la newsletter
-   */
   subscribeNewsletter(): void {
-    const email = this.newsletterEmail().trim();
+    const email = this.newsletterEmail.trim();
 
     if (!email) {
       this.newsletterError.set('Veuillez saisir votre email');
@@ -210,11 +153,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.isSubscribing.set(true);
     this.newsletterError.set(null);
 
-    // Appel API newsletter (à implémenter selon votre backend)
     setTimeout(() => {
       this.isSubscribing.set(false);
       this.newsletterSuccess.set(true);
-      this.newsletterEmail.set('');
+      this.newsletterEmail = '';
 
       setTimeout(() => {
         this.newsletterSuccess.set(false);
@@ -252,21 +194,4 @@ export class HomeComponent implements OnInit, OnDestroy {
     return item.id;
   }
 
-  /**
-   * Vérifie la taille de l'écran (SSR compatible)
-   */
-  isLargeScreen(): boolean {
-    if (isPlatformBrowser(this.platformId)) {
-      return window.innerWidth >= 1024;
-    }
-    return true;
-  }
-  /**
-   * Scroll en haut (SSR compatible)
-   */
-  scrollToTop(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }
 }

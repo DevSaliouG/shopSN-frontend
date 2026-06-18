@@ -6,10 +6,12 @@ import { LoadingSpinnerComponent } from '../../../../shared/components/loading-s
 import { FcfaPipe } from '../../../../shared/pipes/fcfa.pipe';
 import { AuthService } from '../../../services/auth.service';
 
-// Interface pour la structure de données attendue dans le template
 interface DashboardStats {
   totalProducts: number;
+  activeProducts: number;
+  totalCategories: number;
   totalUsers: number;
+  totalFavorites: number;
   totalOrders: number;
   revenue: number;
   recentProducts: {
@@ -19,32 +21,44 @@ interface DashboardStats {
     statut: 'actif' | 'inactif' | 'rupture';
     category?: { nom: string };
   }[];
+  recentUsers: {
+    id: number;
+    nom: string;
+    prenom: string;
+    email: string;
+    role: string;
+    created_at: string;
+  }[];
 }
 
-// Interface décrivant la réponse complète du backend
 interface ApiDashboardResponse {
-  stats: {
-    total_products?: number;
-    total_users?: number;
-    total_orders?: number;
-    revenue?: number;
-    // d'autres éventuels champs
-  };
-  top_products: Array<{
-    id: number;
-    nom?: string;        // selon le backend
-    name?: string;       // fallback
-    prix?: number;
-    price?: number;
-    statut?: string;
-    status?: string;
-    category?: {
-      nom?: string;
-      name?: string;
+  data: {
+    stats: {
+      total_products: number;
+      active_products: number;
+      total_categories: number;
+      total_users: number;
+      total_favorites: number;
+      total_orders: number;
+      total_revenue: number;
     };
-  }>;
-  recent_users: any[];   // non utilisé pour l'instant
-  sales_data: any[];     // non utilisé pour l'instant
+    top_products: Array<{
+      id: number;
+      nom: string;
+      prix: number;
+      statut: string;
+      category?: { nom: string };
+    }>;
+    recent_users: Array<{
+      id: number;
+      nom: string;
+      prenom: string;
+      email: string;
+      role: string;
+      created_at: string;
+    }>;
+    sales_data: any;
+  };
 }
 
 @Component({
@@ -64,10 +78,14 @@ export class DashboardComponent implements OnInit {
 
   stats = signal<DashboardStats>({
     totalProducts: 0,
+    activeProducts: 0,
+    totalCategories: 0,
     totalUsers: 0,
+    totalFavorites: 0,
     totalOrders: 0,
     revenue: 0,
     recentProducts: [],
+    recentUsers: [],
   });
 
   isLoading = signal(true);
@@ -85,24 +103,24 @@ export class DashboardComponent implements OnInit {
 
     this.http.get<ApiDashboardResponse>(this.apiUrl).subscribe({
       next: (response) => {
-        // Extraction et mapping des données
-        const stats = response.stats || {};
-        const topProducts = response.top_products || [];
+        const { stats, top_products, recent_users } = response.data;
 
         const mappedStats: DashboardStats = {
           totalProducts: stats.total_products ?? 0,
+          activeProducts: stats.active_products ?? 0,
+          totalCategories: stats.total_categories ?? 0,
           totalUsers: stats.total_users ?? 0,
+          totalFavorites: stats.total_favorites ?? 0,
           totalOrders: stats.total_orders ?? 0,
-          revenue: stats.revenue ?? 0,
-          recentProducts: topProducts.map((product) => ({
+          revenue: stats.total_revenue ?? 0,
+          recentProducts: (top_products || []).map((product) => ({
             id: product.id,
-            nom: product.nom || product.name || 'Sans nom',
-            prix: product.prix ?? product.price ?? 0,
-            statut: (product.statut || product.status || 'inactif') as 'actif' | 'inactif' | 'rupture',
-            category: product.category ? {
-              nom: product.category.nom || product.category.name || 'Non catégorisé'
-            } : undefined,
+            nom: product.nom || 'Sans nom',
+            prix: product.prix ?? 0,
+            statut: (product.statut || 'inactif') as 'actif' | 'inactif' | 'rupture',
+            category: product.category ? { nom: product.category.nom || 'Non categorise' } : undefined,
           })),
+          recentUsers: recent_users || [],
         };
 
         this.stats.set(mappedStats);
@@ -110,7 +128,7 @@ export class DashboardComponent implements OnInit {
       },
       error: (err) => {
         console.error('Erreur chargement dashboard:', err);
-        this.error.set('Impossible de charger les statistiques. Réessayez plus tard.');
+        this.error.set('Impossible de charger les statistiques. Reessayez plus tard.');
         this.isLoading.set(false);
       },
     });

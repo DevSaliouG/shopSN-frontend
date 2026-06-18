@@ -67,6 +67,14 @@
                       Modifier
                     </button>
                     <button
+                      (click)="toggleStatus(product)"
+                      [disabled]="isToggling() === product.id"
+                      class="transition-colors disabled:opacity-50"
+                      [class]="product.statut === 'actif' ? 'text-yellow-600 hover:text-yellow-800' : 'text-green-600 hover:text-green-800'"
+                    >
+                      {{ isToggling() === product.id ? '...' : (product.statut === 'actif' ? 'Désactiver' : 'Activer') }}
+                    </button>
+                    <button
                       (click)="deleteProduct(product.id)"
                       class="text-red-600 hover:text-red-800 transition-colors"
                     >
@@ -75,7 +83,7 @@
                   } @else {
                     <button
                       (click)="restoreProduct(product.id)"
-                      class="text-green-600 hover:text-green-800 transition-colors"
+                      class="text-[#2D5A4C] hover:text-[#D4A84E] transition-colors"
                     >
                       Restaurer
                     </button>
@@ -122,10 +130,15 @@
             <input
               formControlName="nom"
               class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              [class.border-red-500]="productForm.get('nom')?.invalid && productForm.get('nom')?.touched"
+              [class.border-red-500]="(productForm.get('nom')?.invalid && productForm.get('nom')?.touched) || serverErrors()['nom']"
             />
             @if (productForm.get('nom')?.invalid && productForm.get('nom')?.touched) {
               <p class="text-red-500 text-xs mt-1">Le nom est requis</p>
+            }
+            @if (serverErrors()['nom']) {
+              @for (err of serverErrors()['nom']; track err) {
+                <p class="text-red-500 text-xs mt-1">{{ err }}</p>
+              }
             }
           </div>
           <div class="mb-3">
@@ -162,10 +175,15 @@
               type="number"
               formControlName="prix"
               class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              [class.border-red-500]="productForm.get('prix')?.invalid && productForm.get('prix')?.touched"
+              [class.border-red-500]="(productForm.get('prix')?.invalid && productForm.get('prix')?.touched) || serverErrors()['prix']"
             />
             @if (productForm.get('prix')?.invalid && productForm.get('prix')?.touched) {
               <p class="text-red-500 text-xs mt-1">Prix valide requis</p>
+            }
+            @if (serverErrors()['prix']) {
+              @for (err of serverErrors()['prix']; track err) {
+                <p class="text-red-500 text-xs mt-1">{{ err }}</p>
+              }
             }
           </div>
           <div class="mb-3">

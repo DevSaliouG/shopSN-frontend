@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, signal, computed, effect } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, OnDestroy, inject, signal, computed, effect } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -26,7 +26,8 @@ import { Product, ProductFilters } from '../models/product.model';
     EmptyStateComponent
   ],
   templateUrl: './category-page.component.html',
-  styleUrls: ['./category-page.component.css']
+  styleUrls: ['./category-page.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CategoryPageComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);

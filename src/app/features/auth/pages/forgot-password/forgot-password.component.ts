@@ -9,7 +9,7 @@
  * - Rate limiting protection
  */
 
-import { Component, inject, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -20,7 +20,8 @@ import { AuthService } from '../../../services/auth.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './forgot-password.component.html',
-  styleUrls: ['./forgot-password.component.css']
+  styleUrls: ['./forgot-password.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ForgotPasswordComponent {
   private readonly fb = inject(FormBuilder);

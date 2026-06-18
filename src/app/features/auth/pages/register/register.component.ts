@@ -10,7 +10,7 @@
  * - Validation personnalisée (mot de passe fort)
  */
 
-import { Component, inject, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -52,7 +52,8 @@ const strongPasswordValidator = (control: AbstractControl): ValidationErrors | n
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: ['./register.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegisterComponent {
   private readonly fb = inject(FormBuilder);

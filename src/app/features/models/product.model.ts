@@ -48,7 +48,7 @@ export interface Product {
   vues: number;
   category?: Category;
   images?: ProductImage[];
-  main_image?: ProductImage;
+  main_image?: ProductImage | null;
   created_at: string;
   updated_at: string;
   deleted_at?: string | null;

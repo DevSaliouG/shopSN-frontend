@@ -28,7 +28,7 @@ export class SidebarComponent {
     { label: 'Produits', route: '/admin/produits', icon: 'products' },
     { label: 'Catégories', route: '/admin/categories', icon: 'categories' },
     { label: 'Utilisateurs', route: '/admin/utilisateurs', icon: 'users' },
-    { label: '🗑️ Corbeille', route: '/admin/produits/supprimes', icon: 'trash' },
+    { label: 'Corbeille', route: '/admin/produits/supprimes', icon: 'trash' },
   ];
 
   toggleMobileMenu(): void {

@@ -159,11 +159,11 @@ export interface GalleryImage {
       }
 
       .thumbs-swiper-container .swiper-slide-thumb-active img {
-        border-color: #22c55e;
+        border-color: #2D5A4C;
       }
 
       .main-thumb {
-        border-color: #22c55e !important;
+        border-color: #2D5A4C !important;
       }
 
       @media (max-width: 640px) {

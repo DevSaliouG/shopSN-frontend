@@ -1,163 +1,112 @@
 <div class="home-wrapper">
-  <section class="hero-modern">
-    <div class="container hero-grid">
-      <div class="hero-content">
-        <div class="hero-badge"><span class="pulse-dot"></span> 🇸🇳 La boutique sénégalaise</div>
-        <h1 class="hero-title">
-          Votre shopping <br />
-          <span class="text-highlight">à portée de clic</span>
-        </h1>
-        <p class="hero-description">
-          Découvrez des milliers de produits de qualité. Commandez en un instant via WhatsApp et
-          profitez d'une livraison rapide partout au Sénégal.
-        </p>
+  <!-- Hero Section -->
+  <app-hero-section />
 
-        <div class="hero-actions">
-          <a
-            [href]="getWhatsAppUrl()"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn btn-whatsapp-large"
-          >
-            <svg class="icon" fill="currentColor" viewBox="0 0 24 24">
-              <path
-                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"
-              />
-            </svg>
-            Commander sur WhatsApp
-          </a>
-          <a routerLink="/produits" class="btn btn-outline">Explorer le catalogue</a>
-        </div>
+  <!-- Wave: Hero → Categories -->
+  <div class="wave-sep wave-to-white"></div>
 
-        <div class="trust-indicators">
-          <div class="trust-item"><strong>500+</strong> <span>Produits</span></div>
-          <div class="trust-divider"></div>
-          <div class="trust-item"><strong>50+</strong> <span>Vendeurs</span></div>
-          <div class="trust-divider"></div>
-          <div class="trust-item"><strong>1000+</strong> <span>Clients satisfaits</span></div>
-        </div>
-      </div>
-
-      <div class="hero-visual">
-        <div class="image-wrapper">
-          <img
-            src="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=800"
-            alt="Shopping en ligne"
-            class="main-img"
-          />
-          <div class="floating-card">
-            <div class="card-icon">🚀</div>
-            <div>
-              <strong>Livraison Express</strong>
-              <span>Dakar et banlieue</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section categories-section bg-light">
+  <!-- Categories Section -->
+  <section class="section categories-section">
     <div class="container">
       <div class="section-header align-center">
-        <h2 class="title">Que recherchez-vous ?</h2>
-        <p class="subtitle">Parcourez nos catégories les plus populaires</p>
+        <span class="section-eyebrow">Catalogue</span>
+        <h2 class="section-title">Parcourez nos categories</h2>
+        <p class="section-subtitle">Trouvez exactement ce que vous cherchez</p>
       </div>
 
       @if (isLoadingCategories()) {
-        <div class="loading-wrapper">
-          <app-loading-spinner size="medium" text="Chargement des catégories..." />
+        <div class="cat-grid">
+          @for (i of [1,2,3,4,5,6,7,8]; track i) {
+            <div class="cat-skeleton"></div>
+          }
         </div>
       } @else {
-        <div class="categories-grid-modern">
-          @for (category of categories(); track category.id) {
+        <div class="cat-grid">
+          @for (category of categories(); track category.id; let idx = $index) {
             <a
               [routerLink]="['/categorie', category.slug]"
-              class="category-card"
-              [attr.aria-label]="'Découvrir la catégorie ' + category.nom"
+              class="cat-card-v2"
+              [attr.aria-label]="'Decouvrir ' + category.nom"
             >
-              <div class="icon-wrapper">
-                @if (category.image_url) {
-                  <img
-                    [src]="category.image_url"
-                    [alt]="category.nom"
-                    class="category-img"
-                    loading="lazy"
-                  />
-                } @else {
-                  <svg
-                    class="fallback-icon"
-                    aria-hidden="true"
-                    width="26"
-                    height="26"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      d="M20 7h-4.18A3 3 0 0 0 16 5.18V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v1.18A3 3 0 0 0 8.18 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z"
-                    />
+              @if (category.image_url) {
+                <img [src]="category.image_url" [alt]="category.nom" class="cat-img" loading="lazy" />
+              } @else {
+                <div [class]="'cat-fallback cat-color-' + (idx % 6)">
+                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.5">
+                    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <path d="M16 10a4 4 0 01-8 0"/>
                   </svg>
+                </div>
+              }
+              <div class="cat-overlay"></div>
+              <div class="cat-body">
+                <span class="cat-name">{{ category.nom }}</span>
+                @if (category.produits_count || category.products_count) {
+                  <span class="cat-count">{{ category.produits_count || category.products_count }} articles</span>
                 }
               </div>
-
-              <div class="category-meta">
-                <span class="category-name">{{ category.nom }}</span>
-                @if (category.produits_count) {
-                  <span class="category-count">{{ category.produits_count }} articles</span>
-                }
-              </div>
-
-              <span class="category-arrow" aria-hidden="true">
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <polyline points="12 5 19 12 12 19"></polyline>
+              <div class="cat-arrow">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
                 </svg>
-              </span>
+              </div>
             </a>
           } @empty {
-            <div class="empty-state">
-              <p>Aucune catégorie disponible pour le moment.</p>
-            </div>
+            <div class="empty-state">Aucune categorie disponible pour le moment.</div>
           }
+        </div>
+
+        <div class="cat-footer">
+          <a routerLink="/produits" class="link-all">
+            Voir tous les produits
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
         </div>
       }
     </div>
   </section>
 
-  <section class="section">
+  <!-- Wave: Categories → Popular -->
+  <div class="wave-sep wave-to-gray"></div>
+
+  <!-- Popular Products -->
+  <section class="section popular-section">
     <div class="container">
       <div class="section-header space-between">
-        <div class="header-text">
-          <h2 class="title">🔥 Les plus demandés</h2>
-          <p class="subtitle">Découvrez ce que nos clients adorent</p>
+        <div>
+          <span class="section-eyebrow">Tendances</span>
+          <h2 class="section-title">Les plus demandes</h2>
+          <p class="section-subtitle">Decouvrez ce que nos clients adorent</p>
         </div>
-        <a routerLink="/produits" class="link-view-all">Tout voir <span class="arrow">→</span></a>
+        <a routerLink="/produits" class="link-all">
+          Tout voir
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
       </div>
 
       @if (isLoadingPopular()) {
-        <div class="loading-wrapper">
-          <app-loading-spinner size="medium" text="Chargement..." />
+        <div class="products-grid">
+          @for (i of [1,2,3,4]; track i) {
+            <div class="skeleton-card">
+              <div class="skeleton-image"></div>
+              <div class="skeleton-body">
+                <div class="skeleton-line medium"></div>
+                <div class="skeleton-line short"></div>
+              </div>
+            </div>
+          }
         </div>
       } @else if (popularProducts().length === 0) {
         <div class="empty-state">Aucun produit populaire pour le moment.</div>
       } @else {
         <div class="products-grid">
           @for (product of popularProducts(); track product.id; let i = $index) {
-            <div
-              class="product-wrapper animate-on-scroll"
-              [style.animation-delay]="getAnimationDelay(i)"
-            >
+            <div class="product-wrapper" [style.--delay]="getAnimationDelay(i)">
               <app-product-card [product]="product" />
             </div>
           }
@@ -166,47 +115,65 @@
     </div>
   </section>
 
-  <section class="section">
-    <div class="container">
-      <div class="promo-banner-modern">
-        <div class="promo-content">
-          <span class="tag">🎁 Offre exclusive</span>
-          <h2>Livraison 100% Gratuite</h2>
-          <p>
-            Pour toute commande supérieure à <strong>50 000 FCFA</strong>, nous vous offrons la
-            livraison à Dakar et ses environs. N'attendez plus !
-          </p>
-          <a routerLink="/produits" class="btn btn-primary">En profiter maintenant</a>
+  <!-- Wave: Popular → Promo -->
+  <div class="wave-sep wave-to-white"></div>
+
+  <!-- Promo Banner -->
+  @defer (on viewport) {
+    <section class="section">
+      <div class="container">
+        <div class="promo-banner">
+          <div class="promo-content">
+            <span class="promo-tag">Offre exclusive</span>
+            <h2>Livraison Gratuite</h2>
+            <p>
+              Pour toute commande superieure a <strong>50 000 FCFA</strong>, profitez de la
+              livraison gratuite a Dakar et ses environs.
+            </p>
+            <a routerLink="/produits" class="btn-promo">Decouvrir nos produits</a>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  } @placeholder {
+    <div style="min-height: 200px;"></div>
+  }
 
-  <section class="section bg-light">
+  <!-- Recent Products -->
+  <section class="section section-alt">
     <div class="container">
       <div class="section-header space-between">
-        <div class="header-text">
-          <h2 class="title">✨ Fraîchement arrivés</h2>
-          <p class="subtitle">Les dernières pépites ajoutées à notre catalogue</p>
+        <div>
+          <span class="section-eyebrow">Récemment ajoutés</span>
+          <h2 class="section-title">Nouveautes</h2>
+          <p class="section-subtitle">Les dernieres pepites ajoutees au catalogue</p>
         </div>
-        <a routerLink="/produits?sort=recent" class="link-view-all"
-          >Tout voir <span class="arrow">→</span></a
-        >
+        <a routerLink="/produits" [queryParams]="{sort: 'recent'}" class="link-all">
+          Tout voir
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
       </div>
 
       @if (isLoadingRecent()) {
-        <div class="loading-wrapper">
-          <app-loading-spinner size="medium" text="Chargement..." />
+        <div class="products-grid">
+          @for (i of [1,2,3,4]; track i) {
+            <div class="skeleton-card">
+              <div class="skeleton-image"></div>
+              <div class="skeleton-body">
+                <div class="skeleton-line medium"></div>
+                <div class="skeleton-line short"></div>
+              </div>
+            </div>
+          }
         </div>
       } @else if (recentProducts().length === 0) {
         <div class="empty-state">Aucun nouveau produit pour le moment.</div>
       } @else {
         <div class="products-grid">
           @for (product of recentProducts(); track product.id; let i = $index) {
-            <div
-              class="product-wrapper animate-on-scroll"
-              [style.animation-delay]="getAnimationDelay(i)"
-            >
+            <div class="product-wrapper" [style.--delay]="getAnimationDelay(i)">
               <app-product-card [product]="product" />
             </div>
           }
@@ -215,38 +182,44 @@
     </div>
   </section>
 
-  <section class="newsletter-modern">
-    <div class="container newsletter-inner">
-      <div class="newsletter-text">
-        <h2>Ne manquez aucune bonne affaire</h2>
-        <p>Rejoignez notre communauté et recevez nos offres spéciales avant tout le monde.</p>
-      </div>
-      <div class="newsletter-action">
-        @if (newsletterSuccess()) {
-          <div class="alert-success">✅ Inscription confirmée ! Merci.</div>
-        }
-        <div class="input-group">
-          <input
-            type="email"
-            [(ngModel)]="newsletterEmail"
-            placeholder="Votre adresse email"
-            [disabled]="isSubscribing()"
-          />
-          <button class="btn btn-dark" (click)="subscribeNewsletter()" [disabled]="isSubscribing()">
-            @if (isSubscribing()) {
-              <span class="spinner"></span>...
-            } @else {
-              S'abonner
-            }
-          </button>
+  <!-- Newsletter -->
+  @defer (on viewport) {
+    <section class="newsletter-section">
+      <div class="container newsletter-inner">
+        <div class="newsletter-text">
+          <h2>Restez informe</h2>
+          <p>Recevez nos offres speciales et nouveautes en avant-premiere.</p>
         </div>
-        @if (newsletterError()) {
-          <p class="alert-error">{{ newsletterError() }}</p>
-        }
+        <div class="newsletter-form">
+          @if (newsletterSuccess()) {
+            <div class="alert-success">Inscription confirmee ! Merci de votre confiance.</div>
+          }
+          <div class="input-group">
+            <input
+              type="email"
+              [(ngModel)]="newsletterEmail"
+              placeholder="Votre adresse email"
+              [disabled]="isSubscribing()"
+            />
+            <button class="btn-subscribe" (click)="subscribeNewsletter()" [disabled]="isSubscribing()">
+              @if (isSubscribing()) {
+                <span class="spinner"></span>
+              } @else {
+                S'abonner
+              }
+            </button>
+          </div>
+          @if (newsletterError()) {
+            <p class="alert-error">{{ newsletterError() }}</p>
+          }
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  } @placeholder {
+    <div style="min-height: 120px;"></div>
+  }
 
+  <!-- WhatsApp FAB -->
   <a
     [href]="getWhatsAppUrl()"
     target="_blank"
@@ -255,9 +228,7 @@
     aria-label="Contactez-nous sur WhatsApp"
   >
     <svg fill="currentColor" viewBox="0 0 24 24">
-      <path
-        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"
-      />
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
     </svg>
   </a>
 </div>

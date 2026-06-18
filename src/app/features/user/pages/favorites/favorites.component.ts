@@ -114,7 +114,7 @@ export class FavoritesComponent implements OnInit {
     // Implémentation simple - peut être remplacée par un ToastService
     const toast = document.createElement('div');
     toast.textContent = message;
-    toast.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in-up';
+    toast.className = 'fixed bottom-4 right-4 bg-[#2D5A4C] text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in-up';
     document.body.appendChild(toast);
     
     setTimeout(() => {

@@ -1,280 +1,203 @@
-<div class="min-h-screen bg-gray-50 py-8">
-  <div class="container mx-auto px-4">
-    
+<div class="detail-page">
+  <div class="detail-container">
+
     <!-- Fil d'Ariane -->
-    <nav class="flex mb-6 text-sm text-gray-500">
-      <a routerLink="/" class="hover:text-green-600">Accueil</a>
-      <span class="mx-2">/</span>
-      <a routerLink="/produits" class="hover:text-green-600">Produits</a>
+    <nav class="breadcrumb" aria-label="Navigation">
+      <a routerLink="/" class="bc-link">Accueil</a>
+      <span class="bc-sep">/</span>
+      <a routerLink="/produits" class="bc-link">Produits</a>
       @if (currentProduct()?.category) {
-        <span class="mx-2">/</span>
-        <a [routerLink]="['/categorie', currentProduct()?.category?.slug]" class="hover:text-green-600">
+        <span class="bc-sep">/</span>
+        <a [routerLink]="['/categorie', currentProduct()?.category?.slug]" class="bc-link">
           {{ currentProduct()?.category?.nom }}
         </a>
       }
-      <span class="mx-2">/</span>
-      <span class="text-gray-700">{{ currentProduct()?.nom }}</span>
+      <span class="bc-sep">/</span>
+      <span class="bc-current">{{ currentProduct()?.nom }}</span>
     </nav>
 
-    <!-- État de chargement -->
+    <!-- Chargement -->
     @if (isLoading()) {
-      <app-loading-spinner />
-    }
-    
-    <!-- État d'erreur -->
-    @else if (error()) {
-      <div class="text-center py-12">
-        <div class="text-red-500 mb-4">
-          <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-        </div>
-        <h3 class="text-lg font-medium text-gray-900 mb-2">Produit non trouvé</h3>
-        <p class="text-gray-500 mb-4">Le produit que vous recherchez n'existe pas ou a été supprimé.</p>
-        <a routerLink="/produits" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
-          Voir tous les produits
-        </a>
+      <div class="state-center">
+        <app-loading-spinner />
       </div>
     }
-    
-    <!-- Détail du produit -->
+
+    <!-- Erreur -->
+    @else if (error()) {
+      <div class="state-center">
+        <svg class="state-icon text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <h3 class="state-title">Produit non trouvé</h3>
+        <p class="state-msg">Le produit que vous recherchez n'existe pas ou a été supprimé.</p>
+        <a routerLink="/produits" class="btn-primary">Voir tous les produits</a>
+      </div>
+    }
+
+    <!-- Détail -->
     @else if (currentProduct(); as product) {
-      
-      <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 p-6 lg:p-8">
-          
-          <!-- Galerie d'images -->
-          <div class="space-y-4">
-            <!-- Swiper principal -->
-            <div class="product-main-swiper swiper rounded-xl overflow-hidden bg-gray-100">
+
+      <div class="product-layout">
+
+        <!-- ===== GALERIE ===== -->
+        <div class="gallery-col">
+          <!-- Image principale Swiper -->
+          <div class="product-main-swiper swiper main-image-wrap">
+            <div class="swiper-wrapper">
+              @for (image of productImages(); track image.id) {
+                <div class="swiper-slide">
+                  <img [src]="image.url" [alt]="image.alt_text || product.nom" class="main-img" />
+                </div>
+              }
+              @if (productImages().length === 0) {
+                <div class="swiper-slide">
+                  <img src="/assets/images/placeholder-large.webp" [alt]="product.nom" class="main-img" />
+                </div>
+              }
+            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
+          </div>
+
+          <!-- Miniatures -->
+          @if (productImages().length > 1) {
+            <div class="product-thumbs swiper thumbs-wrap">
               <div class="swiper-wrapper">
                 @for (image of productImages(); track image.id) {
-                  <div class="swiper-slide">
+                  <div class="swiper-slide thumb-slide">
                     <img
-                      [src]="image.url"
+                      [src]="image.thumbnail_url || image.url"
                       [alt]="image.alt_text || product.nom"
-                      class="w-full h-auto object-cover"
-                      style="aspect-ratio: 1 / 1;"
-                    />
-                  </div>
-                }
-                @if (productImages().length === 0) {
-                  <div class="swiper-slide">
-                    <img
-                      src="/assets/images/placeholder-large.webp"
-                      [alt]="product.nom"
-                      class="w-full h-auto object-cover"
-                      style="aspect-ratio: 1 / 1;"
+                      class="thumb-img"
                     />
                   </div>
                 }
               </div>
-              <div class="swiper-button-next !text-green-600"></div>
-              <div class="swiper-button-prev !text-green-600"></div>
-              <div class="swiper-pagination"></div>
             </div>
-            
-            <!-- Miniatures Swiper -->
-            @if (productImages().length > 1) {
-              <div class="product-thumbs swiper">
-                <div class="swiper-wrapper">
-                  @for (image of productImages(); track image.id) {
-                    <div class="swiper-slide">
-                      <img
-                        [src]="image.thumbnail_url || image.url"
-                        [alt]="image.alt_text || product.nom"
-                        class="rounded-lg cursor-pointer border-2 border-transparent hover:border-green-500 transition-colors"
-                        style="aspect-ratio: 1 / 1; object-fit: cover;"
-                      />
-                    </div>
-                  }
-                </div>
-              </div>
-            }
-          </div>
-          
-          <!-- Informations produit -->
-          <div class="space-y-6">
-            
-            <!-- Catégorie -->
-            @if (product.category) {
-              <a
-                [routerLink]="['/categorie', product.category.slug]"
-                class="inline-block text-sm text-green-600 bg-green-50 px-3 py-1 rounded-full hover:bg-green-100 transition-colors"
-              >
-                {{ product.category.nom }}
-              </a>
-            }
-            
-            <!-- Titre -->
-            <h1 class="text-2xl md:text-3xl font-bold text-gray-900">
-              {{ product.nom }}
-            </h1>
-            
-            <!-- Prix et stock -->
-            <div class="flex items-center justify-between flex-wrap gap-4">
-              <div class="text-3xl font-bold text-green-600">
-                {{ product.prix_format }}
-              </div>
-              <div class="flex items-center gap-2">
-                <div class="flex items-center gap-1">
-                  <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                  </svg>
-                  <span class="text-sm text-gray-600">{{ product.vues }} vues</span>
-                </div>
-                <div class="w-px h-4 bg-gray-300"></div>
-                <div class="flex items-center gap-1">
-                  <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-                  </svg>
-                  <span class="text-sm font-medium" [class]="stockClass()">
-                    {{ stockMessage() }}
-                  </span>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Description courte -->
-            @if (product.description_courte) {
-              <div class="bg-gray-50 p-4 rounded-lg">
-                <p class="text-gray-700">{{ product.description_courte }}</p>
-              </div>
-            }
-            
-            <!-- Quantité -->
-            @if (isInStock()) {
-              <div class="flex items-center gap-4">
-                <span class="text-gray-700 font-medium">Quantité :</span>
-                <div class="flex items-center border rounded-lg">
-                  <button
-                    (click)="updateQuantity(-1)"
-                    [disabled]="quantity() <= 1"
-                    class="px-3 py-2 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    -
-                  </button>
-                  <span class="w-12 text-center">{{ quantity() }}</span>
-                  <button
-                    (click)="updateQuantity(1)"
-                    [disabled]="quantity() >= product.stock"
-                    class="px-3 py-2 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    +
-                  </button>
-                </div>
-                <span class="text-sm text-gray-500">Stock: {{ product.stock }} unités</span>
-              </div>
-            }
-            
-            <!-- Actions -->
-            <div class="flex flex-col sm:flex-row gap-4 pt-4">
-              <!-- Bouton WhatsApp -->
-              <button
-                (click)="openWhatsApp()"
-                [disabled]="!isInStock()"
-                class="flex-1 flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#128C7E] text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-                  <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.557 4.124 1.533 5.86L0 24l6.305-1.515A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.371l-.36-.213-3.731.897.929-3.618-.235-.374A9.818 9.818 0 1112 21.818z"/>
-                </svg>
-                @if (!isInStock()) {
-                  Produit indisponible
-                } @else {
-                  Commander sur WhatsApp
-                }
-              </button>
-              
-              <!-- Bouton favori -->
-              <button
-                (click)="toggleFavorite()"
-                class="flex items-center justify-center gap-2 px-6 py-3 border rounded-xl transition-all hover:bg-gray-50"
-                [class.border-red-300]="isFavorite()"
-              >
-                <svg
-                  class="w-5 h-5 transition-colors"
-                  [class.fill-red-500]="isFavorite()"
-                  [class.text-red-500]="isFavorite()"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                </svg>
-                {{ isFavorite() ? 'Retirer des favoris' : 'Ajouter aux favoris' }}
-              </button>
-            </div>
-            
-            <!-- Partage -->
-            <div class="border-t pt-6">
-              <p class="text-sm text-gray-600 mb-3">Partager ce produit :</p>
-              <div class="flex gap-3">
-                <button
-                  (click)="shareOnFacebook()"
-                  class="p-2 bg-[#1877F2] text-white rounded-lg hover:opacity-90 transition-opacity"
-                  aria-label="Partager sur Facebook"
-                >
-                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.5c-1.5 0-1.96.93-1.96 1.89v2.26h3.32l-.53 3.49h-2.8V24C19.62 23.1 24 18.1 24 12.07z"/>
-                  </svg>
-                </button>
-                <button
-                  (click)="shareOnTwitter()"
-                  class="p-2 bg-[#1DA1F2] text-white rounded-lg hover:opacity-90 transition-opacity"
-                  aria-label="Partager sur Twitter"
-                >
-                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 0021.964-12.09c0-.21-.005-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-                  </svg>
-                </button>
-                <button
-                  (click)="copyLink()"
-                  class="p-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-                  aria-label="Copier le lien"
-                >
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-            
-          </div>
+          }
         </div>
-        
-        <!-- Description complète -->
-        <div class="border-t p-6 lg:p-8">
-          <h2 class="text-xl font-bold text-gray-900 mb-4">Description du produit</h2>
-          <div class="prose max-w-none">
-            <p [class.line-clamp-6]="!showFullDescription()" class="text-gray-700 whitespace-pre-line">
-              {{ product.description }}
-            </p>
-            @if (product.description.length > 500) {
-              <button
-                (click)="showFullDescription.set(!showFullDescription())"
-                class="text-green-600 hover:text-green-700 font-medium mt-2"
-              >
-                {{ showFullDescription() ? 'Voir moins' : 'Voir plus' }}
-              </button>
-            }
+
+        <!-- ===== INFOS ===== -->
+        <div class="info-col">
+
+          <!-- Catégorie -->
+          @if (product.category) {
+            <a [routerLink]="['/categorie', product.category.slug]" class="cat-tag">
+              {{ product.category.nom }}
+            </a>
+          }
+
+          <!-- Titre -->
+          <h1 class="product-title">{{ product.nom }}</h1>
+
+          <!-- Métriques rapides -->
+          <div class="meta-row">
+            <span class="meta-item">
+              <svg class="meta-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg>
+              {{ product.vues }} vues
+            </span>
+            <span class="meta-sep">·</span>
+            <span class="meta-item stock-meta" [class]="stockClass()">{{ stockMessage() }}</span>
           </div>
+
+          <!-- Prix -->
+          <div class="price-block">
+            <span class="product-price">{{ product.prix_format }}</span>
+          </div>
+
+          <!-- Description courte -->
+          @if (product.description_courte) {
+            <p class="desc-short">{{ product.description_courte }}</p>
+          }
+
+          <!-- Quantité -->
+          @if (isInStock()) {
+            <div class="qty-row">
+              <span class="qty-label">Quantité</span>
+              <div class="qty-control">
+                <button (click)="updateQuantity(-1)" [disabled]="quantity() <= 1" class="qty-btn" aria-label="Diminuer">−</button>
+                <span class="qty-value">{{ quantity() }}</span>
+                <button (click)="updateQuantity(1)" [disabled]="quantity() >= product.stock" class="qty-btn" aria-label="Augmenter">+</button>
+              </div>
+              <span class="qty-stock">{{ product.stock }} en stock</span>
+            </div>
+          }
+
+          <!-- Actions -->
+          <div class="actions-row">
+            <button
+              (click)="openWhatsApp()"
+              [disabled]="!isInStock()"
+              class="btn-whatsapp"
+            >
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.557 4.124 1.533 5.86L0 24l6.305-1.515A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.371l-.36-.213-3.731.897.929-3.618-.235-.374A9.818 9.818 0 1112 21.818z"/>
+              </svg>
+              @if (!isInStock()) { Indisponible } @else { Commander sur WhatsApp }
+            </button>
+
+            <button
+              (click)="toggleFavorite()"
+              class="btn-fav"
+              [class.is-fav]="isFavorite()"
+              aria-label="Favori"
+            >
+              <svg
+                class="fav-icon"
+                [attr.fill]="isFavorite() ? 'currentColor' : 'none'"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Partager -->
+          <div class="share-row">
+            <span class="share-label">Partager :</span>
+            <button (click)="shareOnFacebook()" class="share-btn share-fb" aria-label="Facebook">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.5c-1.5 0-1.96.93-1.96 1.89v2.26h3.32l-.53 3.49h-2.8V24C19.62 23.1 24 18.1 24 12.07z"/></svg>
+            </button>
+            <button (click)="shareOnTwitter()" class="share-btn share-tw" aria-label="Twitter">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 0021.964-12.09c0-.21-.005-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+            </button>
+            <button (click)="copyLink()" class="share-btn share-copy" aria-label="Copier le lien">
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+            </button>
+          </div>
+
         </div>
       </div>
-      
+
+      <!-- Description complète -->
+      <div class="description-block">
+        <h2 class="section-title">Description du produit</h2>
+        <p class="desc-full" [class.clamped]="!showFullDescription()">{{ product.description }}</p>
+        @if (product.description.length > 400) {
+          <button (click)="showFullDescription.set(!showFullDescription())" class="toggle-desc">
+            {{ showFullDescription() ? 'Voir moins ↑' : 'Voir plus ↓' }}
+          </button>
+        }
+      </div>
+
       <!-- Produits similaires -->
       @if (similarProducts().length > 0) {
-        <div class="mt-12">
-          <h2 class="text-2xl font-bold text-gray-900 mb-6">Produits similaires</h2>
-          <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+        <div class="similar-section">
+          <h2 class="section-title">Produits similaires</h2>
+          <div class="similar-grid">
             @for (similar of similarProducts(); track similar.id) {
               <app-product-card [product]="similar" />
             }
           </div>
         </div>
       }
-      
+
     }
-    
+
   </div>
 </div>

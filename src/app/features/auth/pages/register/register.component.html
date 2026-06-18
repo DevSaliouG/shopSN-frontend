@@ -1,12 +1,12 @@
-<div class="min-h-screen bg-gradient-to-br from-green-50 to-white py-12 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gradient-to-br from-[#E8EDF2] to-white py-12 px-4 sm:px-6 lg:px-8">
   <div class="max-w-md w-full mx-auto bg-white p-8 rounded-2xl shadow-xl">
-    
+
     <!-- Header -->
     <div class="text-center mb-8">
-      <h2 class="text-3xl font-bold text-gray-900">Créer un compte</h2>
+      <h2 class="text-3xl font-bold text-gray-900 font-sans">Créer un compte</h2>
       <p class="mt-2 text-sm text-gray-600">
-        ou 
-        <a routerLink="/connexion" class="font-medium text-green-600 hover:text-green-500">
+        ou
+        <a routerLink="/connexion" class="font-medium text-[#2D5A4C] hover:text-[#3D7A6A]">
           connectez-vous à votre compte
         </a>
       </p>
@@ -21,7 +21,7 @@
 
     <!-- Formulaire -->
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5">
-      
+
       <!-- Nom -->
       <div>
         <label for="nom" class="block text-sm font-medium text-gray-700">
@@ -32,14 +32,14 @@
           type="text"
           formControlName="nom"
           placeholder="Diop"
-          class="mt-1 w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+          class="mt-1 w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#3D7A6A] focus:border-transparent transition-colors"
           [ngClass]="{
             'border-red-400 bg-red-50': nom?.invalid && nom?.touched,
-            'border-green-400 bg-green-50': nom?.valid && nom?.touched,
+            'border-[#3D7A6A] bg-[#E8EDF2]': nom?.valid && nom?.touched,
             'border-gray-300': !nom?.touched
           }"
         />
-        
+
         @if (nom?.invalid && nom?.touched) {
           <p class="mt-1 text-red-500 text-sm">
             @if (nom?.errors?.['required']) { Le nom est obligatoire }
@@ -47,7 +47,7 @@
             @else if (nom?.errors?.['maxlength']) { Maximum 100 caractères }
           </p>
         }
-        
+
         @if (hasServerError('nom')) {
           <p class="mt-1 text-red-500 text-sm">{{ getServerError('nom') }}</p>
         }
@@ -63,14 +63,14 @@
           type="text"
           formControlName="prenom"
           placeholder="Mamadou"
-          class="mt-1 w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+          class="mt-1 w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#3D7A6A] focus:border-transparent transition-colors"
           [ngClass]="{
             'border-red-400 bg-red-50': prenom?.invalid && prenom?.touched,
-            'border-green-400 bg-green-50': prenom?.valid && prenom?.touched,
+            'border-[#3D7A6A] bg-[#E8EDF2]': prenom?.valid && prenom?.touched,
             'border-gray-300': !prenom?.touched
           }"
         />
-        
+
         @if (prenom?.invalid && prenom?.touched) {
           <p class="mt-1 text-red-500 text-sm">
             @if (prenom?.errors?.['required']) { Le prénom est obligatoire }
@@ -78,7 +78,7 @@
             @else if (prenom?.errors?.['maxlength']) { Maximum 100 caractères }
           </p>
         }
-        
+
         @if (hasServerError('prenom')) {
           <p class="mt-1 text-red-500 text-sm">{{ getServerError('prenom') }}</p>
         }
@@ -94,21 +94,21 @@
           type="email"
           formControlName="email"
           placeholder="mamadou@exemple.sn"
-          class="mt-1 w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+          class="mt-1 w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#3D7A6A] focus:border-transparent transition-colors"
           [ngClass]="{
             'border-red-400 bg-red-50': email?.invalid && email?.touched,
-            'border-green-400 bg-green-50': email?.valid && email?.touched,
+            'border-[#3D7A6A] bg-[#E8EDF2]': email?.valid && email?.touched,
             'border-gray-300': !email?.touched
           }"
         />
-        
+
         @if (email?.invalid && email?.touched) {
           <p class="mt-1 text-red-500 text-sm">
             @if (email?.errors?.['required']) { L'email est obligatoire }
             @else if (email?.errors?.['email']) { Veuillez saisir un email valide }
           </p>
         }
-        
+
         @if (hasServerError('email')) {
           <p class="mt-1 text-red-500 text-sm">{{ getServerError('email') }}</p>
         }
@@ -125,10 +125,10 @@
             id="password"
             formControlName="password"
             placeholder="••••••••"
-            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors pr-12"
+            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#3D7A6A] focus:border-transparent transition-colors pr-12"
             [ngClass]="{
               'border-red-400 bg-red-50': password?.invalid && password?.touched,
-              'border-green-400 bg-green-50': password?.valid && password?.touched,
+              'border-[#3D7A6A] bg-[#E8EDF2]': password?.valid && password?.touched,
               'border-gray-300': !password?.touched
             }"
           />
@@ -141,7 +141,7 @@
             {{ showPassword() ? '🙈' : '👁️' }}
           </button>
         </div>
-        
+
         <!-- Liste des exigences du mot de passe -->
         @if (password?.touched && password?.invalid) {
           <div class="mt-2 space-y-1">
@@ -152,7 +152,7 @@
             }
           </div>
         }
-        
+
         @if (hasServerError('password')) {
           <p class="mt-1 text-red-500 text-sm">{{ getServerError('password') }}</p>
         }
@@ -169,10 +169,10 @@
             id="password_confirmation"
             formControlName="password_confirmation"
             placeholder="••••••••"
-            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors pr-12"
+            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#3D7A6A] focus:border-transparent transition-colors pr-12"
             [ngClass]="{
               'border-red-400 bg-red-50': registerForm.errors?.['passwordMismatch'] && passwordConfirmation?.touched,
-              'border-green-400 bg-green-50': passwordConfirmation?.valid && passwordConfirmation?.touched,
+              'border-[#3D7A6A] bg-[#E8EDF2]': passwordConfirmation?.valid && passwordConfirmation?.touched,
               'border-gray-300': !passwordConfirmation?.touched
             }"
           />
@@ -184,11 +184,11 @@
             {{ showConfirmPassword() ? '🙈' : '👁️' }}
           </button>
         </div>
-        
+
         @if (registerForm.errors?.['passwordMismatch'] && passwordConfirmation?.touched) {
           <p class="mt-1 text-red-500 text-sm">Les mots de passe ne correspondent pas</p>
         }
-        
+
         @if (hasServerError('password_confirmation')) {
           <p class="mt-1 text-red-500 text-sm">{{ getServerError('password_confirmation') }}</p>
         }
@@ -201,17 +201,17 @@
             type="checkbox"
             formControlName="acceptTerms"
             (change)="updateAcceptedTerms($event)"
-            class="rounded border-gray-300 text-green-600 focus:ring-green-500"
+            class="rounded border-gray-300 text-[#2D5A4C] focus:ring-[#3D7A6A]"
           />
         </div>
         <div class="ml-3 text-sm">
           <label class="text-gray-600">
-            J'accepte les 
-            <a href="/conditions-generales" target="_blank" class="text-green-600 hover:text-green-500">
+            J'accepte les
+            <a href="/conditions-generales" target="_blank" class="text-[#2D5A4C] hover:text-[#3D7A6A]">
               conditions générales d'utilisation
             </a>
-            et la 
-            <a href="/confidentialite" target="_blank" class="text-green-600 hover:text-green-500">
+            et la
+            <a href="/confidentialite" target="_blank" class="text-[#2D5A4C] hover:text-[#3D7A6A]">
               politique de confidentialité
             </a>
           </label>
@@ -225,7 +225,7 @@
       <button
         type="submit"
         [disabled]="authService.isLoading() || registerForm.invalid"
-        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-[#2D5A4C] hover:bg-[#1E3D33] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3D7A6A] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
         @if (authService.isLoading()) {
           <span class="flex items-center">
@@ -236,7 +236,7 @@
             Création du compte...
           </span>
         } @else {
-          'Créer mon compte'
+          Créer mon compte
         }
       </button>
     </form>

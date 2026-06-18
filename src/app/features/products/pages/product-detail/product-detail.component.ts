@@ -12,7 +12,7 @@
  * - Gestion des favoris
  */
 
-import { Component, inject, OnInit, OnDestroy, signal, computed, effect } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, signal, computed, effect, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductStore } from '../../store/product.store';
@@ -37,7 +37,8 @@ import { FavoriteService } from '../../../services/favorite.service';
     LoadingSpinnerComponent
   ],
   templateUrl: './product-detail.component.html',
-  styleUrls: ['./product-detail.component.css']
+  styleUrls: ['./product-detail.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductDetailComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
@@ -122,17 +123,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     if (!product) return '';
     if (product.stock === 0) return 'text-red-600 bg-red-50';
     if (product.stock < 10) return 'text-orange-600 bg-orange-50';
-    return 'text-green-600 bg-green-50';
+    return 'text-[#2D5A4C] bg-[#E8EDF2]';
   });
 
-  ngOnInit(): void {
-    // Récupère le slug depuis l'URL
-    const slug = this.route.snapshot.paramMap.get('slug');
-    if (slug) {
-      this.productStore.loadProductBySlug(slug);
-    }
-
-    // Effet pour mettre à jour le SEO quand le produit charge
+  constructor() {
     effect(() => {
       const product = this.currentProduct();
       if (product) {
@@ -140,8 +134,14 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         this.checkIfFavorite(product.id);
       }
     });
+  }
 
-    // Initialise Swiper après le chargement du DOM
+  ngOnInit(): void {
+    const slug = this.route.snapshot.paramMap.get('slug');
+    if (slug) {
+      this.productStore.loadProductBySlug(slug);
+    }
+
     setTimeout(() => this.initSwiper(), 100);
   }
 

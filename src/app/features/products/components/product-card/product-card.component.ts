@@ -11,14 +11,13 @@
 
 import { Component, input, computed, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { NgOptimizedImage } from '@angular/common';
 import { WhatsAppUtil } from '../../../../shared/utils/whatsapp.util';
 import { Product } from '../../../models/product.model';
 
 @Component({
   selector: 'app-product-card',
   standalone: true,
-  imports: [RouterLink, NgOptimizedImage],
+  imports: [RouterLink],
   templateUrl: './product-card.component.html',
   styleUrls: ['./product-card.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -38,24 +37,24 @@ export class ProductCardComponent {
    */
   readonly isLowStock = computed(() => this.product().stock > 0 && this.product().stock < 10);
   
-  /**
-   * URL de l'image principale
-   */
   readonly mainImageUrl = computed(() => {
     const product = this.product();
-    const mainImage = product.images?.find(img => img.principale);
-    if (mainImage) return mainImage.url;
-    if (product.images?.length) return product.images[0].url;
+    // Full images array (detail view or admin)
+    if (product.images?.length) {
+      const main = product.images.find(img => img.principale) ?? product.images[0];
+      return main.url ?? main.chemin ?? '/assets/images/placeholder.webp';
+    }
+    // main_image only (list view — API returns single relation)
+    if (product.main_image) {
+      return product.main_image.url ?? product.main_image.chemin ?? '/assets/images/placeholder.webp';
+    }
     return '/assets/images/placeholder.webp';
   });
-  
-  /**
-   * Alt text pour l'image
-   */
+
   readonly imageAlt = computed(() => {
     const product = this.product();
-    const mainImage = product.images?.find(img => img.principale);
-    return mainImage?.alt_text || product.nom;
+    const img = product.images?.find(i => i.principale) ?? product.main_image;
+    return img?.alt_text || product.nom;
   });
   
   /**

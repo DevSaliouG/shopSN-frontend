@@ -4,12 +4,10 @@ import { CommonModule } from '@angular/common';
 import { ProductService } from '../../../services/product.service';
 import { ToastService } from '../../../services/toast.service';
 import { ProductImage } from '../../../models/product.model';
-import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
-
 @Component({
   selector: 'app-product-images',
   standalone: true,
-  imports: [CommonModule, LoadingSpinnerComponent],
+  imports: [CommonModule],
   template: `
     <div class="product-images-container">
       <div class="images-header">
@@ -109,7 +107,7 @@ import { LoadingSpinnerComponent } from '../../../../shared/components/loading-s
       align-items: center;
       gap: 0.5rem;
       padding: 0.4rem 0.8rem;
-      background: #22c55e;
+      background: #2D5A4C;
       color: white;
       border: none;
       border-radius: 0.5rem;
@@ -118,7 +116,7 @@ import { LoadingSpinnerComponent } from '../../../../shared/components/loading-s
       transition: background 0.2s;
     }
     .btn-upload:hover:not(:disabled) {
-      background: #16a34a;
+      background: #1E3D33;
     }
     .btn-upload:disabled {
       opacity: 0.6;
@@ -151,7 +149,7 @@ import { LoadingSpinnerComponent } from '../../../../shared/components/loading-s
       background: #f3f4f6;
     }
     .image-card.main-image {
-      border-color: #22c55e;
+      border-color: #2D5A4C;
     }
     .image-card img {
       width: 100%;
@@ -187,7 +185,7 @@ import { LoadingSpinnerComponent } from '../../../../shared/components/loading-s
       transition: all 0.2s;
     }
     .btn-set-main:hover:not(:disabled) {
-      background: #22c55e;
+      background: #2D5A4C;
       color: white;
     }
     .btn-delete-image:hover:not(:disabled) {
@@ -200,7 +198,7 @@ import { LoadingSpinnerComponent } from '../../../../shared/components/loading-s
       cursor: not-allowed;
     }
     .badge-main {
-      background: #22c55e;
+      background: #2D5A4C;
       color: white;
       padding: 0.2rem 0.5rem;
       border-radius: 0.25rem;

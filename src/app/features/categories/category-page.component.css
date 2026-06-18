@@ -5,11 +5,11 @@
     min-height: 100vh;
     background: linear-gradient(
         180deg,
-        var(--color-bg-alt) 0%,
-        #f8fafc 100%
+        var(--color-bg-alt, #F0F4F8) 0%,
+        var(--color-bg, #E8EDF2) 100%
     );
     font-family: "Inter", sans-serif;
-    color: var(--color-text);
+    color: var(--color-text, #1A1A1A);
 }
 
 .container {
@@ -106,7 +106,7 @@
 }
 
 .btn-filter-toggle.active {
-    background: rgba(34,197,94,.08);
+    background: rgba(92,58,33,.08);
     color: var(--color-primary);
     border-color: var(--color-primary);
 }
@@ -154,7 +154,7 @@
     border-color: var(--color-primary);
 
     box-shadow:
-        0 0 0 4px rgba(34,197,94,.15);
+        0 0 0 4px rgba(245,197,163,.4);
 }
 
 /* ===========================

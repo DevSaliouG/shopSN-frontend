@@ -32,12 +32,14 @@ export class ProductsManagementComponent implements OnInit {
   showTrashed = signal(false);
   isRestoring = signal<number | null>(null);
   isEditMode = computed(() => this.editingId() !== null);
+  serverErrors = signal<Record<string, string[]>>({});
+  isToggling = signal<number | null>(null);
 
   productForm = this.fb.group({
     nom: ['', Validators.required],
     category_id: [null as number | null, Validators.required],
     description: [''],
-    prix: [0, [Validators.required, Validators.min(0)]],
+    prix: [0, [Validators.required, Validators.min(1)]],
     stock: [0, Validators.min(0)],
     statut: ['actif'],
     populaire: [false],
@@ -95,6 +97,7 @@ export class ProductsManagementComponent implements OnInit {
 
   openCreateModal(): void {
     this.editingId.set(null);
+    this.serverErrors.set({});
     this.productForm.reset({
       nom: '',
       category_id: null,
@@ -129,19 +132,22 @@ export class ProductsManagementComponent implements OnInit {
       return;
     }
 
+    this.serverErrors.set({});
+
     const raw = this.productForm.value;
-    const data = {
+    const data: Record<string, any> = {
       category_id: raw.category_id!,
-      nom: raw.nom!,
+      nom: raw.nom!.trim(),
       description: raw.description || '',
       prix: raw.prix!,
       stock: raw.stock ?? 0,
       statut: raw.statut as 'actif' | 'inactif',
       populaire: raw.populaire ?? false,
-      whatsapp_message: raw.whatsapp_message || ''
     };
 
-    console.log('📤 Données envoyées:', data);
+    if (raw.whatsapp_message?.trim()) {
+      data['whatsapp_message'] = raw.whatsapp_message.trim();
+    }
 
     if (this.editingId()) {
       const updateData: UpdateProductData = {
@@ -155,22 +161,32 @@ export class ProductsManagementComponent implements OnInit {
           this.closeModal();
         },
         error: (err) => {
-          console.error('Erreur modification:', err);
-          this.toast.error('Erreur lors de la modification');
+          this.handleServerError(err, 'modification');
         }
       });
     } else {
-      this.productService.createProduct(data).subscribe({
+      this.productService.createProduct(data as any).subscribe({
         next: () => {
           this.toast.success('Produit créé avec succès');
           this.loadProducts();
           this.closeModal();
         },
         error: (err) => {
-          console.error('Erreur création:', err);
-          this.toast.error('Erreur lors de la création');
+          this.handleServerError(err, 'création');
         }
       });
+    }
+  }
+
+  private handleServerError(err: any, action: string): void {
+    if (err.status === 422 && err.error?.errors) {
+      this.serverErrors.set(err.error.errors);
+      const messages = Object.values(err.error.errors as Record<string, string[]>)
+        .flat()
+        .join('. ');
+      this.toast.error(messages);
+    } else {
+      this.toast.error(`Erreur lors de la ${action}`);
     }
   }
 
@@ -228,10 +244,24 @@ export class ProductsManagementComponent implements OnInit {
     this.productForm.reset();
   }
 
-  // Helper pour afficher le titre de la page
+  toggleStatus(product: Product): void {
+    this.isToggling.set(product.id);
+    this.productService.toggleProductStatus(product.id).subscribe({
+      next: (res) => {
+        this.products.update(list =>
+          list.map(p => p.id === product.id ? { ...p, statut: res.data.statut } : p)
+        );
+        this.toast.success(`Produit "${product.nom}" : statut mis à jour`);
+        this.isToggling.set(null);
+      },
+      error: () => {
+        this.toast.error('Erreur lors du changement de statut');
+        this.isToggling.set(null);
+      }
+    });
+  }
+
   getPageTitle(): string {
     return this.showTrashed() ? '🗑️ Produits supprimés' : 'Gestion des produits';
   }
-
-  
 }

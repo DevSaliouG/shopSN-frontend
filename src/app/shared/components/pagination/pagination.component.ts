@@ -86,8 +86,8 @@ import { CommonModule } from '@angular/common';
     }
     
     .pagination-number.active {
-      background: #22c55e;
-      border-color: #22c55e;
+      background: #2D5A4C;
+      border-color: #2D5A4C;
       color: white;
     }
     

@@ -2,8 +2,6 @@ import { Routes } from '@angular/router';
 import { authGuard } from './features/guards/auth.guard';
 import { CategoryPageComponent } from './features/categories/category-page.component';
 import { adminGuard } from './features/guards/admin.guard';
-// import { authGuard } from './core/guards/auth.guard';
-// import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -19,10 +17,6 @@ export const routes: Routes = [
     path: 'categorie/:slug',
     component: CategoryPageComponent
   },
-  // {
-  //   path: 'recherche',
-  //   // loadComponent: () => import('./features/search/search.component').then(m => m.SearchComponent)
-  // },
   {
     path: 'connexion',
     loadComponent: () => import('./features/auth/pages/login/login.component').then(m => m.LoginComponent)
@@ -54,20 +48,19 @@ export const routes: Routes = [
     canActivate: [authGuard, adminGuard],
     loadChildren: () => import('./features/admin/admin.routes').then(m => m.ADMIN_ROUTES)
   },
-  // {
-  //   path: 'contact',
-  //   loadComponent: () => import('./features/contact/contact.component').then(m => m.ContactComponent)
-  // },
-  // {
-  //   path: 'a-propos',
-  //   loadComponent: () => import('./features/about/about.component').then(m => m.AboutComponent)
-  // },
-  // {
-  //   path: 'faq',
-  //   loadComponent: () => import('./features/faq/faq.component').then(m => m.FaqComponent)
-  // },
-  // {
-  //   path: '**',
-  //   loadComponent: () => import('./shared/components/not-found/not-found.component').then(m => m.NotFoundComponent)
-  // }
+  {
+    path: 'contact',
+    loadComponent: () => import('./features/contact/contact.component').then(m => m.ContactComponent),
+    title: 'Contact | ShopSN'
+  },
+  {
+    path: 'a-propos',
+    loadComponent: () => import('./features/about/about.component').then(m => m.AboutComponent),
+    title: 'A propos | ShopSN'
+  },
+  {
+    path: '**',
+    loadComponent: () => import('./shared/components/not-found/not-found.component').then(m => m.NotFoundComponent),
+    title: 'Page introuvable | ShopSN'
+  }
 ];

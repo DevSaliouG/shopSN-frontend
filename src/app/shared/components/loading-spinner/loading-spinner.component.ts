@@ -51,7 +51,7 @@ export class LoadingSpinnerComponent {
       case 'gray':
         return 'border-gray-600 border-t-gray-300';
       case 'success':
-        return 'border-green-600 border-t-green-300';
+        return 'border-[#2D5A4C] border-t-[#3D7A6A]';
       default:
         return 'border-primary-600 border-t-primary-300';
     }
