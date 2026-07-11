@@ -95,7 +95,7 @@ import { NotificationService } from '../../../core/services/notification.service
     .toast-success::before { background: #22C55E; }
     .toast-error::before { background: #EF4444; }
     .toast-warning::before { background: #F59E0B; }
-    .toast-info::before { background: #2D5A4C; }
+    .toast-info::before { background: #FF6600; }
 
     .toast-icon {
       flex-shrink: 0;
@@ -123,8 +123,8 @@ import { NotificationService } from '../../../core/services/notification.service
     }
 
     .toast-info .toast-icon {
-      background: rgba(45, 90, 76, 0.1);
-      color: #2D5A4C;
+      background: rgba(255, 102, 0, 0.1);
+      color: #FF6600;
     }
 
     .toast-content {
@@ -160,7 +160,7 @@ import { NotificationService } from '../../../core/services/notification.service
       transition: all 0.15s;
 
       &:hover {
-        background: #E8EDF2;
+        background: #F5F5F5;
         color: #1A1A1A;
       }
     }

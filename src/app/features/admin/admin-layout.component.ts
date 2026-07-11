@@ -18,7 +18,7 @@ import { SidebarComponent } from '../../shared/components/sidebar/sidebar.compon
     .admin-layout {
       display: flex;
       min-height: 100vh;
-      background: #E8EDF2;
+      background: #F5F5F5;
     }
     .admin-content {
       flex: 1;

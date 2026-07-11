@@ -5,7 +5,7 @@ export const PRODUCTS_ROUTES: Routes = [
     path: '',
     loadComponent: () => import('./pages/product-list/product-list.component')
       .then(m => m.ProductListComponent),
-    title: 'Catalogue produits | ShopSN'
+    title: 'Catalogue produits | OnlineStore'
   },
   {
     path: ':slug',

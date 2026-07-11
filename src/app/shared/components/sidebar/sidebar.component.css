@@ -5,13 +5,13 @@
   left: 0;
   height: calc(100vh - 72px);
   width: 280px;
-  background: #2D5A4C;
-  color: #E8EDF2;
+  background: #FF6600;
+  color: #F5F5F5;
   display: flex;
   flex-direction: column;
   z-index: 999;
   box-shadow: 0 4px 12px rgba(74, 46, 26, 0.2);
-  border-right: 1px solid #1E3D33;
+  border-right: 1px solid #E65500;
   overflow-y: auto;
   transition: width 0.3s ease, transform 0.3s ease;
   font-family: system-ui, -apple-system, sans-serif;
@@ -52,7 +52,7 @@
   gap: 0.5rem;
   font-size: 1.2rem;
   font-weight: 700;
-  color: #E8EDF2;
+  color: #F5F5F5;
   white-space: nowrap;
   overflow: hidden;
 }
@@ -62,7 +62,7 @@
 }
 
 .brand-vector {
-  color: #3D7A6A;
+  color: #FF8533;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -70,7 +70,7 @@
 }
 
 .brand-text span {
-  color: #3D7A6A;
+  color: #FF8533;
 }
 
 .toggle-btn {
@@ -89,7 +89,7 @@
 
 .toggle-btn:hover {
   background: rgba(245, 197, 163, 0.1);
-  color: #3D7A6A;
+  color: #FF8533;
 }
 
 .toggle-btn svg {
@@ -155,18 +155,18 @@
 
 .sidebar-nav a:hover {
   background: rgba(245, 197, 163, 0.1);
-  color: #3D7A6A;
+  color: #FF8533;
   border-left-color: rgba(232, 168, 124, 0.5);
 }
 
 .sidebar-nav a.active {
   background: rgba(245, 197, 163, 0.15);
-  color: #3D7A6A;
-  border-left-color: #D4A84E;
+  color: #FF8533;
+  border-left-color: #666666;
 }
 
 .sidebar-nav a.active .nav-icon {
-  color: #3D7A6A;
+  color: #FF8533;
 }
 
 .nav-icon {
@@ -181,7 +181,7 @@
 
 .sidebar-nav a:hover .nav-icon,
 .sidebar-nav a.active .nav-icon {
-  color: #3D7A6A;
+  color: #FF8533;
 }
 
 /* Mode réduit : le label est caché */
@@ -208,14 +208,14 @@
 .user-avatar {
   width: 36px;
   height: 36px;
-  background: #1E3D33;
+  background: #E65500;
   border-radius: 9999px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
   font-size: 0.85rem;
-  color: #3D7A6A;
+  color: #FF8533;
   text-transform: uppercase;
   flex-shrink: 0;
   border: 2px solid rgba(245, 197, 163, 0.3);
@@ -230,7 +230,7 @@
 
 .user-name {
   font-weight: 600;
-  color: #E8EDF2;
+  color: #F5F5F5;
   font-size: 0.9rem;
 }
 

@@ -1,13 +1,12 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './features/guards/auth.guard';
-import { CategoryPageComponent } from './features/categories/category-page.component';
-import { adminGuard } from './features/guards/admin.guard';
+import { authGuard } from './core/guards/auth.guard';
+import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent),
-    title: 'ShopSN — Boutique en ligne Sénégal'
+    title: 'OnlineStore — Boutique en ligne Sénégal'
   },
   {
     path: 'produits',
@@ -15,7 +14,10 @@ export const routes: Routes = [
   },
   {
     path: 'categorie/:slug',
-    component: CategoryPageComponent
+    loadComponent: () =>
+      import('./features/categories/category-page.component').then(
+        (m) => m.CategoryPageComponent,
+      ),
   },
   {
     path: 'connexion',
@@ -51,16 +53,16 @@ export const routes: Routes = [
   {
     path: 'contact',
     loadComponent: () => import('./features/contact/contact.component').then(m => m.ContactComponent),
-    title: 'Contact | ShopSN'
+    title: 'Contact | OnlineStore'
   },
   {
     path: 'a-propos',
     loadComponent: () => import('./features/about/about.component').then(m => m.AboutComponent),
-    title: 'A propos | ShopSN'
+    title: 'A propos | OnlineStore'
   },
   {
     path: '**',
     loadComponent: () => import('./shared/components/not-found/not-found.component').then(m => m.NotFoundComponent),
-    title: 'Page introuvable | ShopSN'
+    title: 'Page introuvable | OnlineStore'
   }
 ];

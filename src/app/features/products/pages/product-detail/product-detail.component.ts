@@ -123,7 +123,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     if (!product) return '';
     if (product.stock === 0) return 'text-red-600 bg-red-50';
     if (product.stock < 10) return 'text-orange-600 bg-orange-50';
-    return 'text-[#2D5A4C] bg-[#E8EDF2]';
+    return 'text-[#FF6600] bg-[#F5F5F5]';
   });
 
   constructor() {
@@ -295,7 +295,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   }
 
   shareOnTwitter(): void {
-    const text = encodeURIComponent(`Découvrez ${this.currentProduct()?.nom} sur ShopSN`);
+    const text = encodeURIComponent(`Découvrez ${this.currentProduct()?.nom} sur OnlineStore`);
     const url = encodeURIComponent(window.location.href);
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
   }

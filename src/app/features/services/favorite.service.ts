@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { ApiResponse, Product, ProductImage } from '../models/product.model';
 import { Favorite } from '../models/user.model';
-import { ENVIRONMENT } from '../../app.config';
+import { ENVIRONMENT } from '../../core/tokens/environment.token';
 
 @Injectable({ providedIn: 'root' })
 export class FavoriteService {

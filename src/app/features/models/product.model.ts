@@ -1,5 +1,5 @@
 /**
- * Modèles TypeScript pour les produits ShopSN
+ * Modèles TypeScript pour les produits OnlineStore
  * Définit les structures de données utilisées dans tout le module produit
  */
 

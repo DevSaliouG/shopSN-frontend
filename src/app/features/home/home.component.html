@@ -106,7 +106,7 @@
       } @else {
         <div class="products-grid">
           @for (product of popularProducts(); track product.id; let i = $index) {
-            <div class="product-wrapper" [style.--delay]="getAnimationDelay(i)">
+            <div class="product-wrapper" [attr.style]="'--delay:' + getAnimationDelay(i)">
               <app-product-card [product]="product" />
             </div>
           }
@@ -173,7 +173,7 @@
       } @else {
         <div class="products-grid">
           @for (product of recentProducts(); track product.id; let i = $index) {
-            <div class="product-wrapper" [style.--delay]="getAnimationDelay(i)">
+            <div class="product-wrapper" [attr.style]="'--delay:' + getAnimationDelay(i)">
               <app-product-card [product]="product" />
             </div>
           }

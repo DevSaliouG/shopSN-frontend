@@ -5,7 +5,7 @@
 
 export class WhatsAppUtil {
   // Numéro WhatsApp de la boutique (format international sans +)
-  private static readonly DEFAULT_PHONE = '221700078822';
+  private static readonly DEFAULT_PHONE = '221787838002';
 
   /**
    * Génère l'URL WhatsApp complète

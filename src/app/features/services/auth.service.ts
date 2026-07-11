@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
-import { ENVIRONMENT } from '../../app.config';
+import { ENVIRONMENT } from '../../core/tokens/environment.token';
 import {
   User,
   LoginCredentials,
@@ -16,9 +16,9 @@ import {
 import { ApiResponse } from '../models/product.model';
 
 const STORAGE_KEYS = {
-  TOKEN: 'shopSN_token',
-  USER: 'shopSN_user',
-  TOKEN_EXPIRY: 'shopSN_token_expiry',
+  TOKEN: 'onlineStore_token',
+  USER: 'onlineStore_user',
+  TOKEN_EXPIRY: 'onlineStore_token_expiry',
 } as const;
 
 @Injectable({ providedIn: 'root' })

@@ -38,7 +38,7 @@ export class SeoService {
 
   // Configuration par défaut
   private readonly defaultConfig: SeoConfig = {
-    title: 'ShopSN - Boutique en ligne Sénégal',
+    title: 'OnlineStore - Boutique en ligne Sénégal',
     description:
       'Découvrez des centaines de produits et commandez facilement via WhatsApp. Livraison au Sénégal.',
     keywords: 'e-commerce, Sénégal, boutique en ligne, WhatsApp, produits, shopping, Dakar',
@@ -47,7 +47,7 @@ export class SeoService {
   };
 
   // URL de base de l'application
-  private readonly baseUrl = 'https://shopsn.sn';
+  private readonly baseUrl = 'https://onlinestore.sn';
 
   /**
    * Définit les meta tags SEO de base
@@ -95,13 +95,13 @@ export class SeoService {
     this.meta.updateTag({ property: 'og:image', content: image });
     this.meta.updateTag({ property: 'og:url', content: url });
     this.meta.updateTag({ property: 'og:type', content: config.type || 'website' });
-    this.meta.updateTag({ property: 'og:site_name', content: 'ShopSN' });
+    this.meta.updateTag({ property: 'og:site_name', content: 'OnlineStore' });
     this.meta.updateTag({ property: 'og:locale', content: 'fr_FR' });
 
     // Image dimensions recommandées pour les réseaux sociaux
     this.meta.updateTag({ property: 'og:image:width', content: '1200' });
     this.meta.updateTag({ property: 'og:image:height', content: '630' });
-    this.meta.updateTag({ property: 'og:image:alt', content: config.title || 'ShopSN' });
+    this.meta.updateTag({ property: 'og:image:alt', content: config.title || 'OnlineStore' });
   }
 
   /**
@@ -112,8 +112,8 @@ export class SeoService {
     const image = config.image || `${this.baseUrl}/assets/images/og-image.jpg`;
 
     this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
-    this.meta.updateTag({ name: 'twitter:site', content: '@shopsn' });
-    this.meta.updateTag({ name: 'twitter:creator', content: '@shopsn' });
+    this.meta.updateTag({ name: 'twitter:site', content: '@onlinestore' });
+    this.meta.updateTag({ name: 'twitter:creator', content: '@onlinestore' });
     this.meta.updateTag({
       name: 'twitter:title',
       content: config.title || this.defaultConfig.title,
@@ -123,7 +123,7 @@ export class SeoService {
       content: config.description || this.defaultConfig.description,
     });
     this.meta.updateTag({ name: 'twitter:image', content: image });
-    this.meta.updateTag({ name: 'twitter:image:alt', content: config.title || 'ShopSN' });
+    this.meta.updateTag({ name: 'twitter:image:alt', content: config.title || 'OnlineStore' });
   }
 
   /**
@@ -147,7 +147,7 @@ export class SeoService {
    * @param product - Produit à optimiser SEO
    */
   setProductMeta(product: Product): void {
-    const title = `${product.nom} - ${product.prix_format} | ShopSN`;
+    const title = `${product.nom} - ${product.prix_format} | OnlineStore`;
     const description = product.description_courte || product.description.substring(0, 160);
     const image = product.images?.find((img) => img.principale)?.url || product.images?.[0]?.url;
     const url = `${this.baseUrl}/produits/${product.slug}`;
@@ -183,10 +183,10 @@ export class SeoService {
    * @param category - Catégorie à optimiser SEO
    */
   setCategoryMeta(category: Category): void {
-    const title = `${category.nom} - Produits | ShopSN`;
+    const title = `${category.nom} - Produits | OnlineStore`;
     const description =
       category.description ||
-      `Découvrez notre sélection de ${category.nom} de qualité sur ShopSN. Commandez facilement via WhatsApp.`;
+      `Découvrez notre sélection de ${category.nom} de qualité sur OnlineStore. Commandez facilement via WhatsApp.`;
     const url = `${this.baseUrl}/categorie/${category.slug}`;
 
     this.setBasicMeta({
@@ -215,7 +215,7 @@ export class SeoService {
    */
   setHomeMeta(): void {
     this.setBasicMeta({
-      title: 'ShopSN - Boutique en ligne Sénégal | Achat via WhatsApp',
+      title: 'OnlineStore - Boutique en ligne Sénégal | Achat via WhatsApp',
       description:
         'Découvrez des centaines de produits et commandez facilement via WhatsApp. Livraison rapide au Sénégal. Paiement sécurisé.',
       keywords: 'e-commerce, Sénégal, boutique en ligne, WhatsApp, achat en ligne, Dakar, produits',
@@ -237,8 +237,8 @@ export class SeoService {
    * @param resultsCount - Nombre de résultats
    */
   setSearchMeta(query: string, resultsCount: number): void {
-    const title = `Résultats pour "${query}" - ${resultsCount} produit${resultsCount > 1 ? 's' : ''} | ShopSN`;
-    const description = `Découvrez ${resultsCount} résultat${resultsCount > 1 ? 's' : ''} pour "${query}" sur ShopSN. Trouvez le produit qui vous correspond.`;
+    const title = `Résultats pour "${query}" - ${resultsCount} produit${resultsCount > 1 ? 's' : ''} | OnlineStore`;
+    const description = `Découvrez ${resultsCount} résultat${resultsCount > 1 ? 's' : ''} pour "${query}" sur OnlineStore. Trouvez le produit qui vous correspond.`;
 
     this.setBasicMeta({
       title,
@@ -263,7 +263,7 @@ export class SeoService {
       mpn: `SN-${product.id}`,
       brand: {
         '@type': 'Brand',
-        name: 'ShopSN',
+        name: 'OnlineStore',
       },
       offers: {
         '@type': 'Offer',
@@ -277,7 +277,7 @@ export class SeoService {
         url: `${this.baseUrl}/produits/${product.slug}`,
         seller: {
           '@type': 'Organization',
-          name: 'ShopSN',
+          name: 'OnlineStore',
         },
       },
       aggregateRating: {
@@ -298,13 +298,13 @@ export class SeoService {
     const structuredData = {
       '@context': 'https://schema.org',
       '@type': 'Organization',
-      name: 'ShopSN',
+      name: 'OnlineStore',
       url: this.baseUrl,
       logo: `${this.baseUrl}/assets/images/logo.png`,
       sameAs: [
-        'https://facebook.com/shopsn',
-        'https://instagram.com/shopsn',
-        'https://twitter.com/shopsn',
+        'https://facebook.com/onlinestore',
+        'https://instagram.com/onlinestore',
+        'https://twitter.com/onlinestore',
       ],
       contactPoint: {
         '@type': 'ContactPoint',
@@ -372,7 +372,7 @@ export class SeoService {
    */
   setNotFoundMeta(): void {
     this.setBasicMeta({
-      title: 'Page non trouvée - 404 | ShopSN',
+      title: 'Page non trouvée - 404 | OnlineStore',
       description: "La page que vous recherchez n'existe pas ou a été déplacée.",
       robots: 'noindex,follow',
     });

@@ -9,7 +9,7 @@ export type SkeletonVariant = 'text' | 'circular' | 'rectangular' | 'card' | 'pr
   template: `
     @switch (variant()) {
       @case ('card') {
-        <div class="skeleton-card" [style.width]="width()" [style.height]="height()">
+        <div class="skeleton-card" [attr.style]="(width() ? 'width:' + width() + ';' : '') + (height() ? 'height:' + height() : '')">
           <div class="skeleton-image"></div>
           <div class="skeleton-content">
             <div class="skeleton-line w-3/4"></div>
@@ -28,13 +28,13 @@ export type SkeletonVariant = 'text' | 'circular' | 'rectangular' | 'card' | 'pr
         </div>
       }
       @case ('circular') {
-        <div class="skeleton-pulse rounded-full" [style.width]="computedSize()" [style.height]="computedSize()"></div>
+        <div class="skeleton-pulse rounded-full" [attr.style]="'width:' + computedSize() + ';height:' + computedSize()"></div>
       }
       @case ('rectangular') {
-        <div class="skeleton-pulse rounded-lg" [style.width]="width() || '100%'" [style.height]="height() || '120px'"></div>
+        <div class="skeleton-pulse rounded-lg" [attr.style]="'width:' + (width() || '100%') + ';height:' + (height() || '120px')"></div>
       }
       @default {
-        <div class="skeleton-pulse rounded" [style.width]="width() || '100%'" [style.height]="height() || '16px'"></div>
+        <div class="skeleton-pulse rounded" [attr.style]="'width:' + (width() || '100%') + ';height:' + (height() || '16px')"></div>
       }
     }
   `,
@@ -42,7 +42,7 @@ export type SkeletonVariant = 'text' | 'circular' | 'rectangular' | 'card' | 'pr
     :host { display: block; }
 
     .skeleton-pulse {
-      background: linear-gradient(90deg, #D8E0E8 25%, #E8EDF2 50%, #D8E0E8 75%);
+      background: linear-gradient(90deg, #EBEBEB 25%, #F5F5F5 50%, #EBEBEB 75%);
       background-size: 200% 100%;
       animation: shimmer 1.5s ease-in-out infinite;
     }
@@ -57,7 +57,7 @@ export type SkeletonVariant = 'text' | 'circular' | 'rectangular' | 'card' | 'pr
     .skeleton-image {
       width: 100%;
       height: 180px;
-      background: linear-gradient(90deg, #D8E0E8 25%, #E8EDF2 50%, #D8E0E8 75%);
+      background: linear-gradient(90deg, #EBEBEB 25%, #F5F5F5 50%, #EBEBEB 75%);
       background-size: 200% 100%;
       animation: shimmer 1.5s ease-in-out infinite;
     }
@@ -72,7 +72,7 @@ export type SkeletonVariant = 'text' | 'circular' | 'rectangular' | 'card' | 'pr
     .skeleton-line {
       height: 12px;
       border-radius: 6px;
-      background: linear-gradient(90deg, #D8E0E8 25%, #E8EDF2 50%, #D8E0E8 75%);
+      background: linear-gradient(90deg, #EBEBEB 25%, #F5F5F5 50%, #EBEBEB 75%);
       background-size: 200% 100%;
       animation: shimmer 1.5s ease-in-out infinite;
     }
@@ -87,7 +87,7 @@ export type SkeletonVariant = 'text' | 'circular' | 'rectangular' | 'card' | 'pr
     .skeleton-product-image {
       width: 100%;
       aspect-ratio: 1;
-      background: linear-gradient(90deg, #D8E0E8 25%, #E8EDF2 50%, #D8E0E8 75%);
+      background: linear-gradient(90deg, #EBEBEB 25%, #F5F5F5 50%, #EBEBEB 75%);
       background-size: 200% 100%;
       animation: shimmer 1.5s ease-in-out infinite;
     }

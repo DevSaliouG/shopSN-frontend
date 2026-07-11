@@ -8,7 +8,7 @@
       </svg>
       <h3 class="font-semibold text-gray-900">Filtres</h3>
       @if (activeFiltersCount() > 0) {
-        <span class="bg-[#E8EDF2] text-[#2D5A4C] text-xs font-medium px-2 py-0.5 rounded-full">
+        <span class="bg-[#F5F5F5] text-[#FF6600] text-xs font-medium px-2 py-0.5 rounded-full">
           {{ activeFiltersCount() }}
         </span>
       }
@@ -17,7 +17,7 @@
     @if (activeFiltersCount() > 0) {
       <button
         (click)="resetFilters()"
-        class="text-xs text-[#2D5A4C] hover:text-[#D4A84E] font-medium transition-colors"
+        class="text-xs text-[#FF6600] hover:text-[#666666] font-medium transition-colors"
       >
         Réinitialiser
       </button>
@@ -45,15 +45,15 @@
         <button
           (click)="selectCategory('')"
           class="w-full text-left px-3 py-2 rounded-lg transition-all duration-200 flex items-center justify-between group"
-          [class.bg-[#E8EDF2]]="selectedCategory() === ''"
-          [class.text-[#2D5A4C]]="selectedCategory() === ''"
+          [class.bg-[#F5F5F5]]="selectedCategory() === ''"
+          [class.text-[#FF6600]]="selectedCategory() === ''"
           [class.hover:bg-gray-50]="selectedCategory() !== ''"
         >
           <span class="text-sm" [class.font-medium]="selectedCategory() === ''">
             Toutes les catégories
           </span>
           @if (selectedCategory() === '') {
-            <svg class="w-4 h-4 text-[#2D5A4C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 text-[#FF6600]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
             </svg>
           }
@@ -64,8 +64,8 @@
           <button
             (click)="selectCategory(category.slug)"
             class="w-full text-left px-3 py-2 rounded-lg transition-all duration-200 flex items-center justify-between group"
-            [class.bg-[#E8EDF2]]="selectedCategory() === category.slug"
-            [class.text-[#2D5A4C]]="selectedCategory() === category.slug"
+            [class.bg-[#F5F5F5]]="selectedCategory() === category.slug"
+            [class.text-[#FF6600]]="selectedCategory() === category.slug"
             [class.hover:bg-gray-50]="selectedCategory() !== category.slug"
           >
             <span class="text-sm" [class.font-medium]="selectedCategory() === category.slug">
@@ -76,7 +76,7 @@
                 <span class="text-xs text-gray-400">{{ category.produits_count }}</span>
               }
               @if (selectedCategory() === category.slug) {
-                <svg class="w-4 h-4 text-[#2D5A4C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 text-[#FF6600]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                 </svg>
               }
@@ -105,7 +105,7 @@
           [max]="sliderMax()"
           [value]="sliderValue().max"
           (input)="onSliderChange($event)"
-          class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#2D5A4C]"
+          class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#FF6600]"
           step="10000"
         />
         <div class="flex justify-between text-xs text-gray-500 mt-1">
@@ -125,7 +125,7 @@
               [value]="prixMin() || ''"
               (input)="onPrixMinChange($event)"
               placeholder="0"
-              class="w-full pl-12 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#3D7A6A] focus:border-transparent"
+              class="w-full pl-12 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#FF8533] focus:border-transparent"
             />
           </div>
         </div>
@@ -138,7 +138,7 @@
               [value]="prixMax() || ''"
               (input)="onPrixMaxChange($event)"
               placeholder="Illimité"
-              class="w-full pl-12 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#3D7A6A] focus:border-transparent"
+              class="w-full pl-12 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#FF8533] focus:border-transparent"
             />
           </div>
         </div>
@@ -163,7 +163,7 @@
           (change)="toggleEnStock()"
           class="sr-only peer"
         />
-        <div class="w-5 h-5 border-2 rounded transition-all peer-checked:bg-[#2D5A4C] peer-checked:border-[#2D5A4C] peer-focus:ring-2 peer-focus:ring-[#3D7A6A]">
+        <div class="w-5 h-5 border-2 rounded transition-all peer-checked:bg-[#FF6600] peer-checked:border-[#FF6600] peer-focus:ring-2 peer-focus:ring-[#FF8533]">
           <svg class="w-4 h-4 text-white absolute top-0.5 left-0.5 hidden peer-checked:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
           </svg>
@@ -182,7 +182,7 @@
   @if (isMobile()) {
     <button
       (click)="emitFiltersChange()"
-      class="w-full bg-[#2D5A4C] hover:bg-[#1E3D33] text-white font-medium py-2.5 rounded-lg transition-colors"
+      class="w-full bg-[#FF6600] hover:bg-[#E65500] text-white font-medium py-2.5 rounded-lg transition-colors"
     >
       Appliquer les filtres
     </button>

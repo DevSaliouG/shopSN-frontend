@@ -107,7 +107,7 @@ import { ProductImage } from '../../../models/product.model';
       align-items: center;
       gap: 0.5rem;
       padding: 0.4rem 0.8rem;
-      background: #2D5A4C;
+      background: #FF6600;
       color: white;
       border: none;
       border-radius: 0.5rem;
@@ -116,7 +116,7 @@ import { ProductImage } from '../../../models/product.model';
       transition: background 0.2s;
     }
     .btn-upload:hover:not(:disabled) {
-      background: #1E3D33;
+      background: #E65500;
     }
     .btn-upload:disabled {
       opacity: 0.6;
@@ -149,7 +149,7 @@ import { ProductImage } from '../../../models/product.model';
       background: #f3f4f6;
     }
     .image-card.main-image {
-      border-color: #2D5A4C;
+      border-color: #FF6600;
     }
     .image-card img {
       width: 100%;
@@ -185,7 +185,7 @@ import { ProductImage } from '../../../models/product.model';
       transition: all 0.2s;
     }
     .btn-set-main:hover:not(:disabled) {
-      background: #2D5A4C;
+      background: #FF6600;
       color: white;
     }
     .btn-delete-image:hover:not(:disabled) {
@@ -198,7 +198,7 @@ import { ProductImage } from '../../../models/product.model';
       cursor: not-allowed;
     }
     .badge-main {
-      background: #2D5A4C;
+      background: #FF6600;
       color: white;
       padding: 0.2rem 0.5rem;
       border-radius: 0.25rem;

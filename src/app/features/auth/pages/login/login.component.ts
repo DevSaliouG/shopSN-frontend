@@ -66,11 +66,11 @@ export class LoginComponent {
       })
       .subscribe({
         next: () => {
-          // 1. On récupère le returnUrl SANS lui assigner de valeur par défaut immédiate
-          const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+          const rawReturnUrl = this.route.snapshot.queryParams['returnUrl'];
+          // OWASP A01: valider que returnUrl est bien un chemin relatif interne
+          const returnUrl = this.isSafeReturnUrl(rawReturnUrl) ? rawReturnUrl : null;
 
           if (returnUrl) {
-            // Si l'utilisateur tentait d'accéder à une page précise avant d'être redirigé
             this.router.navigateByUrl(returnUrl);
           } else if (this.authService.isAdmin()) {
             // Si c'est un admin et qu'aucune page spécifique n'était demandée : direction l'admin
@@ -92,9 +92,13 @@ export class LoginComponent {
       });
   }
 
-  /**
-   * Bascule l'affichage du mot de passe
-   */
+  /** Rejette toute URL qui n'est pas un chemin relatif interne (protection Open Redirect) */
+  private isSafeReturnUrl(url: unknown): url is string {
+    if (typeof url !== 'string' || !url.startsWith('/')) return false;
+    // Rejette les schémas protocol-relative (//evil.com) et les doubles-slash
+    return !url.startsWith('//') && !/^\/[^/].*:/.test(url);
+  }
+
   togglePasswordVisibility(): void {
     this.showPassword.update((value) => !value);
   }

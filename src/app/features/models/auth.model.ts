@@ -1,5 +1,5 @@
 /**
- * Modèles d'authentification pour ShopSN
+ * Modèles d'authentification pour OnlineStore
  * Définit les structures de données liées à l'authentification
  */
 

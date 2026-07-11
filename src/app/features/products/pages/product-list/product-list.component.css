@@ -1,13 +1,13 @@
 :host {
-  --color-primary: #2D5A4C;
-  --color-primary-light: #3D7A6A;
-  --color-peach: #D4A84E;
-  --color-peach-light: rgba(45, 90, 76, 0.06);
+  --color-primary: #FF6600;
+  --color-primary-light: #FF8533;
+  --color-peach: #666666;
+  --color-peach-light: rgba(255, 102, 0, 0.06);
   --color-bg: #FFFFFF;
-  --color-bg-alt: #E8EDF2;
+  --color-bg-alt: #F5F5F5;
   --color-text: #1A2B3C;
   --color-text-muted: #8896A6;
-  --color-border: #D8E0E8;
+  --color-border: #F5F5F5;
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 20px;
@@ -124,7 +124,7 @@
   padding-right: 36px;
 }
 .sort-select:focus {
-  box-shadow: 0 0 0 2px rgba(45, 90, 76, 0.15);
+  box-shadow: 0 0 0 2px rgba(255, 102, 0, 0.15);
 }
 
 .view-toggle-group {
@@ -230,7 +230,7 @@
   height: 44px;
   border-radius: 50%;
   border: none;
-  box-shadow: 0 4px 16px rgba(45, 90, 76, 0.2);
+  box-shadow: 0 4px 16px rgba(255, 102, 0, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;

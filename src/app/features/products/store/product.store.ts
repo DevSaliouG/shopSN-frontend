@@ -12,8 +12,7 @@ import { Injectable, signal, computed, inject } from '@angular/core';
 import { ProductService } from '../../services/product.service';
 import { Product, ProductFilters, PaginationMeta, ApiResponse } from '../../models/product.model';
 import { map, Observable } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
+import { ENVIRONMENT } from '../../../core/tokens/environment.token';
 
 @Injectable({ providedIn: 'root' })
 export class ProductStore {
@@ -42,7 +41,7 @@ export class ProductStore {
   readonly pagination = this._pagination.asReadonly();
   readonly filters = this._filters.asReadonly();
   readonly error = this._error.asReadonly();
-  private http = inject(HttpClient);
+  private readonly env = inject(ENVIRONMENT);
 
   // ==================== COMPUTED SIGNALS (Dérivations) ====================
 
@@ -330,16 +329,16 @@ export class ProductStore {
     totalProducts: number;
     categoryName: string;
   }> {
-    let httpParams = new HttpParams().set('page', params.page).set('category', slug);
-
-    if (params.sort) httpParams = httpParams.set('sort', params.sort);
-    if (params.search) httpParams = httpParams.set('q', params.search);
-    if (params.minPrice != null) httpParams = httpParams.set('prix_min', params.minPrice);
-    if (params.maxPrice != null) httpParams = httpParams.set('prix_max', params.maxPrice);
-    if (params.inStock) httpParams = httpParams.set('en_stock', 'true');
-
-    return this.http
-      .get<ApiResponse<Product[]>>(`${environment.apiUrl}/api/products`, { params: httpParams })
+    return this.productService
+      .getPublicProducts({
+        page: params.page,
+        category: slug,
+        sort: params.sort as ProductFilters['sort'],
+        q: params.search,
+        prix_min: params.minPrice ?? undefined,
+        prix_max: params.maxPrice ?? undefined,
+        en_stock: params.inStock,
+      })
       .pipe(
         map((response) => {
           const meta = response.meta;

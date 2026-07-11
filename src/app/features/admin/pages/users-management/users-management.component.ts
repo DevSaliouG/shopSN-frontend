@@ -2,7 +2,7 @@ import { Component, inject, signal, OnInit, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { ENVIRONMENT } from '../../../../app.config';
+import { ENVIRONMENT } from '../../../../core/tokens/environment.token';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 import { AuthService } from '../../../services/auth.service';
 import { ToastService } from '../../../services/toast.service';

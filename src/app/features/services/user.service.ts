@@ -6,7 +6,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { ENVIRONMENT } from '../../app.config';
+import { ENVIRONMENT } from '../../core/tokens/environment.token';
 import { 
   User, 
   UserProfileUpdate, 

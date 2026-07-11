@@ -3,7 +3,7 @@
  * Affiche la grille de produits avec filtres et pagination
  */
 
-import { Component, inject, OnInit, OnDestroy, signal, HostListener, ChangeDetectionStrategy, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, signal, HostListener, ChangeDetectionStrategy, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -34,7 +34,7 @@ import { ProductFilters } from '../../../models/product.model';
 })
 export class ProductListComponent implements OnInit, OnDestroy {
   protected readonly productStore = inject(ProductStore);
-  @Inject(PLATFORM_ID) private readonly platformId: any;
+  private readonly platformId = inject(PLATFORM_ID);
   
   // État local
   showFilters = signal<boolean>(false);

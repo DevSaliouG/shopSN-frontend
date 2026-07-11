@@ -117,7 +117,7 @@ import { NotificationService, Notification } from '../../../core/services/notifi
       align-items: center;
       justify-content: space-between;
       padding: 20px 20px 16px;
-      border-bottom: 1px solid #E8EDF2;
+      border-bottom: 1px solid #F5F5F5;
 
       h3 {
         font-size: 1.1rem;
@@ -135,15 +135,15 @@ import { NotificationService, Notification } from '../../../core/services/notifi
     .nc-action-btn {
       font-size: 0.75rem;
       font-weight: 600;
-      color: #2D5A4C;
-      background: rgba(45, 90, 76, 0.08);
+      color: #FF6600;
+      background: rgba(255, 102, 0, 0.08);
       border: none;
       padding: 6px 12px;
       border-radius: 999px;
       cursor: pointer;
       transition: background 0.15s;
 
-      &:hover { background: rgba(45, 90, 76, 0.15); }
+      &:hover { background: rgba(255, 102, 0, 0.15); }
     }
 
     .nc-close {
@@ -159,7 +159,7 @@ import { NotificationService, Notification } from '../../../core/services/notifi
       justify-content: center;
       transition: all 0.15s;
 
-      &:hover { background: #E8EDF2; color: #1A1A1A; }
+      &:hover { background: #F5F5F5; color: #1A1A1A; }
     }
 
     .nc-body {
@@ -190,11 +190,11 @@ import { NotificationService, Notification } from '../../../core/services/notifi
       transition: background 0.15s;
       position: relative;
 
-      &:hover { background: #F0F4F8; }
+      &:hover { background: #FAFAFA; }
     }
 
     .nc-item-unread {
-      background: rgba(45, 90, 76, 0.03);
+      background: rgba(255, 102, 0, 0.03);
 
       &::after {
         content: '';
@@ -204,7 +204,7 @@ import { NotificationService, Notification } from '../../../core/services/notifi
         width: 6px;
         height: 6px;
         border-radius: 50%;
-        background: #2D5A4C;
+        background: #FF6600;
       }
     }
 
@@ -221,7 +221,7 @@ import { NotificationService, Notification } from '../../../core/services/notifi
     .nc-icon-success { background: rgba(34, 197, 94, 0.1); color: #16A34A; }
     .nc-icon-error { background: rgba(239, 68, 68, 0.1); color: #DC2626; }
     .nc-icon-warning { background: rgba(245, 158, 11, 0.1); color: #D97706; }
-    .nc-icon-info { background: rgba(45, 90, 76, 0.1); color: #2D5A4C; }
+    .nc-icon-info { background: rgba(255, 102, 0, 0.1); color: #FF6600; }
 
     .nc-item-content {
       flex: 1;
@@ -274,7 +274,7 @@ import { NotificationService, Notification } from '../../../core/services/notifi
 
     .nc-footer {
       padding: 12px 16px;
-      border-top: 1px solid #E8EDF2;
+      border-top: 1px solid #F5F5F5;
       text-align: center;
     }
 

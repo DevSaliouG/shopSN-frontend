@@ -5,8 +5,8 @@
     min-height: 100vh;
     background: linear-gradient(
         180deg,
-        var(--color-bg-alt, #F0F4F8) 0%,
-        var(--color-bg, #E8EDF2) 100%
+        var(--color-bg-alt, #FAFAFA) 0%,
+        var(--color-bg, #F5F5F5) 100%
     );
     font-family: "Inter", sans-serif;
     color: var(--color-text, #1A1A1A);

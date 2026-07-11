@@ -12,7 +12,7 @@ import { NotificationCenterComponent } from './shared/components/notification-ce
   templateUrl: './app.html',
 })
 export class App {
-  protected readonly title = signal('shopSN-frontend');
+  protected readonly title = signal('OnlineStore');
 
   constructor(@Inject(PLATFORM_ID) private platformId: any) {
     afterNextRender(() => {

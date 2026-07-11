@@ -18,7 +18,7 @@ export const environment = {
   },
   
   // Application
-  appName: 'ShopSN',
+  appName: 'OnlineStore',
   appUrl: 'http://localhost:4200',
   appVersion: '1.0.0-dev',
   
@@ -26,9 +26,9 @@ export const environment = {
   whatsappNumber: '222170078822',
   
   // Stockage
-  jwtTokenKey: 'shopSN_token',
-  userStorageKey: 'shopSN_user',
-  tokenExpiryKey: 'shopSN_token_expiry',
+  jwtTokenKey: 'onlineStore_token',
+  userStorageKey: 'onlineStore_user',
+  tokenExpiryKey: 'onlineStore_token_expiry',
   
   // Feature flags
   enableAnalytics: false,
@@ -44,14 +44,14 @@ export const environment = {
   cacheTTL: 300, // 5 minutes en secondes
   
   // SEO
-  defaultMetaTitle: 'ShopSN - Boutique en ligne Sénégal',
+  defaultMetaTitle: 'OnlineStore - Boutique en ligne Sénégal',
   defaultMetaDescription: 'Découvrez des centaines de produits et commandez facilement via WhatsApp. Livraison au Sénégal.',
   defaultMetaKeywords: 'e-commerce, Sénégal, boutique en ligne, WhatsApp, produits',
   
   // Social
   socialLinks: {
-    facebook: 'https://facebook.com/shopsn',
-    instagram: 'https://instagram.com/shopsn',
-    twitter: 'https://twitter.com/shopsn'
+    facebook: 'https://facebook.com/onlinestore',
+    instagram: 'https://instagram.com/onlinestore',
+    twitter: 'https://twitter.com/onlinestore'
   }
 };

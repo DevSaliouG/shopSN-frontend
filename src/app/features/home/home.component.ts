@@ -1,5 +1,5 @@
 /**
- * Page d'accueil du site ShopSN
+ * Page d'accueil du site OnlineStore
  * Affiche les sections principales : hero, catégories, produits populaires, produits récents
  *
  * Fonctionnalités:
@@ -12,24 +12,17 @@
  * - SEO dynamique
  */
 
-import {
-  Component,
-  inject,
-  OnInit,
-  OnDestroy,
-  signal,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProductStore } from '../products/store/product.store';
 import { CategoryService } from '../services/category.service';
 import { ProductCardComponent } from '../products/components/product-card/product-card.component';
 import { HeroSectionComponent } from './components/hero-section.component';
 import { SeoService } from '../../core/services/seo.service';
 import { WhatsAppUtil } from '../../shared/utils/whatsapp.util';
-import { Subject, takeUntil } from 'rxjs';
 import { Category, Product, ApiResponse } from '../models/product.model';
 
 @Component({
@@ -40,12 +33,12 @@ import { Category, Product, ApiResponse } from '../models/product.model';
   styleUrls: ['./home.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit {
   private readonly productStore = inject(ProductStore);
   private readonly categoryService = inject(CategoryService);
   private readonly seoService = inject(SeoService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  // État
   categories = signal<Category[]>([]);
   popularProducts = signal<Product[]>([]);
   recentProducts = signal<Product[]>([]);
@@ -54,13 +47,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   isLoadingRecent = signal<boolean>(true);
   error = signal<string | null>(null);
 
-  // Newsletter
   newsletterEmail = '';
   isSubscribing = signal<boolean>(false);
   newsletterSuccess = signal<boolean>(false);
   newsletterError = signal<string | null>(null);
-
-  private destroy$ = new Subject<void>();
 
   ngOnInit(): void {
     this.seoService.setHomeMeta();
@@ -69,19 +59,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.loadRecentProducts();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  /**
-   * Charge les catégories depuis l'API
-   */
   private loadCategories(): void {
     this.isLoadingCategories.set(true);
     this.categoryService
       .getCategories()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: ApiResponse<Category[]>) => {
           this.categories.set(response.data.slice(0, 8));
@@ -94,14 +76,11 @@ export class HomeComponent implements OnInit, OnDestroy {
       });
   }
 
-  /**
-   * Charge les produits populaires
-   */
   private loadPopularProducts(): void {
     this.isLoadingPopular.set(true);
     this.productStore
       .getPopularProducts()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: ApiResponse<Product[]>) => {
           this.popularProducts.set(response.data.slice(0, 8));
@@ -114,14 +93,11 @@ export class HomeComponent implements OnInit, OnDestroy {
       });
   }
 
-  /**
-   * Charge les produits récents
-   */
   private loadRecentProducts(): void {
     this.isLoadingRecent.set(true);
     this.productStore
       .getRecentProducts()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: ApiResponse<Product[]>) => {
           this.recentProducts.set(response.data.slice(0, 8));

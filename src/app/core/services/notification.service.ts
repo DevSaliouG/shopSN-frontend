@@ -22,7 +22,7 @@ export interface ToastNotification {
   duration: number;
 }
 
-const STORAGE_KEY = 'shopsn_notifications';
+const STORAGE_KEY = 'onlinestore_notifications';
 const MAX_NOTIFICATIONS = 50;
 
 @Injectable({ providedIn: 'root' })

@@ -2,17 +2,14 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Installer Angular CLI (version alignée sur le projet)
-RUN npm install -g @angular/cli@21
+COPY package.json package-lock.json ./
+RUN npm ci --ignore-scripts
 
-# Copier les fichiers de dépendances en premier (cache Docker)
-COPY package*.json ./
-RUN npm install
-
-# Copier le reste du code source
 COPY . .
+
+COPY --chmod=0755 docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 4200
 
-# Serveur de développement avec hot-reload
-CMD ["ng", "serve", "--host", "0.0.0.0", "--poll=2000"]
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["node_modules/.bin/ng", "serve", "--host", "0.0.0.0", "--poll=2000"]

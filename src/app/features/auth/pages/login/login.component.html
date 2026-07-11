@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-[#E8EDF2] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-[#F5F5F5] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
   <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-lg">
 
     <!-- Header -->
@@ -6,7 +6,7 @@
       <h2 class="text-3xl font-bold text-gray-900 font-sans">Connexion</h2>
       <p class="mt-2 text-sm text-gray-600">
         ou
-        <a routerLink="/inscription" class="font-medium text-[#2D5A4C] hover:text-[#3D7A6A]">
+        <a routerLink="/inscription" class="font-medium text-[#FF6600] hover:text-[#FF8533]">
           créez un compte gratuitement
         </a>
       </p>
@@ -32,10 +32,10 @@
           type="email"
           formControlName="email"
           placeholder="mamadou@exemple.sn"
-          class="mt-1 w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#3D7A6A] focus:border-transparent transition-colors"
+          class="mt-1 w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#FF8533] focus:border-transparent transition-colors"
           [ngClass]="{
             'border-red-400 bg-red-50': email?.invalid && email?.touched,
-            'border-[#3D7A6A] bg-[#E8EDF2]': email?.valid && email?.touched,
+            'border-[#FF8533] bg-[#F5F5F5]': email?.valid && email?.touched,
             'border-gray-300': !email?.touched
           }"
         />
@@ -59,10 +59,10 @@
             id="password"
             formControlName="password"
             placeholder="••••••••"
-            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#3D7A6A] focus:border-transparent transition-colors pr-12"
+            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#FF8533] focus:border-transparent transition-colors pr-12"
             [ngClass]="{
               'border-red-400 bg-red-50': password?.invalid && password?.touched,
-              'border-[#3D7A6A] bg-[#E8EDF2]': password?.valid && password?.touched,
+              'border-[#FF8533] bg-[#F5F5F5]': password?.valid && password?.touched,
               'border-gray-300': !password?.touched
             }"
           />
@@ -86,10 +86,10 @@
       <!-- Options -->
       <div class="flex items-center justify-between">
         <label class="flex items-center">
-          <input type="checkbox" formControlName="rememberMe" class="rounded border-gray-300 text-[#2D5A4C] focus:ring-[#3D7A6A]">
+          <input type="checkbox" formControlName="rememberMe" class="rounded border-gray-300 text-[#FF6600] focus:ring-[#FF8533]">
           <span class="ml-2 text-sm text-gray-600">Se souvenir de moi</span>
         </label>
-        <a routerLink="/mot-de-passe-oublie" class="text-sm text-[#2D5A4C] hover:text-[#3D7A6A]">
+        <a routerLink="/mot-de-passe-oublie" class="text-sm text-[#FF6600] hover:text-[#FF8533]">
           Mot de passe oublié ?
         </a>
       </div>
@@ -98,7 +98,7 @@
       <button
         type="submit"
         [disabled]="authService.isLoading()"
-        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-full text-sm font-semibold text-white bg-[#2D5A4C] hover:bg-[#1E3D33] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3D7A6A] disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:shadow-lg"
+        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-full text-sm font-semibold text-white bg-[#FF6600] hover:bg-[#E65500] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FF8533] disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:shadow-lg"
       >
         @if (authService.isLoading()) {
           <span class="flex items-center">

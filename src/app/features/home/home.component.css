@@ -5,7 +5,7 @@
 .home-wrapper {
   font-family: var(--font-body, 'Inter', system-ui, sans-serif);
   color: var(--color-text, #1A2B3C);
-  background-color: var(--color-bg, #E8EDF2);
+  background-color: var(--color-bg, #F5F5F5);
   overflow-x: hidden;
 }
 
@@ -26,7 +26,7 @@
 }
 
 .popular-section {
-  background: #E8EDF2;
+  background: #F5F5F5;
 }
 
 .section-alt {
@@ -48,7 +48,7 @@
 
 .wave-to-white {
   height: 60px;
-  background: #E8EDF2;
+  background: #F5F5F5;
   clip-path: ellipse(55% 100% at 50% 0%);
 }
 
@@ -95,7 +95,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: var(--color-primary, #2D5A4C);
+  color: var(--color-primary, #FF6600);
   text-decoration: none;
   font-weight: 600;
   font-size: 0.85rem;
@@ -121,8 +121,8 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #2D5A4C;
-  background: rgba(45, 90, 76, 0.08);
+  color: #FF6600;
+  background: rgba(255, 102, 0, 0.08);
   padding: 5px 14px;
   border-radius: 999px;
   margin-bottom: 10px;
@@ -144,7 +144,7 @@
   aspect-ratio: 3 / 2;
   display: block;
   text-decoration: none;
-  background: #D8E0E8;
+  background: #F5F5F5;
   box-shadow: 0 2px 14px rgba(26, 43, 60, 0.07);
   transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
               box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -176,7 +176,7 @@
   justify-content: center;
 }
 
-.cat-color-0 { background: linear-gradient(135deg, #2D5A4C, #4A8C7A); }
+.cat-color-0 { background: linear-gradient(135deg, #FF6600, #FF8533); }
 .cat-color-1 { background: linear-gradient(135deg, #1E3A8A, #3B82F6); }
 .cat-color-2 { background: linear-gradient(135deg, #7C3AED, #A78BFA); }
 .cat-color-3 { background: linear-gradient(135deg, #B45309, #F59E0B); }
@@ -245,7 +245,7 @@
 .cat-skeleton {
   border-radius: 20px;
   aspect-ratio: 3 / 2;
-  background: linear-gradient(90deg, #E8EDF2 25%, #DFE5EC 50%, #E8EDF2 75%);
+  background: linear-gradient(90deg, #F5F5F5 25%, #F5F5F5 50%, #F5F5F5 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite linear;
 }
@@ -276,7 +276,7 @@
 /*   PROMO BANNER       */
 /* ==================== */
 .promo-banner {
-  background: var(--color-primary, #2D5A4C);
+  background: var(--color-primary, #FF6600);
   border-radius: var(--radius-2xl, 28px);
   padding: 56px;
   position: relative;
@@ -344,7 +344,7 @@
   align-items: center;
   padding: 14px 32px;
   background: white;
-  color: var(--color-primary, #2D5A4C);
+  color: var(--color-primary, #FF6600);
   border-radius: var(--radius-pill, 999px);
   font-weight: 700;
   text-decoration: none;
@@ -363,7 +363,7 @@
 /*   NEWSLETTER         */
 /* ==================== */
 .newsletter-section {
-  background: var(--color-bg, #E8EDF2);
+  background: var(--color-bg, #F5F5F5);
   padding: 80px 0;
 }
 
@@ -400,14 +400,14 @@
 .input-group {
   display: flex;
   gap: 8px;
-  background: var(--color-bg, #E8EDF2);
+  background: var(--color-bg, #F5F5F5);
   padding: 6px;
   border-radius: var(--radius-pill, 999px);
   border: none;
 }
 
 .input-group:focus-within {
-  box-shadow: 0 0 0 2px rgba(45, 90, 76, 0.15);
+  box-shadow: 0 0 0 2px rgba(255, 102, 0, 0.15);
 }
 
 .input-group input {
@@ -425,7 +425,7 @@
 }
 
 .btn-subscribe {
-  background: var(--color-primary, #2D5A4C);
+  background: var(--color-primary, #FF6600);
   color: white;
   padding: 12px 28px;
   font-weight: 600;
@@ -437,7 +437,7 @@
   font-size: 0.875rem;
 
   &:hover {
-    background: var(--color-primary-dark, #1E3D33);
+    background: var(--color-primary-dark, #E65500);
   }
 
   &:disabled {
@@ -447,11 +447,11 @@
 }
 
 .alert-success {
-  color: var(--color-primary, #2D5A4C);
+  color: var(--color-primary, #FF6600);
   font-weight: 500;
   margin-bottom: 12px;
   padding: 10px 16px;
-  background: rgba(45, 90, 76, 0.08);
+  background: rgba(255, 102, 0, 0.08);
   border-radius: var(--radius-md, 12px);
   font-size: 0.875rem;
 }
@@ -516,7 +516,7 @@
 .skeleton-image {
   width: 100%;
   aspect-ratio: 1;
-  background: linear-gradient(90deg, #F0F4F8 25%, #E8EDF2 50%, #F0F4F8 75%);
+  background: linear-gradient(90deg, #FAFAFA 25%, #F5F5F5 50%, #FAFAFA 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite linear;
 }
@@ -528,7 +528,7 @@
 .skeleton-line {
   height: 12px;
   border-radius: 6px;
-  background: linear-gradient(90deg, #F0F4F8 25%, #E8EDF2 50%, #F0F4F8 75%);
+  background: linear-gradient(90deg, #FAFAFA 25%, #F5F5F5 50%, #FAFAFA 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite linear;
   margin-bottom: 10px;
@@ -608,7 +608,7 @@
     box-shadow: none;
   }
   .input-group input {
-    background: var(--color-bg, #E8EDF2);
+    background: var(--color-bg, #F5F5F5);
     border: none;
     border-radius: var(--radius-pill, 999px);
     margin-bottom: 10px;

@@ -2,7 +2,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, shareReplay } from 'rxjs';
-import { ENVIRONMENT } from '../../app.config';
+import { ENVIRONMENT } from '../../core/tokens/environment.token';
 import { ApiResponse, Category } from '../models/product.model';
 
 @Injectable({ providedIn: 'root' })

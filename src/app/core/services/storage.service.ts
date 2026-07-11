@@ -10,8 +10,8 @@ export class StorageService {
   private readonly userKey: string;
 
   constructor() {
-    this.tokenKey = this.env.jwtTokenKey || 'shopSN_token';
-    this.userKey = this.env.userStorageKey || 'shopSN_user';
+    this.tokenKey = this.env.jwtTokenKey || 'onlineStore_token';
+    this.userKey = this.env.userStorageKey || 'onlineStore_user';
   }
 
   /**

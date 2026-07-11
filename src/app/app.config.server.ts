@@ -1,6 +1,7 @@
 import { mergeApplicationConfig, ApplicationConfig } from '@angular/core';
 import { provideServerRendering, withRoutes } from '@angular/ssr';
-import { appConfig, ENVIRONMENT } from './app.config';
+import { appConfig } from './app.config';
+import { ENVIRONMENT } from './core/tokens/environment.token';
 import { serverRoutes } from './app.routes.server';
 import { environment } from '../environments/environment';
 

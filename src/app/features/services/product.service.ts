@@ -11,7 +11,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, shareReplay } from 'rxjs';
-import { ENVIRONMENT } from '../../app.config';
+import { ENVIRONMENT } from '../../core/tokens/environment.token';
 import {
   Product,
   ProductFilters,
@@ -69,7 +69,6 @@ export class ProductService {
       params = params.set('per_page', filters.per_page.toString());
     }
 
-    console.log('📤 getDeletedProducts - URL:', `${this.env.apiUrl}/api/admin/products/trashed`);
     return this.http.get<ApiResponse<Product[]>>(`${this.env.apiUrl}/api/admin/products/trashed`, {
       params,
     });
@@ -79,7 +78,6 @@ export class ProductService {
    * Restaure un produit supprimé (soft delete)
    */
   restoreProduct(id: number): Observable<{ data: Product }> {
-    console.log('📤 restoreProduct - URL:', `${this.env.apiUrl}/api/admin/products/${id}/restore`);
     return this.http.post<{ data: Product }>(
       `${this.env.apiUrl}/api/admin/products/${id}/restore`,
       {},
@@ -90,10 +88,6 @@ export class ProductService {
    * Supprime définitivement un produit (hard delete)
    */
   forceDeleteProduct(id: number): Observable<{ message: string }> {
-    console.log(
-      '📤 forceDeleteProduct - URL:',
-      `${this.env.apiUrl}/api/admin/products/${id}/force`,
-    );
     return this.http.delete<{ message: string }>(
       `${this.env.apiUrl}/api/admin/products/${id}/force`,
     );
@@ -186,8 +180,6 @@ export class ProductService {
    * @param data - Données du produit à créer
    */
   createProduct(data: CreateProductData): Observable<{ data: Product }> {
-    console.log('📤 createProduct - URL:', `${this.env.apiUrl}/api/admin/products`);
-    console.log('📤 createProduct - Data:', data);
     return this.http.post<{ data: Product }>(`${this.env.apiUrl}/api/admin/products`, data);
   }
 
@@ -197,8 +189,6 @@ export class ProductService {
    */
   updateProduct(data: UpdateProductData): Observable<{ data: Product }> {
     const { id, ...updateData } = data;
-    console.log('📤 updateProduct - URL:', `${this.env.apiUrl}/api/admin/products/${id}`);
-    console.log('📤 updateProduct - Data:', updateData);
     return this.http.put<{ data: Product }>(
       `${this.env.apiUrl}/api/admin/products/${id}`,
       updateData,
@@ -210,7 +200,6 @@ export class ProductService {
    * @param id - ID du produit
    */
   deleteProduct(id: number): Observable<{ message: string }> {
-    console.log('📤 deleteProduct - URL:', `${this.env.apiUrl}/api/admin/products/${id}`);
     return this.http.delete<{ message: string }>(`${this.env.apiUrl}/api/admin/products/${id}`);
   }
 
@@ -276,10 +265,8 @@ export class ProductService {
     this.cacheTimestamp = 0;
   }
 
-  // product.service.ts - Ajoutez cette méthode
   /**
-   * Récupère la liste paginée des produits pour l'ADMIN
-   * @param filters - Critères de filtrage et pagination
+   * Récupère la liste paginée des produits
    */
   getProducts(filters: ProductFilters = {}): Observable<ApiResponse<Product[]>> {
     let params = new HttpParams();
@@ -293,27 +280,7 @@ export class ProductService {
     return this.http.get<ApiResponse<Product[]>>(`${this.env.apiUrl}/api/products`, { params });
   }
 
-  /**
-   * Upload d'images pour un produit
-   * @param productId - ID du produit
-   * @param files - FormData contenant les fichiers images
-   */
   uploadImages(productId: number, files: FormData): Observable<{ data: ProductImage[] }> {
-    // ✅ Vérifier le contenu du FormData avant l'envoi
-    console.log(
-      '📤 uploadImages - URL:',
-      `${this.env.apiUrl}/api/admin/products/${productId}/images`,
-    );
-    console.log('📤 uploadImages - FormData entries:');
-    for (const pair of files.entries()) {
-      console.log(
-        `   ${pair[0]}:`,
-        pair[1] instanceof File ? `${pair[1].name} (${pair[1].size} bytes)` : pair[1],
-      );
-    }
-
-    // ✅ S'assurer que le header Content-Type n'est pas défini manuellement
-    // Angular le gère automatiquement avec FormData
     return this.http.post<{ data: ProductImage[] }>(
       `${this.env.apiUrl}/api/admin/products/${productId}/images`,
       files,
