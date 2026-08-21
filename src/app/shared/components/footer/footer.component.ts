@@ -12,13 +12,8 @@ import { RouterLink } from '@angular/router';
         <div class="footer-grid">
           <div class="footer-brand">
             <div class="footer-logo">
-              <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
-                <path d="M20 4L6 12v16l14 8 14-8V12L20 4z" fill="currentColor" opacity="0.15"/>
-                <path d="M20 8l-10 6v12l10 6 10-6V14L20 8z" stroke="currentColor" stroke-width="2" fill="none"/>
-                <path d="M15 18h10v8H15z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <path d="M18 18v-2a2 2 0 0 1 4 0v2" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-              </svg>
-              <span>Online<em>Store</em></span>
+              <img src="/assets/images/logo.jpeg" alt="DkrOnlineStore" width="36" height="36" style="border-radius:8px;object-fit:cover;flex-shrink:0;" />
+              <span>Dkr<em>OnlineStore</em></span>
             </div>
             <p class="footer-desc">Votre boutique en ligne au Senegal. Commandez facilement via WhatsApp avec livraison rapide sur Dakar et ses environs.</p>
             <div class="social-links">
@@ -38,18 +33,29 @@ import { RouterLink } from '@angular/router';
             <h4>Navigation</h4>
             <ul>
               <li><a routerLink="/">Accueil</a></li>
-              <li><a routerLink="/produits">Catalogue</a></li>
-              <li><a routerLink="/a-propos">A propos</a></li>
-              <li><a routerLink="/contact">Contact</a></li>
+              <li><a routerLink="/produits">Catalogue produits</a></li>
+              <li><a routerLink="/a-propos">A propos de nous</a></li>
+              <li><a routerLink="/contact">Nous contacter</a></li>
             </ul>
           </div>
 
           <div class="footer-col">
-            <h4>Assistance</h4>
+            <h4>Catégories</h4>
             <ul>
-              <li><a routerLink="/faq">FAQ</a></li>
-              <li><a routerLink="/mentions-legales">Mentions legales</a></li>
-              <li><a routerLink="/cgv">CGV</a></li>
+              <li><a routerLink="/produits" [queryParams]="{sort: 'recent'}">Nouveautés</a></li>
+              <li><a routerLink="/produits" [queryParams]="{sort: 'popular'}">Populaires</a></li>
+              <li><a routerLink="/produits" [queryParams]="{en_stock: 'true'}">En stock</a></li>
+              <li><a routerLink="/produits" [queryParams]="{sort: 'price_asc'}">Promotions</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>Informations</h4>
+            <ul>
+              <li><a routerLink="/livraison">Livraison Dakar</a></li>
+              <li><a routerLink="/paiement">Modes de paiement</a></li>
+              <li><a routerLink="/faq">Questions fréquentes</a></li>
+              <li><a routerLink="/cgv">Conditions de vente</a></li>
             </ul>
           </div>
 
@@ -62,7 +68,7 @@ import { RouterLink } from '@angular/router';
               </li>
               <li>
                 <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                <span>contact&#64;onlinestore.sn</span>
+                <span>contact&#64;dkronlinestore.sn</span>
               </li>
               <li>
                 <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -72,9 +78,19 @@ import { RouterLink } from '@angular/router';
           </div>
         </div>
 
+        <!-- Mots-clés SEO pour maillage interne -->
+        <div class="footer-seo">
+          <p class="footer-seo-text">
+            <strong>DkrOnlineStore</strong> - Votre boutique en ligne à <strong>Dakar</strong>, <strong>Sénégal</strong>.
+            Achetez facilement via <strong>WhatsApp</strong>. Paiement <strong>Orange Money</strong>, <strong>Wave</strong>, espèces.
+            <strong>Livraison rapide Dakar</strong> et environs. Large choix de produits.
+            E-commerce fiable au Sénégal. Shopping en ligne sécurisé.
+          </p>
+        </div>
+
         <div class="footer-bottom">
-          <span>&copy; {{ currentYear }} OnlineStore — Tous droits reserves</span>
-          <span class="footer-made">Fait avec soin au Senegal</span>
+          <span>&copy; {{ currentYear }} DkrOnlineStore — Tous droits reserves</span>
+          <span class="footer-made">Fait avec soin au Senegal 🇸🇳</span>
         </div>
       </div>
     </footer>
@@ -83,6 +99,8 @@ import { RouterLink } from '@angular/router';
     .footer {
       background: #1E2A36;
       color: rgba(255, 255, 255, 0.8);
+      position: relative;
+      z-index: var(--z-base, 0);
     }
 
     .footer-container {
@@ -186,6 +204,27 @@ import { RouterLink } from '@angular/router';
       color: rgba(255, 255, 255, 0.55);
     }
 
+    .footer-seo {
+      margin: 32px 0 24px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .footer-seo-text {
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.4);
+      margin: 0;
+      text-align: center;
+
+      strong {
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 500;
+      }
+    }
+
     .footer-bottom {
       border-top: 1px solid rgba(255, 255, 255, 0.06);
       padding-top: 24px;
@@ -203,22 +242,65 @@ import { RouterLink } from '@angular/router';
     @media (max-width: 768px) {
       .footer-grid {
         grid-template-columns: 1fr 1fr;
-        gap: 32px;
+        gap: 28px;
       }
       .footer-bottom {
         flex-direction: column;
         gap: 8px;
         text-align: center;
       }
+      .footer-container {
+        padding: 48px 20px 20px;
+      }
     }
 
     @media (max-width: 480px) {
       .footer-grid {
         grid-template-columns: 1fr;
-        gap: 28px;
+        gap: 24px;
       }
       .footer-container {
-        padding: 48px 16px 20px;
+        padding: 40px 16px 16px;
+      }
+      .footer-logo span {
+        font-size: 1.1rem;
+      }
+      .footer-desc {
+        font-size: 0.8125rem;
+      }
+      .footer-col h4 {
+        font-size: 0.8rem;
+      }
+      .footer-col a {
+        font-size: 0.8rem;
+      }
+      .contact-list li {
+        font-size: 0.8rem;
+      }
+      .footer-seo {
+        padding: 16px;
+        margin: 24px 0 16px;
+      }
+      .footer-seo-text {
+        font-size: 0.75rem;
+      }
+      .footer-bottom {
+        font-size: 0.75rem;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .footer-container {
+        padding: 32px 12px 12px;
+      }
+      .footer-logo {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .social-links a {
+        width: 34px;
+        height: 34px;
       }
     }
   `]

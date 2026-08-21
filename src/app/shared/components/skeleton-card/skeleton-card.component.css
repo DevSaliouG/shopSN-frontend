@@ -1,0 +1,269 @@
+/* ══════════════════════════════════════════════════════════════
+   SKELETON CARD - PHASE 2
+   Composant de loading state avec animation shimmer
+   ══════════════════════════════════════════════════════════════ */
+
+/* Animation shimmer */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Base skeleton element */
+.skeleton-image,
+.skeleton-text,
+.skeleton-button,
+.skeleton-badge,
+.skeleton-wishlist,
+.skeleton-divider {
+  background: linear-gradient(
+    90deg,
+    #EEF2F6 0%,
+    #F5F5F5 50%,
+    #EEF2F6 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SKELETON GRID CARD
+   ══════════════════════════════════════════════════════════════ */
+
+.skeleton-grid-card {
+  background: var(--color-surface, #FFFFFF);
+  border-radius: var(--radius-2xl, 18px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid rgba(238, 242, 246, 0.8);
+  box-shadow: var(--shadow-soft, 0 2px 8px rgba(0, 0, 0, 0.05));
+}
+
+.skeleton-image-wrapper {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: var(--color-neutral-50, #FAFAFA);
+}
+
+.skeleton-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+
+.skeleton-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 80px;
+  height: 24px;
+  border-radius: var(--radius-pill, 999px);
+  z-index: 2;
+}
+
+.skeleton-wishlist {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  z-index: 3;
+}
+
+.skeleton-body {
+  padding: 20px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-grow: 1;
+}
+
+.skeleton-text {
+  height: 14px;
+  margin-bottom: 0;
+}
+
+.skeleton-category {
+  width: 40%;
+  height: 10px;
+  margin-bottom: 8px;
+}
+
+.skeleton-title {
+  width: 90%;
+  height: 18px;
+}
+
+.skeleton-title.short {
+  width: 60%;
+}
+
+.skeleton-divider {
+  height: 1px;
+  width: 100%;
+  margin: 8px 0;
+}
+
+.skeleton-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.skeleton-price {
+  width: 50%;
+  height: 24px;
+}
+
+.skeleton-stock-badge {
+  width: 30%;
+  height: 20px;
+  border-radius: var(--radius-pill, 999px);
+}
+
+.skeleton-button {
+  height: 48px;
+  width: 100%;
+  border-radius: var(--radius-pill, 999px);
+  margin-top: auto;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SKELETON LIST CARD
+   ══════════════════════════════════════════════════════════════ */
+
+.skeleton-list-card {
+  background: var(--color-surface, #FFFFFF);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  gap: 0;
+  box-shadow: var(--shadow-soft, 0 2px 8px rgba(0, 0, 0, 0.05));
+  border: 1px solid rgba(238, 242, 246, 0.8);
+}
+
+.skeleton-list-img {
+  width: 180px;
+  min-width: 180px;
+  height: 160px;
+  background: linear-gradient(
+    90deg,
+    #EEF2F6 0%,
+    #F5F5F5 50%,
+    #EEF2F6 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+.skeleton-list-body {
+  flex: 1;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 160px;
+}
+
+.skeleton-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skeleton-desc {
+  width: 100%;
+  height: 12px;
+}
+
+.skeleton-desc.short {
+  width: 70%;
+}
+
+.skeleton-list-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #EEF2F6;
+  margin-top: 12px;
+}
+
+.skeleton-list-footer .skeleton-price {
+  width: 30%;
+}
+
+.skeleton-list-footer .skeleton-button {
+  width: 40%;
+  height: 40px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 640px) {
+  .skeleton-list-card {
+    flex-direction: column;
+  }
+
+  .skeleton-list-img {
+    width: 100%;
+    min-width: unset;
+    height: 200px;
+  }
+
+  .skeleton-list-body {
+    padding: 14px 16px;
+    min-height: unset;
+  }
+
+  .skeleton-grid-card .skeleton-body {
+    padding: 16px 16px 20px;
+  }
+
+  .skeleton-button {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 375px) {
+  .skeleton-grid-card .skeleton-body {
+    padding: 14px 14px 18px;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ACCESSIBILITY
+   ══════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-image,
+  .skeleton-text,
+  .skeleton-button,
+  .skeleton-badge,
+  .skeleton-wishlist,
+  .skeleton-divider,
+  .skeleton-list-img {
+    animation: pulse 2s ease-in-out infinite;
+  }
+}

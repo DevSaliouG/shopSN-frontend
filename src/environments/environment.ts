@@ -8,7 +8,7 @@ export const environment = {
   production: false,
   
   // API Configuration
-  apiUrl: 'http://localhost:8000',
+  apiUrl: '',  // Empty pour utiliser le proxy (dev) ou chemin relatif
   apiTimeout: 30000, // 30 secondes
   assetsUrl: 'http://localhost:4200/assets',
   imagePlaceholders: {
@@ -18,7 +18,7 @@ export const environment = {
   },
   
   // Application
-  appName: 'OnlineStore',
+  appName: 'DkrOnlineStore',
   appUrl: 'http://localhost:4200',
   appVersion: '1.0.0-dev',
   
@@ -26,9 +26,9 @@ export const environment = {
   whatsappNumber: '222170078822',
   
   // Stockage
-  jwtTokenKey: 'onlineStore_token',
-  userStorageKey: 'onlineStore_user',
-  tokenExpiryKey: 'onlineStore_token_expiry',
+  jwtTokenKey: 'dkrOnlineStore_token',
+  userStorageKey: 'dkrOnlineStore_user',
+  tokenExpiryKey: 'dkrOnlineStore_token_expiry',
   
   // Feature flags
   enableAnalytics: false,
@@ -44,7 +44,7 @@ export const environment = {
   cacheTTL: 300, // 5 minutes en secondes
   
   // SEO
-  defaultMetaTitle: 'OnlineStore - Boutique en ligne Sénégal',
+  defaultMetaTitle: 'DkrOnlineStore - Boutique en ligne Sénégal',
   defaultMetaDescription: 'Découvrez des centaines de produits et commandez facilement via WhatsApp. Livraison au Sénégal.',
   defaultMetaKeywords: 'e-commerce, Sénégal, boutique en ligne, WhatsApp, produits',
   

@@ -1,0 +1,155 @@
+/* ══════════════════════════════════════════════════════════════
+   PRODUCT STICKY BAR - PHASE 3
+   Barre sticky mobile avec prix et CTA WhatsApp
+   ══════════════════════════════════════════════════════════════ */
+
+.product-sticky-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background: white;
+  border-top: 1px solid var(--color-border, #E5E7EB);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  transform: translateY(100%);
+  transition: transform var(--transition-normal, 0.2s) ease-out;
+  /* Safe area padding for iPhone notch */
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.product-sticky-bar.visible {
+  transform: translateY(0);
+}
+
+.sticky-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+  max-width: 100%;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   INFO SECTION
+   ══════════════════════════════════════════════════════════════ */
+
+.sticky-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sticky-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-primary, #FF6600);
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.sticky-stock {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm, 6px);
+}
+
+.sticky-stock::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.sticky-stock.in-stock {
+  color: var(--color-success, #10B981);
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.sticky-stock.in-stock::before {
+  background: var(--color-success, #10B981);
+}
+
+.sticky-stock.out-of-stock {
+  color: var(--color-error, #EF4444);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.sticky-stock.out-of-stock::before {
+  background: var(--color-error, #EF4444);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CTA BUTTON
+   ══════════════════════════════════════════════════════════════ */
+
+.sticky-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  min-height: 48px;
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: var(--radius-pill, 999px);
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s) ease-out;
+  box-shadow: 0 2px 12px rgba(37, 211, 102, 0.3);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.sticky-cta:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+}
+
+.sticky-cta:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.sticky-cta:disabled {
+  background: var(--color-neutral-300, #D1D5DB);
+  color: var(--color-neutral-500, #6B7280);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.sticky-cta:focus-visible {
+  outline: 2px solid var(--color-primary, #FF6600);
+  outline-offset: 2px;
+}
+
+.sticky-cta svg {
+  flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE - HIDDEN ON DESKTOP
+   ══════════════════════════════════════════════════════════════ */
+
+@media (min-width: 768px) {
+  .product-sticky-bar {
+    display: none;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ACCESSIBILITY & REDUCED MOTION
+   ══════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  .product-sticky-bar,
+  .sticky-cta {
+    transition: none;
+  }
+}

@@ -1,9 +1,10 @@
-<div class="p-6">
-  <div class="flex justify-between items-center mb-6">
+<div class="p-4 sm:p-6">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
     <h1 class="text-2xl font-bold">Gestion des utilisateurs</h1>
     <button
       (click)="openCreateModal()"
-      class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors"
+      class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors w-full sm:w-auto min-h-[44px]"
+      aria-label="Créer un nouvel utilisateur"
     >
       + Nouvel utilisateur
     </button>
@@ -12,8 +13,8 @@
   <!-- Compteur -->
   <p class="text-sm text-gray-500 mb-4">{{ meta().total }} utilisateur(s) au total</p>
 
-  <!-- Table -->
-  <div class="bg-white rounded-xl shadow overflow-hidden">
+  <!-- Table Desktop -->
+  <div class="hidden md:block bg-white rounded-xl shadow overflow-hidden">
     <div class="overflow-x-auto">
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
@@ -39,7 +40,7 @@
                 <td class="px-6 py-4 text-sm text-gray-500">#{{ user.id }}</td>
                 <td class="px-6 py-4 text-sm">
                   <div class="flex items-center gap-3">
-                    <img [src]="user.avatar_url" [alt]="user.full_name" class="w-8 h-8 rounded-full object-cover" />
+                    <img [src]="user.avatar_url" [alt]="user.full_name" class="w-10 h-10 rounded-full object-cover" />
                     <span class="font-medium">{{ user.full_name }}</span>
                   </div>
                 </td>
@@ -53,25 +54,28 @@
                   </span>
                 </td>
                 <td class="px-6 py-4 text-sm text-gray-500">{{ user.created_at | date:'dd/MM/yyyy' }}</td>
-                <td class="px-6 py-4 text-right space-x-2 text-sm">
+                <td class="px-6 py-4 text-right space-x-3 text-sm">
                   <button
                     (click)="openEditModal(user)"
-                    class="text-blue-600 hover:text-blue-800 transition-colors"
+                    class="text-blue-600 hover:text-blue-800 transition-colors min-h-[44px] px-2"
+                    [attr.aria-label]="'Modifier ' + user.full_name"
                   >
                     Modifier
                   </button>
                   <button
                     (click)="toggleRole(user)"
                     [disabled]="isTogglingRoleId() === user.id"
-                    class="transition-colors disabled:opacity-50"
+                    class="transition-colors disabled:opacity-50 min-h-[44px] px-2"
                     [class]="user.role === 'admin' ? 'text-yellow-600 hover:text-yellow-800' : 'text-purple-600 hover:text-purple-800'"
+                    [attr.aria-label]="(user.role === 'admin' ? 'Révoquer admin' : 'Nommer admin') + ' pour ' + user.full_name"
                   >
                     {{ isTogglingRoleId() === user.id ? '...' : (user.role === 'admin' ? 'Révoquer admin' : 'Nommer admin') }}
                   </button>
                   <button
                     (click)="deleteUser(user)"
                     [disabled]="isDeletingId() === user.id || authService.currentUser()?.id === user.id"
-                    class="text-red-600 hover:text-red-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    class="text-red-600 hover:text-red-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed min-h-[44px] px-2"
+                    [attr.aria-label]="'Supprimer ' + user.full_name"
                   >
                     {{ isDeletingId() === user.id ? '...' : 'Supprimer' }}
                   </button>
@@ -86,6 +90,91 @@
         </tbody>
       </table>
     </div>
+  </div>
+
+  <!-- Cards Mobile -->
+  <div class="md:hidden space-y-4">
+    @if (isLoading()) {
+      <div class="text-center py-8">
+        <app-loading-spinner size="sm" />
+      </div>
+    } @else {
+      @for (user of users(); track user.id) {
+        <div class="bg-white rounded-xl shadow-sm p-4 space-y-3">
+          <!-- Header avec avatar -->
+          <div class="flex items-start gap-3">
+            <img
+              [src]="user.avatar_url"
+              [alt]="user.full_name"
+              class="w-12 h-12 rounded-full object-cover flex-shrink-0"
+            />
+            <div class="flex-1 min-w-0">
+              <h3 class="font-semibold text-gray-900 truncate">{{ user.full_name }}</h3>
+              <p class="text-sm text-gray-500">#{{ user.id }}</p>
+            </div>
+            <span
+              class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold flex-shrink-0"
+              [class]="user.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-green-100 text-green-700'"
+            >
+              {{ user.role === 'admin' ? 'Admin' : 'Client' }}
+            </span>
+          </div>
+
+          <!-- Détails -->
+          <div class="space-y-2 text-sm">
+            <div class="flex items-center gap-2 text-gray-600">
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              <span class="truncate">{{ user.email }}</span>
+            </div>
+            <div class="flex items-center gap-2 text-gray-500">
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span>Inscrit le {{ user.created_at | date:'dd/MM/yyyy' }}</span>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex flex-col gap-2 pt-2 border-t border-gray-100">
+            <button
+              (click)="openEditModal(user)"
+              class="flex items-center justify-center gap-2 w-full text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors text-sm font-medium min-h-[44px]"
+              [attr.aria-label]="'Modifier ' + user.full_name"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+              Modifier
+            </button>
+            <div class="flex gap-2">
+              <button
+                (click)="toggleRole(user)"
+                [disabled]="isTogglingRoleId() === user.id"
+                class="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg transition-colors text-sm font-medium disabled:opacity-50 min-h-[44px]"
+                [class]="user.role === 'admin' ? 'text-yellow-600 hover:bg-yellow-50' : 'text-purple-600 hover:bg-purple-50'"
+                [attr.aria-label]="(user.role === 'admin' ? 'Révoquer admin' : 'Nommer admin') + ' pour ' + user.full_name"
+              >
+                {{ isTogglingRoleId() === user.id ? '...' : (user.role === 'admin' ? 'Révoquer' : 'Nommer admin') }}
+              </button>
+              <button
+                (click)="deleteUser(user)"
+                [disabled]="isDeletingId() === user.id || authService.currentUser()?.id === user.id"
+                class="flex-1 flex items-center justify-center gap-2 text-red-600 hover:bg-red-50 px-3 py-2 rounded-lg transition-colors text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed min-h-[44px]"
+                [attr.aria-label]="'Supprimer ' + user.full_name"
+              >
+                {{ isDeletingId() === user.id ? '...' : 'Supprimer' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      } @empty {
+        <div class="bg-white rounded-xl shadow-sm p-8 text-center text-gray-500">
+          Aucun utilisateur trouvé
+        </div>
+      }
+    }
   </div>
 
   <!-- Pagination -->
@@ -128,7 +217,7 @@
       </div>
 
       <form [formGroup]="userForm" (ngSubmit)="saveUser()">
-        <div class="grid grid-cols-2 gap-4 mb-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3">
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Prénom *</label>
             <input
@@ -174,7 +263,7 @@
           </select>
         </div>
 
-        <div class="grid grid-cols-2 gap-4 mb-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3">
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">
               Mot de passe {{ isEditMode() ? '(laisser vide = inchangé)' : '*' }}

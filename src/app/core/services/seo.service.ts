@@ -38,7 +38,7 @@ export class SeoService {
 
   // Configuration par défaut
   private readonly defaultConfig: SeoConfig = {
-    title: 'OnlineStore - Boutique en ligne Sénégal',
+    title: 'DkrOnlineStore - Boutique en ligne Sénégal',
     description:
       'Découvrez des centaines de produits et commandez facilement via WhatsApp. Livraison au Sénégal.',
     keywords: 'e-commerce, Sénégal, boutique en ligne, WhatsApp, produits, shopping, Dakar',
@@ -47,7 +47,7 @@ export class SeoService {
   };
 
   // URL de base de l'application
-  private readonly baseUrl = 'https://onlinestore.sn';
+  private readonly baseUrl = 'https://dkronlinestore.sn';
 
   /**
    * Définit les meta tags SEO de base
@@ -95,13 +95,13 @@ export class SeoService {
     this.meta.updateTag({ property: 'og:image', content: image });
     this.meta.updateTag({ property: 'og:url', content: url });
     this.meta.updateTag({ property: 'og:type', content: config.type || 'website' });
-    this.meta.updateTag({ property: 'og:site_name', content: 'OnlineStore' });
+    this.meta.updateTag({ property: 'og:site_name', content: 'DkrOnlineStore' });
     this.meta.updateTag({ property: 'og:locale', content: 'fr_FR' });
 
     // Image dimensions recommandées pour les réseaux sociaux
     this.meta.updateTag({ property: 'og:image:width', content: '1200' });
     this.meta.updateTag({ property: 'og:image:height', content: '630' });
-    this.meta.updateTag({ property: 'og:image:alt', content: config.title || 'OnlineStore' });
+    this.meta.updateTag({ property: 'og:image:alt', content: config.title || 'DkrOnlineStore' });
   }
 
   /**
@@ -123,7 +123,7 @@ export class SeoService {
       content: config.description || this.defaultConfig.description,
     });
     this.meta.updateTag({ name: 'twitter:image', content: image });
-    this.meta.updateTag({ name: 'twitter:image:alt', content: config.title || 'OnlineStore' });
+    this.meta.updateTag({ name: 'twitter:image:alt', content: config.title || 'DkrOnlineStore' });
   }
 
   /**
@@ -147,7 +147,7 @@ export class SeoService {
    * @param product - Produit à optimiser SEO
    */
   setProductMeta(product: Product): void {
-    const title = `${product.nom} - ${product.prix_format} | OnlineStore`;
+    const title = `${product.nom} - ${product.prix_format} | DkrOnlineStore`;
     const description = product.description_courte || product.description.substring(0, 160);
     const image = product.images?.find((img) => img.principale)?.url || product.images?.[0]?.url;
     const url = `${this.baseUrl}/produits/${product.slug}`;
@@ -183,10 +183,10 @@ export class SeoService {
    * @param category - Catégorie à optimiser SEO
    */
   setCategoryMeta(category: Category): void {
-    const title = `${category.nom} - Produits | OnlineStore`;
+    const title = `${category.nom} - Produits | DkrOnlineStore`;
     const description =
       category.description ||
-      `Découvrez notre sélection de ${category.nom} de qualité sur OnlineStore. Commandez facilement via WhatsApp.`;
+      `Découvrez notre sélection de ${category.nom} de qualité sur DkrOnlineStore. Commandez facilement via WhatsApp.`;
     const url = `${this.baseUrl}/categorie/${category.slug}`;
 
     this.setBasicMeta({
@@ -215,10 +215,10 @@ export class SeoService {
    */
   setHomeMeta(): void {
     this.setBasicMeta({
-      title: 'OnlineStore - Boutique en ligne Sénégal | Achat via WhatsApp',
+      title: 'DkrOnlineStore - Boutique en ligne Dakar Sénégal | Achat WhatsApp',
       description:
-        'Découvrez des centaines de produits et commandez facilement via WhatsApp. Livraison rapide au Sénégal. Paiement sécurisé.',
-      keywords: 'e-commerce, Sénégal, boutique en ligne, WhatsApp, achat en ligne, Dakar, produits',
+        'Boutique en ligne Dakar. Achetez via WhatsApp +221 78 783 80 02. Paiement Orange Money, Wave. Livraison rapide Dakar et Sénégal. Des centaines de produits disponibles.',
+      keywords: 'boutique en ligne Dakar, acheter en ligne Sénégal, e-commerce Dakar, shopping WhatsApp, livraison Dakar, Orange Money, Wave Sénégal, vente en ligne Dakar',
     });
 
     this.setOpenGraphMeta({
@@ -227,8 +227,10 @@ export class SeoService {
 
     this.setTwitterCard({});
 
-    // Structured data pour l'organisation
+    // Structured data pour SEO
     this.setOrganizationStructuredData();
+    this.setLocalBusinessStructuredData();
+    this.setWebsiteStructuredData();
   }
 
   /**
@@ -237,8 +239,8 @@ export class SeoService {
    * @param resultsCount - Nombre de résultats
    */
   setSearchMeta(query: string, resultsCount: number): void {
-    const title = `Résultats pour "${query}" - ${resultsCount} produit${resultsCount > 1 ? 's' : ''} | OnlineStore`;
-    const description = `Découvrez ${resultsCount} résultat${resultsCount > 1 ? 's' : ''} pour "${query}" sur OnlineStore. Trouvez le produit qui vous correspond.`;
+    const title = `Résultats pour "${query}" - ${resultsCount} produit${resultsCount > 1 ? 's' : ''} | DkrOnlineStore`;
+    const description = `Découvrez ${resultsCount} résultat${resultsCount > 1 ? 's' : ''} pour "${query}" sur DkrOnlineStore. Trouvez le produit qui vous correspond.`;
 
     this.setBasicMeta({
       title,
@@ -263,7 +265,7 @@ export class SeoService {
       mpn: `SN-${product.id}`,
       brand: {
         '@type': 'Brand',
-        name: 'OnlineStore',
+        name: 'DkrOnlineStore',
       },
       offers: {
         '@type': 'Offer',
@@ -277,7 +279,7 @@ export class SeoService {
         url: `${this.baseUrl}/produits/${product.slug}`,
         seller: {
           '@type': 'Organization',
-          name: 'OnlineStore',
+          name: 'DkrOnlineStore',
         },
       },
       aggregateRating: {
@@ -298,7 +300,7 @@ export class SeoService {
     const structuredData = {
       '@context': 'https://schema.org',
       '@type': 'Organization',
-      name: 'OnlineStore',
+      name: 'DkrOnlineStore',
       url: this.baseUrl,
       logo: `${this.baseUrl}/assets/images/logo.png`,
       sameAs: [
@@ -308,7 +310,7 @@ export class SeoService {
       ],
       contactPoint: {
         '@type': 'ContactPoint',
-        telephone: '+221771234567',
+        telephone: '+221787838002',
         contactType: 'customer service',
         availableLanguage: ['French', 'Wolof'],
       },
@@ -320,6 +322,94 @@ export class SeoService {
     };
 
     this.setStructuredData('organization', structuredData);
+  }
+
+  /**
+   * Structure de données JSON-LD pour LocalBusiness (SEO Local Sénégal)
+   * À appeler sur la page d'accueil et page contact
+   */
+  setLocalBusinessStructuredData(): void {
+    const structuredData = {
+      '@context': 'https://schema.org',
+      '@type': 'LocalBusiness',
+      '@id': `${this.baseUrl}/#localbusiness`,
+      name: 'DkrOnlineStore',
+      image: `${this.baseUrl}/assets/images/logo.png`,
+      url: this.baseUrl,
+      telephone: '+221787838002',
+      priceRange: '$$',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Dakar',
+        addressLocality: 'Dakar',
+        addressRegion: 'Dakar',
+        postalCode: '10000',
+        addressCountry: 'SN',
+      },
+      geo: {
+        '@type': 'GeoCoordinates',
+        latitude: 14.6928,
+        longitude: -17.4467,
+      },
+      openingHoursSpecification: [
+        {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+          opens: '08:00',
+          closes: '20:00',
+        },
+        {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: 'Sunday',
+          opens: '10:00',
+          closes: '18:00',
+        },
+      ],
+      sameAs: [
+        'https://facebook.com/dkronlinestore',
+        'https://instagram.com/dkronlinestore',
+        'https://twitter.com/dkronlinestore',
+      ],
+      paymentAccepted: 'Cash, Orange Money, Wave, Virement bancaire',
+      currenciesAccepted: 'XOF',
+      areaServed: {
+        '@type': 'City',
+        name: 'Dakar',
+        '@id': 'https://www.wikidata.org/wiki/Q3718',
+      },
+    };
+
+    this.setStructuredData('localbusiness', structuredData);
+  }
+
+  /**
+   * Structure de données JSON-LD pour Website + SearchAction
+   * Ajoute la barre de recherche dans les résultats Google
+   */
+  setWebsiteStructuredData(): void {
+    const structuredData = {
+      '@context': 'https://schema.org',
+      '@type': 'Website',
+      '@id': `${this.baseUrl}/#website`,
+      url: this.baseUrl,
+      name: 'DkrOnlineStore',
+      description: 'Boutique en ligne au Sénégal - Commandez via WhatsApp',
+      publisher: {
+        '@type': 'Organization',
+        name: 'DkrOnlineStore',
+      },
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: {
+          '@type': 'EntryPoint',
+          urlTemplate: `${this.baseUrl}/produits?q={search_term_string}`,
+        },
+        'query-input': 'required name=search_term_string',
+      },
+      inLanguage: 'fr-SN',
+    };
+
+    this.setStructuredData('website', structuredData);
   }
 
   /**
@@ -372,7 +462,7 @@ export class SeoService {
    */
   setNotFoundMeta(): void {
     this.setBasicMeta({
-      title: 'Page non trouvée - 404 | OnlineStore',
+      title: 'Page non trouvée - 404 | DkrOnlineStore',
       description: "La page que vous recherchez n'existe pas ou a été déplacée.",
       robots: 'noindex,follow',
     });

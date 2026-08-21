@@ -1,43 +1,41 @@
-<header class="main-header">
+<header class="main-header" [class.compact]="isCompact()">
   <div class="header-container">
+    <!-- Bouton Menu Mobile -->
+    <button class="mobile-menu-btn" (click)="toggleMobileMenu()" aria-label="Menu" [attr.aria-expanded]="mobileMenuOpen()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 12h18M3 6h18M3 18h18"/>
+      </svg>
+    </button>
+
     <!-- Logo -->
     <div class="logo">
       <a routerLink="/">
-        <svg class="logo-icon" width="32" height="32" viewBox="0 0 40 40" fill="none">
-          <path d="M20 4L6 12v16l14 8 14-8V12L20 4z" fill="currentColor" opacity="0.12"/>
-          <path d="M20 8l-10 6v12l10 6 10-6V14L20 8z" stroke="currentColor" stroke-width="2" fill="none"/>
-          <path d="M15 18h10v8H15z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-          <path d="M18 18v-2a2 2 0 0 1 4 0v2" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-        </svg>
-        <span class="logo-text">Online<span class="logo-accent">Store</span></span>
+        <img
+          src="/assets/images/logo.jpeg"
+          alt="DkrOnlineStore logo"
+          class="logo-img"
+          width="36"
+          height="36"
+        />
+        <span class="logo-text">Dkr<span class="logo-accent">OnlineStore</span></span>
       </a>
     </div>
 
-    <!-- Navigation principale (desktop) -->
-    <nav class="nav-links">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Accueil</a>
-      <a routerLink="/produits" routerLinkActive="active">Catalogue</a>
-      <a routerLink="/a-propos" routerLinkActive="active">A propos</a>
+    <!-- Navigation principale (desktop uniquement) -->
+    <nav class="nav-links" role="navigation" aria-label="Navigation principale">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" aria-label="Aller à la page d'accueil">Accueil</a>
+      <a routerLink="/produits" routerLinkActive="active" aria-label="Voir le catalogue de produits">Catalogue</a>
+      <a routerLink="/a-propos" routerLinkActive="active" aria-label="En savoir plus sur DkrOnlineStore">A propos</a>
       @if (authService.isAdmin()) {
-        <a routerLink="/admin" routerLinkActive="active">Admin</a>
+        <a routerLink="/admin" routerLinkActive="active" aria-label="Accéder au tableau de bord administrateur">Admin</a>
       }
-      <a routerLink="/contact" routerLinkActive="active" class="contact-link">Contact</a>
+      <a routerLink="/contact" routerLinkActive="active" class="contact-link" aria-label="Nous contacter">Contact</a>
     </nav>
 
     <!-- Barre de recherche + actions -->
     <div class="header-actions">
-      <div class="search-bar">
-        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8"/>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <input
-          type="text"
-          placeholder="Rechercher..."
-          [(ngModel)]="searchQuery"
-          (keyup.enter)="onSearch()"
-        />
-      </div>
+      <!-- Nouvelle barre de recherche avec autocomplétion -->
+      <app-search-autocomplete />
 
       @if (authService.isLoggedIn()) {
         <button class="notification-btn" (click)="notificationService.toggleCenter()" aria-label="Notifications">
@@ -80,34 +78,174 @@
       }
     </div>
 
-    <!-- Bouton menu mobile -->
-    <button class="mobile-menu-btn" (click)="toggleMobileMenu()" aria-label="Menu">
-      @if (mobileMenuOpen()) {
+  </div>
+</header>
+
+<!-- Menu Mobile Drawer -->
+@if (mobileMenuOpen()) {
+  <!-- Backdrop -->
+  <div class="mobile-menu-backdrop" (click)="closeMobileMenu()" [@fadeIn]></div>
+
+  <!-- Drawer -->
+  <nav class="mobile-menu-drawer" [@slideIn] role="navigation" aria-label="Menu mobile">
+    <div class="mobile-menu-header">
+      <div class="mobile-menu-title">
+        <img src="/assets/images/logo.jpeg" alt="Logo" width="32" height="32" style="border-radius: 8px; object-fit: cover;" />
+        <span>Menu</span>
+      </div>
+      <button class="mobile-menu-close" (click)="closeMobileMenu()" aria-label="Fermer le menu">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M18 6L6 18M6 6l12 12"/>
         </svg>
-      } @else {
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 12h18M3 6h18M3 18h18"/>
-        </svg>
-      }
-    </button>
-  </div>
+      </button>
+    </div>
 
-  <!-- Menu mobile -->
-  @if (mobileMenuOpen()) {
-    <div class="mobile-nav">
-      <a routerLink="/" (click)="mobileMenuOpen.set(false)">Accueil</a>
-      <a routerLink="/produits" (click)="mobileMenuOpen.set(false)">Catalogue</a>
-      <a routerLink="/a-propos" (click)="mobileMenuOpen.set(false)">A propos</a>
-      <a routerLink="/contact" (click)="mobileMenuOpen.set(false)">Contact</a>
-      @if (authService.isAdmin()) {
-        <a routerLink="/admin" (click)="mobileMenuOpen.set(false)">Administration</a>
+    <div class="mobile-menu-content">
+      <!-- User Info (si connecté) -->
+      @if (authService.isLoggedIn()) {
+        <div class="mobile-menu-user">
+          <div class="mobile-user-avatar">
+            {{ authService.userInitials() }}
+          </div>
+          <div class="mobile-user-info">
+            <p class="mobile-user-name">{{ authService.currentUser()?.nom }} {{ authService.currentUser()?.prenom }}</p>
+            <p class="mobile-user-email">{{ authService.currentUser()?.email }}</p>
+          </div>
+        </div>
       }
-      @if (!authService.isLoggedIn()) {
-        <a routerLink="/connexion" (click)="mobileMenuOpen.set(false)">Connexion</a>
-        <a routerLink="/inscription" (click)="mobileMenuOpen.set(false)">Inscription</a>
+
+      <!-- Navigation Links -->
+      <div class="mobile-menu-links">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMobileMenu()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          <span>Accueil</span>
+        </a>
+        <a routerLink="/produits" routerLinkActive="active" (click)="closeMobileMenu()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+          <span>Catalogue</span>
+        </a>
+        <a routerLink="/a-propos" routerLinkActive="active" (click)="closeMobileMenu()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="16" x2="12" y2="12"/>
+            <line x1="12" y1="8" x2="12.01" y2="8"/>
+          </svg>
+          <span>A propos</span>
+        </a>
+        <a routerLink="/contact" routerLinkActive="active" (click)="closeMobileMenu()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          <span>Contact</span>
+        </a>
+      </div>
+
+      <!-- Section Admin (si admin) -->
+      @if (authService.isAdmin()) {
+        <div class="mobile-menu-section">
+          <p class="mobile-menu-section-title">Administration</p>
+          <a routerLink="/admin" routerLinkActive="active" (click)="closeMobileMenu()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"/>
+              <rect x="14" y="3" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/>
+            </svg>
+            <span>Tableau de bord</span>
+          </a>
+          <a routerLink="/admin/produits" routerLinkActive="active" (click)="closeMobileMenu()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+            <span>Gestion produits</span>
+          </a>
+          <a routerLink="/admin/categories" routerLinkActive="active" (click)="closeMobileMenu()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 7h16M4 12h16M4 17h16"/>
+            </svg>
+            <span>Gestion catégories</span>
+          </a>
+          <a routerLink="/admin/utilisateurs" routerLinkActive="active" (click)="closeMobileMenu()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+            <span>Gestion utilisateurs</span>
+          </a>
+          <a routerLink="/admin/analytics" routerLinkActive="active" (click)="closeMobileMenu()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="20" x2="12" y2="10"/>
+              <line x1="18" y1="20" x2="18" y2="4"/>
+              <line x1="6" y1="20" x2="6" y2="16"/>
+            </svg>
+            <span>Statistiques</span>
+          </a>
+        </div>
+      }
+
+      <!-- User Actions -->
+      @if (authService.isLoggedIn()) {
+        <div class="mobile-menu-section">
+          <p class="mobile-menu-section-title">Mon espace</p>
+          <a routerLink="/profil" routerLinkActive="active" (click)="closeMobileMenu()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <span>Mon profil</span>
+          </a>
+          <a routerLink="/favoris" routerLinkActive="active" (click)="closeMobileMenu()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+            <span>Mes favoris</span>
+          </a>
+          <button (click)="notificationService.toggleCenter(); closeMobileMenu()" class="mobile-menu-link-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            <span>Notifications</span>
+            @if (notificationService.hasUnread()) {
+              <span class="mobile-notification-badge">{{ notificationService.unreadCount() }}</span>
+            }
+          </button>
+        </div>
+
+        <div class="mobile-menu-footer">
+          <button class="mobile-logout-btn" (click)="logout(); closeMobileMenu()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            <span>Deconnexion</span>
+          </button>
+        </div>
+      } @else {
+        <div class="mobile-menu-footer">
+          <a routerLink="/connexion" class="mobile-login-btn" (click)="closeMobileMenu()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+              <polyline points="10 17 15 12 10 7"/>
+              <line x1="15" y1="12" x2="3" y2="12"/>
+            </svg>
+            <span>Se connecter</span>
+          </a>
+        </div>
       }
     </div>
-  }
-</header>
+  </nav>
+}

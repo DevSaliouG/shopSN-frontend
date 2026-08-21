@@ -1,0 +1,327 @@
+/**
+ * ════════════════════════════════════════════════════════════
+ * SHOPSN DESIGN SYSTEM - Design Tokens
+ * ════════════════════════════════════════════════════════════
+ *
+ * Architecture à 3 couches:
+ * 1. Primitive Layer (valeurs brutes)
+ * 2. Semantic Layer (aliases par usage)
+ * 3. Component Layer (composants spécifiques)
+ *
+ * Version: 2.0
+ * Last Updated: 2026-08-18
+ */
+
+:root {
+  /* ════════════════════════════════════════════════════════════
+     PRIMITIVE LAYER - Valeurs brutes
+     ════════════════════════════════════════════════════════════ */
+
+  /* ── Couleurs Orange (Primaire) ── */
+  --primitive-orange-50: #FFF7ED;
+  --primitive-orange-100: #FFEDD5;
+  --primitive-orange-200: #FED7AA;
+  --primitive-orange-300: #FDBA74;
+  --primitive-orange-400: #FB923C;
+  --primitive-orange-500: #F97316;
+  --primitive-orange-600: #EA6C0A;
+  --primitive-orange-700: #C2570A;
+  --primitive-orange-800: #9A3F0A;
+  --primitive-orange-900: #7C3209;
+  --primitive-orange-950: #431407;
+
+  /* ── Couleurs Neutres (Grays) ── */
+  --primitive-gray-50: #F9FAFB;
+  --primitive-gray-100: #F3F4F6;
+  --primitive-gray-200: #E5E7EB;
+  --primitive-gray-300: #D1D5DB;
+  --primitive-gray-400: #9CA3AF;
+  --primitive-gray-500: #6B7280;
+  --primitive-gray-600: #4B5563;
+  --primitive-gray-700: #374151;
+  --primitive-gray-800: #1F2937;
+  --primitive-gray-900: #111827;
+  --primitive-gray-950: #030712;
+
+  /* ── Couleurs Fonctionnelles ── */
+  --primitive-white: #FFFFFF;
+  --primitive-black: #000000;
+
+  --primitive-success-500: #10B981;
+  --primitive-success-600: #059669;
+  --primitive-warning-500: #F59E0B;
+  --primitive-warning-600: #D97706;
+  --primitive-error-500: #EF4444;
+  --primitive-error-600: #DC2626;
+  --primitive-info-500: #3B82F6;
+  --primitive-info-600: #2563EB;
+
+  /* ── Espacements Primitifs ── */
+  --primitive-space-0: 0;
+  --primitive-space-1: 0.25rem;  /* 4px */
+  --primitive-space-2: 0.5rem;   /* 8px */
+  --primitive-space-3: 0.75rem;  /* 12px */
+  --primitive-space-4: 1rem;     /* 16px */
+  --primitive-space-5: 1.25rem;  /* 20px */
+  --primitive-space-6: 1.5rem;   /* 24px */
+  --primitive-space-8: 2rem;     /* 32px */
+  --primitive-space-10: 2.5rem;  /* 40px */
+  --primitive-space-12: 3rem;    /* 48px */
+  --primitive-space-16: 4rem;    /* 64px */
+  --primitive-space-20: 5rem;    /* 80px */
+  --primitive-space-24: 6rem;    /* 96px */
+
+  /* ── Border Radius ── */
+  --primitive-radius-none: 0;
+  --primitive-radius-sm: 0.375rem;   /* 6px */
+  --primitive-radius-md: 0.625rem;   /* 10px */
+  --primitive-radius-lg: 0.875rem;   /* 14px */
+  --primitive-radius-xl: 1.25rem;    /* 20px */
+  --primitive-radius-2xl: 1.5rem;    /* 24px */
+  --primitive-radius-3xl: 2rem;      /* 32px */
+  --primitive-radius-full: 9999px;
+
+  /* ── Ombres ── */
+  --primitive-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --primitive-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --primitive-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --primitive-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --primitive-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --primitive-shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+  /* ── Transitions ── */
+  --primitive-duration-fast: 0.15s;
+  --primitive-duration-base: 0.22s;
+  --primitive-duration-slow: 0.3s;
+  --primitive-duration-slower: 0.45s;
+
+  --primitive-ease-linear: linear;
+  --primitive-ease-in: cubic-bezier(0.32, 0, 0.67, 0);
+  --primitive-ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+  --primitive-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --primitive-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── Typographie ── */
+  --primitive-font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --primitive-font-mono: 'Fira Code', 'Courier New', monospace;
+
+  --primitive-font-size-xs: 0.75rem;     /* 12px */
+  --primitive-font-size-sm: 0.875rem;    /* 14px */
+  --primitive-font-size-base: 1rem;      /* 16px */
+  --primitive-font-size-lg: 1.125rem;    /* 18px */
+  --primitive-font-size-xl: 1.25rem;     /* 20px */
+  --primitive-font-size-2xl: 1.5rem;     /* 24px */
+  --primitive-font-size-3xl: 1.875rem;   /* 30px */
+  --primitive-font-size-4xl: 2.25rem;    /* 36px */
+  --primitive-font-size-5xl: 3rem;       /* 48px */
+
+  --primitive-font-weight-normal: 400;
+  --primitive-font-weight-medium: 500;
+  --primitive-font-weight-semibold: 600;
+  --primitive-font-weight-bold: 700;
+  --primitive-font-weight-extrabold: 800;
+
+  --primitive-line-height-tight: 1.25;
+  --primitive-line-height-snug: 1.375;
+  --primitive-line-height-normal: 1.5;
+  --primitive-line-height-relaxed: 1.625;
+  --primitive-line-height-loose: 2;
+
+  /* ════════════════════════════════════════════════════════════
+     SEMANTIC LAYER - Aliases par usage
+     ════════════════════════════════════════════════════════════ */
+
+  /* ── Couleurs Sémantiques ── */
+  --color-primary: var(--primitive-orange-500);
+  --color-primary-light: var(--primitive-orange-400);
+  --color-primary-dark: var(--primitive-orange-600);
+  --color-primary-subtle: var(--primitive-orange-50);
+
+  --color-text: var(--primitive-gray-900);
+  --color-text-secondary: var(--primitive-gray-600);
+  --color-text-muted: var(--primitive-gray-400);
+  --color-text-inverse: var(--primitive-white);
+
+  --color-bg: var(--primitive-gray-50);
+  --color-bg-alt: var(--primitive-gray-100);
+  --color-surface: var(--primitive-white);
+  --color-surface-raised: var(--primitive-white);
+
+  --color-border: var(--primitive-gray-200);
+  --color-border-light: var(--primitive-gray-100);
+  --color-border-dark: var(--primitive-gray-300);
+
+  --color-success: var(--primitive-success-500);
+  --color-success-dark: var(--primitive-success-600);
+  --color-warning: var(--primitive-warning-500);
+  --color-warning-dark: var(--primitive-warning-600);
+  --color-error: var(--primitive-error-500);
+  --color-error-dark: var(--primitive-error-600);
+  --color-info: var(--primitive-info-500);
+  --color-info-dark: var(--primitive-info-600);
+
+  /* ── Espacements Sémantiques ── */
+  --space-xs: var(--primitive-space-1);
+  --space-sm: var(--primitive-space-2);
+  --space-md: var(--primitive-space-4);
+  --space-lg: var(--primitive-space-6);
+  --space-xl: var(--primitive-space-8);
+  --space-2xl: var(--primitive-space-12);
+  --space-3xl: var(--primitive-space-16);
+
+  /* ── Border Radius Sémantiques ── */
+  --radius-sm: var(--primitive-radius-sm);
+  --radius-md: var(--primitive-radius-md);
+  --radius-lg: var(--primitive-radius-lg);
+  --radius-xl: var(--primitive-radius-xl);
+  --radius-2xl: var(--primitive-radius-2xl);
+  --radius-full: var(--primitive-radius-full);
+
+  /* ── Ombres Sémantiques ── */
+  --shadow-sm: var(--primitive-shadow-sm);
+  --shadow-md: var(--primitive-shadow-md);
+  --shadow-lg: var(--primitive-shadow-lg);
+  --shadow-xl: var(--primitive-shadow-xl);
+  --shadow-primary: 0 8px 24px rgba(249, 115, 22, 0.22), 0 2px 6px rgba(249, 115, 22, 0.12);
+
+  /* ── Transitions Sémantiques ── */
+  --transition-fast: var(--primitive-duration-fast) var(--primitive-ease-out);
+  --transition-base: var(--primitive-duration-base) var(--primitive-ease-out);
+  --transition-slow: var(--primitive-duration-slow) var(--primitive-ease-out);
+  --transition-spring: var(--primitive-duration-slow) var(--primitive-ease-spring);
+
+  /* ── Typographie Sémantique ── */
+  --font-body: var(--primitive-font-sans);
+  --font-heading: var(--primitive-font-sans);
+  --font-mono: var(--primitive-font-mono);
+
+  /* ════════════════════════════════════════════════════════════
+     COMPONENT LAYER - Layout & Navigation
+     ════════════════════════════════════════════════════════════ */
+
+  /* ── Z-Index Scale ── */
+  --z-base: 0;
+  --z-content: 1;
+  --z-sidebar: 100;
+  --z-navbar: 200;
+  --z-dropdown: 300;
+  --z-sidebar-overlay: 350;
+  --z-overlay: 400;
+  --z-modal: 500;
+  --z-toast: 600;
+  --z-tooltip: 700;
+
+  /* ── Layout Dimensions ── */
+  --layout-sidebar-width: 260px;
+  --layout-sidebar-width-collapsed: 72px;
+  --layout-navbar-height: 68px;
+  --layout-navbar-height-compact: 60px;
+  --layout-max-width: 1440px;
+
+  /* ── Sidebar Component ── */
+  --sidebar-bg: var(--color-surface);
+  --sidebar-border: var(--color-border);
+  --sidebar-shadow: var(--shadow-lg);
+  --sidebar-transition: var(--transition-base);
+
+  --sidebar-item-color: var(--color-text-secondary);
+  --sidebar-item-bg-hover: rgba(249, 115, 22, 0.06);
+  --sidebar-item-bg-active: rgba(249, 115, 22, 0.1);
+  --sidebar-item-color-active: var(--color-primary);
+  --sidebar-item-radius: var(--radius-lg);
+
+  /* ── Navbar Component ── */
+  --navbar-bg: rgba(255, 255, 255, 0.86);
+  --navbar-bg-scrolled: rgba(255, 255, 255, 0.92);
+  --navbar-border: rgba(229, 231, 235, 0.85);
+  --navbar-shadow: var(--shadow-sm);
+  --navbar-backdrop: blur(14px) saturate(160%);
+  --navbar-backdrop-scrolled: blur(20px) saturate(180%);
+
+  /* ── Button Component ── */
+  --button-primary-bg: var(--color-primary);
+  --button-primary-bg-hover: var(--color-primary-dark);
+  --button-primary-color: var(--color-text-inverse);
+  --button-primary-shadow: var(--shadow-primary);
+
+  --button-secondary-bg: var(--color-surface);
+  --button-secondary-bg-hover: var(--color-primary);
+  --button-secondary-color: var(--color-text);
+  --button-secondary-color-hover: var(--color-text-inverse);
+  --button-secondary-border: var(--color-border);
+
+  --button-padding-y: 0.8125rem;
+  --button-padding-x: 1.75rem;
+  --button-radius: var(--radius-full);
+  --button-min-height: 44px;
+  --button-transition: var(--transition-base);
+
+  /* ── Form Component ── */
+  --input-bg: var(--color-surface);
+  --input-border: var(--color-border);
+  --input-border-focus: var(--color-primary);
+  --input-color: var(--color-text);
+  --input-placeholder: var(--color-text-muted);
+  --input-padding-y: 0.75rem;
+  --input-padding-x: 1.125rem;
+  --input-radius: var(--radius-lg);
+  --input-min-height: 44px;
+  --input-shadow-focus: 0 0 0 3px rgba(249, 115, 22, 0.08);
+
+  /* ── Card Component ── */
+  --card-bg: var(--color-surface);
+  --card-border: var(--color-border-light);
+  --card-radius: var(--radius-xl);
+  --card-padding: var(--space-lg);
+  --card-shadow: var(--shadow-sm);
+  --card-shadow-hover: var(--shadow-lg);
+
+  /* ── Table Component ── */
+  --table-border: var(--color-border-light);
+  --table-header-bg: var(--color-bg-alt);
+  --table-row-hover: var(--color-bg-alt);
+
+  /* ── Breakpoints (pour référence JS) ── */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   DARK MODE SUPPORT (optionnel)
+   ════════════════════════════════════════════════════════════ */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* À implémenter selon les besoins */
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   ACCESSIBILITY
+   ════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-fast: 0.01ms;
+    --transition-base: 0.01ms;
+    --transition-slow: 0.01ms;
+    --transition-spring: 0.01ms;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   PRINT STYLES
+   ════════════════════════════════════════════════════════════ */
+
+@media print {
+  :root {
+    --shadow-sm: none;
+    --shadow-md: none;
+    --shadow-lg: none;
+    --shadow-xl: none;
+    --shadow-primary: none;
+  }
+}

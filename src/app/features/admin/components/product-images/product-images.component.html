@@ -23,6 +23,51 @@
     </div>
   </div>
 
+  <!-- Guidelines upload -->
+  <div class="upload-guidelines">
+    <svg class="guidelines-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <div class="guidelines-text">
+      <strong>Formats acceptés :</strong> JPEG, PNG, WebP (max 5 MB)
+      <br>
+      <small>Astuce : Des images haute résolution (1200px+) offrent un meilleur rendu.</small>
+    </div>
+  </div>
+
+  <!-- Prévisualisation avant upload -->
+  @if (previewImages().length > 0) {
+    <div class="preview-section">
+      <div class="preview-header">
+        <h4>📋 Aperçu avant upload ({{ previewImages().length }} images)</h4>
+        <div class="preview-actions">
+          <button class="btn-cancel" (click)="cancelPreviews()">Annuler</button>
+          <button class="btn-confirm" (click)="uploadImages()" [disabled]="isUploading()">
+            @if (isUploading()) {
+              <span class="spinner-small"></span> Upload...
+            } @else {
+              ✓ Confirmer l'upload
+            }
+          </button>
+        </div>
+      </div>
+      <div class="preview-grid">
+        @for (preview of previewImages(); track $index) {
+          <div class="preview-card">
+            <img [src]="preview.preview" [alt]="preview.file.name" />
+            <button class="btn-remove-preview" (click)="removePreview($index)" title="Retirer">
+              ✕
+            </button>
+            <div class="preview-info">
+              <span class="file-name">{{ preview.file.name }}</span>
+              <span class="file-size">{{ (preview.file.size / 1024).toFixed(0) }} KB</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
   <!-- Grille d'images -->
   <div class="images-grid">
     @for (image of images(); track image.id) {

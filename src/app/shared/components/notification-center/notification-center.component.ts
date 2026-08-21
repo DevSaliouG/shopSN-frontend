@@ -93,7 +93,7 @@ import { NotificationService, Notification } from '../../../core/services/notifi
       inset: 0;
       background: rgba(0, 0, 0, 0.2);
       backdrop-filter: blur(2px);
-      z-index: 9990;
+      z-index: var(--z-overlay, 400);
       animation: fadeIn 0.2s ease;
     }
 
@@ -105,7 +105,7 @@ import { NotificationService, Notification } from '../../../core/services/notifi
       width: 380px;
       max-width: 100vw;
       background: white;
-      z-index: 9991;
+      z-index: var(--z-modal, 500);
       display: flex;
       flex-direction: column;
       box-shadow: -8px 0 32px rgba(0, 0, 0, 0.1);

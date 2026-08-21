@@ -41,6 +41,13 @@ export const ADMIN_ROUTES: Routes = [
             (m) => m.UsersManagementComponent,
           ),
       },
+      {
+        path: 'analytics',
+        loadComponent: () =>
+          import('./pages/analytics-dashboard/analytics-dashboard.component').then(
+            (m) => m.AnalyticsDashboardComponent,
+          ),
+      },
     ],
   },
 ];

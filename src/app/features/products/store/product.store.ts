@@ -171,11 +171,17 @@ export class ProductStore {
    * @param filters - Nouveaux filtres
    */
   updateFilters(filters: Partial<ProductFilters>): void {
+    // Utiliser Object.assign pour que les undefined remplacent les valeurs existantes
     const currentFilters = this._filters();
-    const newFilters = {
-      ...currentFilters,
-      ...filters,
+    const newFilters: ProductFilters = {
       page: 1, // Reset à la page 1 lors d'un changement de filtre
+      per_page: currentFilters.per_page ?? 20,
+      q: filters.q !== undefined ? filters.q : currentFilters.q,
+      category: filters.category !== undefined ? filters.category : currentFilters.category,
+      prix_min: filters.prix_min !== undefined ? filters.prix_min : currentFilters.prix_min,
+      prix_max: filters.prix_max !== undefined ? filters.prix_max : currentFilters.prix_max,
+      sort: filters.sort !== undefined ? filters.sort : currentFilters.sort,
+      en_stock: filters.en_stock !== undefined ? filters.en_stock : currentFilters.en_stock,
     };
 
     this._filters.set(newFilters);

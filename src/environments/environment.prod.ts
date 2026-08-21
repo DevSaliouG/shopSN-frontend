@@ -15,15 +15,15 @@ export const environment = {
     avatar: '/assets/images/avatars/avatar-1.webp',
   },
 
-  appName: 'OnlineStore',
+  appName: 'DkrOnlineStore',
   appUrl: 'https://onlinestore.sn',
   appVersion: '1.0.0',
 
   whatsappNumber: '221787838002',
 
-  jwtTokenKey: 'onlineStore_token',
-  userStorageKey: 'onlineStore_user',
-  tokenExpiryKey: 'onlineStore_token_expiry',
+  jwtTokenKey: 'dkrOnlineStore_token',
+  userStorageKey: 'dkrOnlineStore_user',
+  tokenExpiryKey: 'dkrOnlineStore_token_expiry',
 
   enableAnalytics: true,
   enableDebug: false,
@@ -35,7 +35,7 @@ export const environment = {
 
   cacheTTL: 600,
 
-  defaultMetaTitle: 'OnlineStore - Boutique en ligne Sénégal',
+  defaultMetaTitle: 'DkrOnlineStore - Boutique en ligne Sénégal',
   defaultMetaDescription: 'Découvrez des centaines de produits et commandez facilement via WhatsApp. Livraison au Sénégal.',
   defaultMetaKeywords: 'e-commerce, Sénégal, boutique en ligne, WhatsApp, produits',
 

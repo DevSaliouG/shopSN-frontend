@@ -1,6 +1,7 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 import { CategoryService } from '../../../services/category.service';
 import { ToastService } from '../../../services/toast.service';
@@ -17,6 +18,7 @@ export class CategoriesManagementComponent implements OnInit {
   private categoryService = inject(CategoryService);
   private fb = inject(FormBuilder);
   private toast = inject(ToastService);
+  private router = inject(Router);
 
   categories = signal<Category[]>([]);
   isLoading = signal(true);
@@ -110,5 +112,14 @@ export class CategoriesManagementComponent implements OnInit {
     this.showModal.set(false);
     this.editingId.set(null);
     this.categoryForm.reset();
+  }
+
+  /**
+   * Navigue vers le formulaire d'ajout de produit avec la catégorie pré-remplie
+   */
+  navigateToAddProduct(category: Category): void {
+    this.router.navigate(['/admin/produits'], {
+      queryParams: { categoryId: category.id, categoryName: category.nom }
+    });
   }
 }

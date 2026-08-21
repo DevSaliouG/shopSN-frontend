@@ -28,7 +28,9 @@ export class ProductService {
   private readonly env = inject(ENVIRONMENT);
 
   private popularProductsCache$: Observable<ApiResponse<Product[]>> | null = null;
-  private cacheTimestamp = 0;
+  private recentProductsCache$: Observable<ApiResponse<Product[]>> | null = null;
+  private popularCacheTimestamp = 0;
+  private recentCacheTimestamp = 0;
   private readonly CACHE_DURATION = 5 * 60 * 1000;
 
   // ==================== MÉTHODES PUBLIQUES (catalogue) ====================
@@ -94,6 +96,14 @@ export class ProductService {
   }
 
   /**
+   * Récupère un produit par son ID (admin)
+   * @param id - ID du produit
+   */
+  getProduct(id: number): Observable<ApiResponse<Product>> {
+    return this.http.get<ApiResponse<Product>>(`${this.env.apiUrl}/api/admin/products/${id}`);
+  }
+
+  /**
    * Récupère un produit par son slug SEO-friendly
    * @param slug - Slug unique du produit
    */
@@ -116,7 +126,7 @@ export class ProductService {
   getPopularProducts(limit: number = 12): Observable<ApiResponse<Product[]>> {
     const now = Date.now();
 
-    if (this.popularProductsCache$ && now - this.cacheTimestamp < this.CACHE_DURATION) {
+    if (this.popularProductsCache$ && now - this.popularCacheTimestamp < this.CACHE_DURATION) {
       return this.popularProductsCache$;
     }
 
@@ -126,19 +136,30 @@ export class ProductService {
       })
       .pipe(shareReplay(1));
 
-    this.cacheTimestamp = now;
+    this.popularCacheTimestamp = now;
     return this.popularProductsCache$;
   }
 
   /**
-   * Récupère les produits récents
+   * Récupère les produits récents avec cache
    * @param limit - Nombre de produits à récupérer (défaut: 12)
    * @param days - Période en jours (défaut: 30)
    */
   getRecentProducts(limit: number = 12, days: number = 30): Observable<ApiResponse<Product[]>> {
-    return this.http.get<ApiResponse<Product[]>>(`${this.env.apiUrl}/api/products/recent`, {
-      params: new HttpParams().set('limit', limit.toString()).set('days', days.toString()),
-    });
+    const now = Date.now();
+
+    if (this.recentProductsCache$ && now - this.recentCacheTimestamp < this.CACHE_DURATION) {
+      return this.recentProductsCache$;
+    }
+
+    this.recentProductsCache$ = this.http
+      .get<ApiResponse<Product[]>>(`${this.env.apiUrl}/api/products/recent`, {
+        params: new HttpParams().set('limit', limit.toString()).set('days', days.toString()),
+      })
+      .pipe(shareReplay(1));
+
+    this.recentCacheTimestamp = now;
+    return this.recentProductsCache$;
   }
 
   /**
@@ -154,6 +175,19 @@ export class ProductService {
         params = params.set(key, value.toString());
       }
     });
+
+    return this.http.get<ApiResponse<Product[]>>(`${this.env.apiUrl}/api/search`, { params });
+  }
+
+  /**
+   * Recherche rapide pour l'autocomplétion (limité à 5 résultats)
+   * @param query - Terme de recherche
+   */
+  quickSearch(query: string): Observable<ApiResponse<Product[]>> {
+    const params = new HttpParams()
+      .set('q', query)
+      .set('per_page', '5')
+      .set('statut', 'actif');
 
     return this.http.get<ApiResponse<Product[]>>(`${this.env.apiUrl}/api/search`, { params });
   }
@@ -244,7 +278,7 @@ export class ProductService {
    * @param imageId - ID de l'image
    */
   setMainImage(productId: number, imageId: number): Observable<{ data: ProductImage }> {
-    return this.http.post<{ data: ProductImage }>(
+    return this.http.patch<{ data: ProductImage }>(
       `${this.env.apiUrl}/api/admin/products/${productId}/images/${imageId}/main`,
       {},
     );
@@ -262,7 +296,23 @@ export class ProductService {
    */
   invalidatePopularCache(): void {
     this.popularProductsCache$ = null;
-    this.cacheTimestamp = 0;
+    this.popularCacheTimestamp = 0;
+  }
+
+  /**
+   * Invalide le cache des produits récents
+   */
+  invalidateRecentCache(): void {
+    this.recentProductsCache$ = null;
+    this.recentCacheTimestamp = 0;
+  }
+
+  /**
+   * Invalide tous les caches
+   */
+  invalidateAllCaches(): void {
+    this.invalidatePopularCache();
+    this.invalidateRecentCache();
   }
 
   /**
@@ -284,6 +334,30 @@ export class ProductService {
     return this.http.post<{ data: ProductImage[] }>(
       `${this.env.apiUrl}/api/admin/products/${productId}/images`,
       files,
+    );
+  }
+
+  /**
+   * Créer un produit avec image (FormData)
+   */
+  createProductWithImage(formData: FormData): Observable<{ data: Product }> {
+    return this.http.post<{ data: Product }>(
+      `${this.env.apiUrl}/api/admin/products`,
+      formData
+    );
+  }
+
+  /**
+   * Mettre à jour un produit avec image (FormData)
+   * Utilise POST avec _method=PUT pour supporter FormData
+   */
+  updateProductWithImage(id: number, formData: FormData): Observable<{ data: Product }> {
+    // Laravel supporte _method pour simuler PUT avec FormData
+    formData.append('_method', 'PUT');
+
+    return this.http.post<{ data: Product }>(
+      `${this.env.apiUrl}/api/admin/products/${id}`,
+      formData
     );
   }
 }

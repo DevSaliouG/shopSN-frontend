@@ -1,20 +1,38 @@
 <div class="detail-page">
   <div class="detail-container">
 
-    <!-- Fil d'Ariane -->
-    <nav class="breadcrumb" aria-label="Navigation">
-      <a routerLink="/" class="bc-link">Accueil</a>
-      <span class="bc-sep">/</span>
-      <a routerLink="/produits" class="bc-link">Produits</a>
-      @if (currentProduct()?.category) {
-        <span class="bc-sep">/</span>
-        <a [routerLink]="['/categorie', currentProduct()?.category?.slug]" class="bc-link">
-          {{ currentProduct()?.category?.nom }}
-        </a>
-      }
-      <span class="bc-sep">/</span>
-      <span class="bc-current">{{ currentProduct()?.nom }}</span>
-    </nav>
+    <!-- Fil d'Ariane avec JSON-LD -->
+    @if (currentProduct()) {
+      <app-breadcrumbs [items]="breadcrumbItems()" />
+    }
+
+    <!-- Navigation Produit Précédent/Suivant -->
+    @if (currentProduct() && (previousProduct() || nextProduct())) {
+      <div class="product-navigation">
+        @if (previousProduct(); as prev) {
+          <a [routerLink]="['/produits', prev.slug]" class="nav-link nav-prev">
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            <div class="nav-content">
+              <span class="nav-label">Précédent</span>
+              <span class="nav-product-name">{{ prev.nom }}</span>
+            </div>
+          </a>
+        }
+        @if (nextProduct(); as next) {
+          <a [routerLink]="['/produits', next.slug]" class="nav-link nav-next">
+            <div class="nav-content">
+              <span class="nav-label">Suivant</span>
+              <span class="nav-product-name">{{ next.nom }}</span>
+            </div>
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </a>
+        }
+      </div>
+    }
 
     <!-- Chargement -->
     @if (isLoading()) {
@@ -38,49 +56,15 @@
     <!-- Détail -->
     @else if (currentProduct(); as product) {
 
-      <div class="product-layout">
+      <div class="product-layout" @fadeSlideIn>
 
-        <!-- ===== GALERIE ===== -->
-        <div class="gallery-col">
-          <!-- Image principale Swiper -->
-          <div class="product-main-swiper swiper main-image-wrap">
-            <div class="swiper-wrapper">
-              @for (image of productImages(); track image.id) {
-                <div class="swiper-slide">
-                  <img [src]="image.url" [alt]="image.alt_text || product.nom" class="main-img" />
-                </div>
-              }
-              @if (productImages().length === 0) {
-                <div class="swiper-slide">
-                  <img src="/assets/images/placeholder-large.webp" [alt]="product.nom" class="main-img" />
-                </div>
-              }
-            </div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-pagination"></div>
-          </div>
-
-          <!-- Miniatures -->
-          @if (productImages().length > 1) {
-            <div class="product-thumbs swiper thumbs-wrap">
-              <div class="swiper-wrapper">
-                @for (image of productImages(); track image.id) {
-                  <div class="swiper-slide thumb-slide">
-                    <img
-                      [src]="image.thumbnail_url || image.url"
-                      [alt]="image.alt_text || product.nom"
-                      class="thumb-img"
-                    />
-                  </div>
-                }
-              </div>
-            </div>
-          }
+        <!-- ===== GALERIE - Phase 3 Modern Gallery ===== -->
+        <div class="gallery-col" @scaleIn>
+          <app-product-gallery [images]="productImages()" />
         </div>
 
         <!-- ===== INFOS ===== -->
-        <div class="info-col">
+        <div class="info-col" @fadeSlideIn>
 
           <!-- Catégorie -->
           @if (product.category) {
@@ -200,4 +184,14 @@
     }
 
   </div>
+
+  <!-- Sticky Bar Mobile - Phase 3 -->
+  @if (currentProduct(); as product) {
+    <app-product-sticky-bar
+      [productName]="product.nom"
+      [price]="product.prix"
+      [isInStock]="isInStock()"
+      [whatsappUrl]="whatsappUrl()"
+    />
+  }
 </div>

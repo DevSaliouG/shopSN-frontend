@@ -151,31 +151,20 @@ export class ProductFiltersComponent implements OnInit, OnDestroy {
   protected emitFiltersChange(): void {
     const filters: ProductFilters = {
       page: 1, // Reset à la page 1 quand les filtres changent
-      per_page: 20
+      per_page: 20,
+      category: this.selectedCategory() || undefined,
+      prix_min: this.prixMin() || undefined,
+      prix_max: this.prixMax() || undefined,
+      en_stock: this.enStockOnly(),
+      q: '', // Réinitialiser la recherche aussi
     };
-    
-    if (this.selectedCategory()) {
-      filters.category = this.selectedCategory();
-    }
-    
-    if (this.prixMin()) {
-      filters.prix_min = this.prixMin()!;
-    }
-    
-    if (this.prixMax()) {
-      filters.prix_max = this.prixMax()!;
-    }
-    
-    if (this.enStockOnly()) {
-      filters.en_stock = this.enStockOnly();
-    }
-    
+
     // Préserve le tri actuel si présent
     const currentSort = this.currentFilters().sort;
     if (currentSort) {
       filters.sort = currentSort;
     }
-    
+
     this.filtersChange.emit(filters);
   }
   

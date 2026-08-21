@@ -8,14 +8,24 @@ import { RouterLink } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="hero">
-      <!-- Background image -->
+      <!-- Background image - Desktop -->
       <img
         src="/assets/images/hero-bg.jpg"
         alt=""
-        class="hero-bg-img"
+        class="hero-bg-img hero-bg-desktop"
         loading="eager"
         width="1400"
         height="700"
+      />
+
+      <!-- Background image - Mobile (shopping bags) -->
+      <img
+        src="/assets/images/hero-mobile.jpg"
+        alt="Shopping bags"
+        class="hero-bg-img hero-bg-mobile"
+        loading="eager"
+        width="800"
+        height="1200"
       />
 
       <!-- Overlay gradient for text legibility -->
@@ -156,6 +166,20 @@ import { RouterLink } from '@angular/router';
         height: 100%;
         object-fit: cover;
         object-position: center 30%;
+        transition: opacity 0.3s ease;
+      }
+
+      /* Desktop background - visible par défaut */
+      .hero-bg-desktop {
+        opacity: 1;
+        z-index: 0;
+      }
+
+      /* Mobile background - cachée par défaut */
+      .hero-bg-mobile {
+        opacity: 0;
+        z-index: -1;
+        object-position: center center;
       }
 
       /* Dark gradient overlay — stronger at left for text, lighter at right */
@@ -387,6 +411,17 @@ import { RouterLink } from '@angular/router';
 
       /* Responsive */
       @media (max-width: 768px) {
+        /* Basculer vers l'image mobile (sacs shopping) */
+        .hero-bg-desktop {
+          opacity: 0;
+          z-index: -1;
+        }
+
+        .hero-bg-mobile {
+          opacity: 1;
+          z-index: 0;
+        }
+
         .hero {
           min-height: 90svh;
         }
@@ -400,8 +435,8 @@ import { RouterLink } from '@angular/router';
         .hero-overlay {
           background: linear-gradient(
             to bottom,
-            rgba(8, 20, 30, 0.35) 0%,
-            rgba(8, 20, 30, 0.85) 100%
+            rgba(8, 20, 30, 0.25) 0%,
+            rgba(8, 20, 30, 0.8) 100%
           );
         }
         .hero-stats {

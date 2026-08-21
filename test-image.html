@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Image Hero</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            background: linear-gradient(180deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+            min-height: 100vh;
+            font-family: system-ui;
+            color: white;
+        }
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .test-image-wrapper {
+            background: rgba(255, 0, 0, 0.3);
+            border: 5px solid blue;
+            padding: 20px;
+            display: inline-block;
+            margin: 20px;
+        }
+        .test-image-container {
+            background: rgba(255, 255, 0, 0.3);
+            padding: 20px;
+        }
+        .test-image {
+            border: 3px solid green;
+            max-width: 420px;
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .info {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background: rgba(0,255,0,0.2); }
+        .error { background: rgba(255,0,0,0.2); }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔍 Test Image Hero Shopping</h1>
+
+        <div class="test-image-wrapper">
+            <div class="test-image-container">
+                <img
+                    id="testImage"
+                    src="/assets/images/hero-shopping.jpg"
+                    alt="Test Hero Shopping"
+                    class="test-image"
+                    onerror="handleError()"
+                    onload="handleLoad()"
+                >
+            </div>
+        </div>
+
+        <div class="info">
+            <h2>Status du Test:</h2>
+            <div id="status" class="status">⏳ Chargement...</div>
+
+            <h3>Instructions:</h3>
+            <ul>
+                <li><strong>Rouge/Bleu</strong>: Container principal (catalog-hero-visual)</li>
+                <li><strong>Jaune</strong>: Container image (hero-image-container)</li>
+                <li><strong>Vert</strong>: Bordure de l'image (hero-image)</li>
+            </ul>
+
+            <h3>Informations:</h3>
+            <p><strong>URL image:</strong> <code id="imageUrl"></code></p>
+            <p><strong>Largeur écran:</strong> <span id="width"></span>px</p>
+            <p><strong>Serveur:</strong> ng serve doit être lancé</p>
+        </div>
+    </div>
+
+    <script>
+        const statusEl = document.getElementById('status');
+        const imgEl = document.getElementById('testImage');
+
+        document.getElementById('imageUrl').textContent = imgEl.src;
+        document.getElementById('width').textContent = window.innerWidth;
+
+        function handleLoad() {
+            statusEl.className = 'status success';
+            statusEl.innerHTML = '✅ IMAGE CHARGÉE AVEC SUCCÈS!<br>L\'image existe et est accessible.';
+            console.log('✅ Image loaded:', imgEl.src);
+            console.log('Image size:', imgEl.naturalWidth, 'x', imgEl.naturalHeight);
+        }
+
+        function handleError() {
+            statusEl.className = 'status error';
+            statusEl.innerHTML = '❌ ERREUR: Image introuvable (404)<br>Vérifiez que le serveur Angular tourne (ng serve)';
+            console.error('❌ Image failed to load:', imgEl.src);
+        }
+
+        window.addEventListener('resize', () => {
+            document.getElementById('width').textContent = window.innerWidth;
+        });
+
+        // Timeout si rien ne se passe
+        setTimeout(() => {
+            if (statusEl.textContent.includes('Chargement')) {
+                statusEl.className = 'status error';
+                statusEl.innerHTML = '⏱️ TIMEOUT: L\'image n\'a pas chargé<br>Le serveur Angular ne répond pas.';
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

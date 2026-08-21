@@ -1,0 +1,101 @@
+/* ══════════════════════════════════════════════════════════════
+   APPLIED FILTERS BAR - PHASE 2 PARTIE 2
+   ══════════════════════════════════════════════════════════════ */
+
+.applied-filters-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  background: var(--color-neutral-50, #FAFAFA);
+  border-radius: var(--radius-lg, 12px);
+  flex-wrap: wrap;
+}
+
+.applied-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-secondary, #6B7280);
+  white-space: nowrap;
+}
+
+.filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: white;
+  border: 1px solid var(--color-border, #E5E7EB);
+  border-radius: var(--radius-pill, 999px);
+  font-size: 14px;
+  color: var(--color-text, #1A2B3C);
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s) ease-out;
+}
+
+.filter-pill:hover {
+  background: #FEE2E2;
+  border-color: #DC2626;
+  color: #DC2626;
+}
+
+.filter-pill:focus-visible {
+  outline: 2px solid var(--color-primary, #FF6600);
+  outline-offset: 2px;
+}
+
+.filter-pill:active {
+  transform: scale(0.95);
+}
+
+.filter-pill-label {
+  font-weight: 500;
+}
+
+.filter-pill-close {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.clear-all-btn {
+  padding: 6px 12px;
+  background: none;
+  border: none;
+  color: var(--color-primary, #FF6600);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: var(--radius-md, 8px);
+  transition: all var(--transition-fast, 0.15s) ease-out;
+  white-space: nowrap;
+}
+
+.clear-all-btn:hover {
+  background: rgba(255, 102, 0, 0.1);
+}
+
+.clear-all-btn:focus-visible {
+  outline: 2px solid var(--color-primary, #FF6600);
+  outline-offset: 2px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 640px) {
+  .applied-filters-bar {
+    padding: 12px;
+  }
+
+  .applied-label {
+    width: 100%;
+    margin-bottom: 4px;
+  }
+
+  .filter-pill,
+  .clear-all-btn {
+    font-size: 13px;
+  }
+}

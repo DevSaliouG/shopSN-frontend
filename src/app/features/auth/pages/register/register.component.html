@@ -1,30 +1,77 @@
-<div class="min-h-screen bg-gradient-to-br from-[#F5F5F5] to-white py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full mx-auto bg-white p-8 rounded-2xl shadow-xl">
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+  <!-- Animated background gradient -->
+  <div class="absolute inset-0 animated-gradient"></div>
 
-    <!-- Header -->
-    <div class="text-center mb-8">
-      <h2 class="text-3xl font-bold text-gray-900 font-sans">Créer un compte</h2>
-      <p class="mt-2 text-sm text-gray-600">
-        ou
-        <a routerLink="/connexion" class="font-medium text-[#FF6600] hover:text-[#FF8533]">
-          connectez-vous à votre compte
-        </a>
-      </p>
+  <!-- Animated bubbles with patterns -->
+  <div class="bubbles-container">
+    <div class="bubble bubble-1">
+      <div class="bubble-pattern pattern-dots"></div>
     </div>
+    <div class="bubble bubble-2">
+      <div class="bubble-pattern pattern-lines"></div>
+    </div>
+    <div class="bubble bubble-3">
+      <div class="bubble-pattern pattern-circles"></div>
+    </div>
+    <div class="bubble bubble-4">
+      <div class="bubble-pattern pattern-grid"></div>
+    </div>
+    <div class="bubble bubble-5">
+      <div class="bubble-pattern pattern-waves"></div>
+    </div>
+    <div class="bubble bubble-6">
+      <div class="bubble-pattern pattern-triangles"></div>
+    </div>
+    <div class="bubble bubble-7">
+      <div class="bubble-pattern pattern-hexagon"></div>
+    </div>
+    <div class="bubble bubble-8">
+      <div class="bubble-pattern pattern-stars"></div>
+    </div>
+  </div>
 
-    <!-- Erreur générale -->
-    @if (serverErrors()['general']) {
-      <div class="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-        {{ serverErrors()['general'][0] }}
+  <!-- Centered form container -->
+  <div [@fadeSlideIn] class="max-w-2xl w-full relative z-10">
+    <div class="glass-container-white p-12 rounded-3xl backdrop-blur-2xl bg-white/95 border border-white/40 shadow-2xl space-y-8">
+
+      <!-- Header with enhanced design -->
+      <div class="text-center mb-10">
+        <div class="inline-block mb-6">
+          <div class="w-20 h-20 bg-gradient-to-br from-[#FF6600] via-[#FF8533] to-[#FFA500] rounded-2xl flex items-center justify-center shadow-2xl transform hover:scale-110 hover:rotate-3 transition-all duration-300 animate-float">
+            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+            </svg>
+          </div>
+        </div>
+        <h2 class="text-4xl font-bold text-gray-800 mb-3 tracking-tight">Créer un compte</h2>
+        <p class="text-base text-gray-600">
+          Déjà membre ?
+          <a routerLink="/connexion" class="font-semibold text-[#FF6600] hover:text-[#FF8533] transition-colors duration-200 hover:underline ml-1">
+            Connectez-vous
+          </a>
+        </p>
       </div>
-    }
+
+      <!-- Erreur générale -->
+      @if (serverErrors()['general']) {
+        <div [@errorShake] class="mb-6 bg-red-50 backdrop-blur-md border border-red-300 text-red-700 px-4 py-3 rounded-xl shadow-sm">
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+            </svg>
+            {{ serverErrors()['general'][0] }}
+          </div>
+        </div>
+      }
 
     <!-- Formulaire -->
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-6" [@staggerFadeIn]="registerForm.controls | keyvalue">
 
-      <!-- Nom -->
-      <div>
-        <label for="nom" class="block text-sm font-medium text-gray-700">
+      <!-- Nom et Prénom en 2 colonnes sur desktop -->
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Nom -->
+        <div>
+        <label for="nom" class="block text-sm font-medium text-gray-700 mb-2">
           Nom <span class="text-red-500">*</span>
         </label>
         <input
@@ -32,16 +79,20 @@
           type="text"
           formControlName="nom"
           placeholder="Diop"
-          class="mt-1 w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#FF8533] focus:border-transparent transition-colors"
+          autocomplete="family-name"
+          class="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#FF8533] focus:border-transparent transition-all duration-300 transform focus:scale-[1.02] bg-gray-50 text-gray-900 placeholder:text-gray-400"
           [ngClass]="{
             'border-red-400 bg-red-50': nom?.invalid && nom?.touched,
-            'border-[#FF8533] bg-[#F5F5F5]': nom?.valid && nom?.touched,
-            'border-gray-300': !nom?.touched
+            'border-[#FF8533] bg-orange-50': nom?.valid && nom?.touched,
+            'border-gray-300 hover:border-gray-400': !nom?.touched
           }"
         />
 
         @if (nom?.invalid && nom?.touched) {
-          <p class="mt-1 text-red-500 text-sm">
+          <p class="mt-2 text-red-600 text-sm flex items-center gap-1">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+            </svg>
             @if (nom?.errors?.['required']) { Le nom est obligatoire }
             @else if (nom?.errors?.['minlength']) { Minimum 2 caractères }
             @else if (nom?.errors?.['maxlength']) { Maximum 100 caractères }
@@ -49,13 +100,16 @@
         }
 
         @if (hasServerError('nom')) {
-          <p class="mt-1 text-red-500 text-sm">{{ getServerError('nom') }}</p>
+          <p class="mt-2 text-red-600 text-sm flex items-center gap-1">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+            </svg>{{ getServerError('nom') }}</p>
         }
       </div>
 
       <!-- Prénom -->
       <div>
-        <label for="prenom" class="block text-sm font-medium text-gray-700">
+        <label for="prenom" class="block text-sm font-medium text-gray-700 mb-2">
           Prénom <span class="text-red-500">*</span>
         </label>
         <input
@@ -63,16 +117,20 @@
           type="text"
           formControlName="prenom"
           placeholder="Mamadou"
-          class="mt-1 w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#FF8533] focus:border-transparent transition-colors"
+          autocomplete="given-name"
+          class="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#FF8533] focus:border-transparent transition-all duration-300 transform focus:scale-[1.02] bg-gray-50 text-gray-900 placeholder:text-gray-400"
           [ngClass]="{
             'border-red-400 bg-red-50': prenom?.invalid && prenom?.touched,
-            'border-[#FF8533] bg-[#F5F5F5]': prenom?.valid && prenom?.touched,
-            'border-gray-300': !prenom?.touched
+            'border-[#FF8533] bg-orange-50': prenom?.valid && prenom?.touched,
+            'border-gray-300 hover:border-gray-400': !prenom?.touched
           }"
         />
 
         @if (prenom?.invalid && prenom?.touched) {
-          <p class="mt-1 text-red-500 text-sm">
+          <p class="mt-2 text-red-600 text-sm flex items-center gap-1">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+            </svg>
             @if (prenom?.errors?.['required']) { Le prénom est obligatoire }
             @else if (prenom?.errors?.['minlength']) { Minimum 2 caractères }
             @else if (prenom?.errors?.['maxlength']) { Maximum 100 caractères }
@@ -80,13 +138,17 @@
         }
 
         @if (hasServerError('prenom')) {
-          <p class="mt-1 text-red-500 text-sm">{{ getServerError('prenom') }}</p>
+          <p class="mt-2 text-red-600 text-sm flex items-center gap-1">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+            </svg>{{ getServerError('prenom') }}</p>
         }
+      </div>
       </div>
 
       <!-- Email -->
       <div>
-        <label for="email" class="block text-sm font-medium text-gray-700">
+        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
           Adresse email <span class="text-red-500">*</span>
         </label>
         <input
@@ -94,29 +156,36 @@
           type="email"
           formControlName="email"
           placeholder="mamadou@exemple.sn"
-          class="mt-1 w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#FF8533] focus:border-transparent transition-colors"
+          autocomplete="email"
+          class="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#FF8533] focus:border-transparent transition-all duration-300 transform focus:scale-[1.02] bg-gray-50 text-gray-900 placeholder:text-gray-400"
           [ngClass]="{
             'border-red-400 bg-red-50': email?.invalid && email?.touched,
-            'border-[#FF8533] bg-[#F5F5F5]': email?.valid && email?.touched,
-            'border-gray-300': !email?.touched
+            'border-[#FF8533] bg-orange-50': email?.valid && email?.touched,
+            'border-gray-300 hover:border-gray-400': !email?.touched
           }"
         />
 
         @if (email?.invalid && email?.touched) {
-          <p class="mt-1 text-red-500 text-sm">
+          <p class="mt-2 text-red-600 text-sm flex items-center gap-1">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+            </svg>
             @if (email?.errors?.['required']) { L'email est obligatoire }
             @else if (email?.errors?.['email']) { Veuillez saisir un email valide }
           </p>
         }
 
         @if (hasServerError('email')) {
-          <p class="mt-1 text-red-500 text-sm">{{ getServerError('email') }}</p>
+          <p class="mt-2 text-red-600 text-sm flex items-center gap-1">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+            </svg>{{ getServerError('email') }}</p>
         }
       </div>
 
       <!-- Mot de passe -->
       <div>
-        <label for="password" class="block text-sm font-medium text-gray-700">
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
           Mot de passe <span class="text-red-500">*</span>
         </label>
         <div class="relative mt-1">
@@ -125,42 +194,55 @@
             id="password"
             formControlName="password"
             placeholder="••••••••"
-            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#FF8533] focus:border-transparent transition-colors pr-12"
+            autocomplete="new-password"
+            class="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#FF8533] focus:border-transparent transition-all duration-300 transform focus:scale-[1.02] pr-12"
             [ngClass]="{
-              'border-red-400 bg-red-50': password?.invalid && password?.touched,
-              'border-[#FF8533] bg-[#F5F5F5]': password?.valid && password?.touched,
-              'border-gray-300': !password?.touched
+              'border-red-400 bg-red-50/50': password?.invalid && password?.touched,
+              'border-[#FF8533] bg-orange-50': password?.valid && password?.touched,
+              'border-gray-300 hover:border-gray-400': !password?.touched
             }"
           />
           <button
             type="button"
             (click)="togglePasswordVisibility()"
-            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#FF6600] transition-all duration-200 transform hover:scale-110"
             [attr.aria-label]="showPassword() ? 'Masquer le mot de passe' : 'Afficher le mot de passe'"
           >
-            {{ showPassword() ? '🙈' : '👁️' }}
+            @if (showPassword()) {
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+              </svg>
+            } @else {
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+              </svg>
+            }
           </button>
         </div>
 
         <!-- Liste des exigences du mot de passe -->
         @if (password?.touched && password?.invalid) {
-          <div class="mt-2 space-y-1">
+          <div class="mt-2 space-y-1" [@fadeIn]>
             @for (error of getPasswordErrors(); track error) {
-              <p class="text-red-500 text-xs flex items-center gap-1">
-                <span class="text-red-500">✗</span> {{ error }}
+              <p class="text-red-500 text-xs flex items-center gap-1 animate-pulse">
+                <span class="inline-block w-3 h-3 rounded-full bg-red-500"></span> {{ error }}
               </p>
             }
           </div>
         }
 
         @if (hasServerError('password')) {
-          <p class="mt-1 text-red-500 text-sm">{{ getServerError('password') }}</p>
+          <p class="mt-2 text-red-600 text-sm flex items-center gap-1">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+            </svg>{{ getServerError('password') }}</p>
         }
       </div>
 
       <!-- Confirmation mot de passe -->
       <div>
-        <label for="password_confirmation" class="block text-sm font-medium text-gray-700">
+        <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">
           Confirmer le mot de passe <span class="text-red-500">*</span>
         </label>
         <div class="relative mt-1">
@@ -169,28 +251,45 @@
             id="password_confirmation"
             formControlName="password_confirmation"
             placeholder="••••••••"
-            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#FF8533] focus:border-transparent transition-colors pr-12"
+            autocomplete="new-password"
+            class="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#FF8533] focus:border-transparent transition-all duration-300 transform focus:scale-[1.02] pr-12 bg-white/20 backdrop-blur-sm text-white placeholder:text-gray-300"
             [ngClass]="{
               'border-red-400 bg-red-50': registerForm.errors?.['passwordMismatch'] && passwordConfirmation?.touched,
-              'border-[#FF8533] bg-[#F5F5F5]': passwordConfirmation?.valid && passwordConfirmation?.touched,
-              'border-gray-300': !passwordConfirmation?.touched
+              'border-[#FF8533] bg-orange-50': passwordConfirmation?.valid && passwordConfirmation?.touched,
+              'border-gray-300 hover:border-gray-400': !passwordConfirmation?.touched
             }"
           />
           <button
             type="button"
             (click)="toggleConfirmPasswordVisibility()"
-            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#FF6600] transition-all duration-200 transform hover:scale-110"
+            [attr.aria-label]="showConfirmPassword() ? 'Masquer le mot de passe' : 'Afficher le mot de passe'"
           >
-            {{ showConfirmPassword() ? '🙈' : '👁️' }}
+            @if (showConfirmPassword()) {
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+              </svg>
+            } @else {
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+              </svg>
+            }
           </button>
         </div>
 
         @if (registerForm.errors?.['passwordMismatch'] && passwordConfirmation?.touched) {
-          <p class="mt-1 text-red-500 text-sm">Les mots de passe ne correspondent pas</p>
+          <p class="mt-2 text-red-600 text-sm flex items-center gap-1">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+            </svg>Les mots de passe ne correspondent pas</p>
         }
 
         @if (hasServerError('password_confirmation')) {
-          <p class="mt-1 text-red-500 text-sm">{{ getServerError('password_confirmation') }}</p>
+          <p class="mt-2 text-red-600 text-sm flex items-center gap-1">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+            </svg>{{ getServerError('password_confirmation') }}</p>
         }
       </div>
 
@@ -205,7 +304,7 @@
           />
         </div>
         <div class="ml-3 text-sm">
-          <label class="text-gray-600">
+          <label class="text-gray-700 cursor-pointer">
             J'accepte les
             <a href="/conditions-generales" target="_blank" class="text-[#FF6600] hover:text-[#FF8533]">
               conditions générales d'utilisation
@@ -218,27 +317,67 @@
         </div>
       </div>
       @if (acceptTermsCtrl?.invalid && acceptTermsCtrl?.touched) {
-        <p class="text-red-500 text-sm">Vous devez accepter les conditions générales</p>
+        <p class="text-red-600 text-sm flex items-center gap-1">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+          </svg>
+          Vous devez accepter les conditions générales
+        </p>
       }
 
-      <!-- Bouton d'inscription -->
-      <button
-        type="submit"
-        [disabled]="authService.isLoading() || registerForm.invalid"
-        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-[#FF6600] hover:bg-[#E65500] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FF8533] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-      >
-        @if (authService.isLoading()) {
-          <span class="flex items-center">
-            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      <!-- Enhanced professional signup button -->
+      <div class="pt-4">
+        <button
+          type="submit"
+          [disabled]="authService.isLoading() || registerForm.invalid"
+          class="w-full group relative overflow-hidden flex justify-center items-center gap-3 py-5 px-8 border-2 border-transparent rounded-full text-lg font-bold text-white bg-gradient-to-r from-[#FF6600] via-[#FF8533] to-[#FFA500] hover:from-[#E65500] hover:via-[#FF6600] hover:to-[#FF8533] focus:outline-none focus:ring-4 focus:ring-[#FF8533]/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-500 hover:shadow-2xl hover:scale-[1.03] transform active:scale-95 animate-gradient-x"
+        >
+          <!-- Animated background shine effect -->
+          <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
+
+          @if (authService.isLoading()) {
+            <span class="flex items-center relative z-10">
+              <svg class="animate-spin -ml-1 mr-3 h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Création en cours...
+            </span>
+          } @else {
+            <span class="relative z-10 flex items-center gap-2">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+              </svg>
+              Créer mon compte
+              <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+              </svg>
+            </span>
+          }
+        </button>
+
+        <!-- Trust indicators -->
+        <div class="mt-4 flex items-center justify-center gap-4 text-xs text-gray-600">
+          <div class="flex items-center gap-1">
+            <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
             </svg>
-            Création du compte...
-          </span>
-        } @else {
-          Créer mon compte
-        }
-      </button>
+            <span>Inscription gratuite</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <span>100% sécurisé</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+            </svg>
+            <span>Activation immédiate</span>
+          </div>
+        </div>
+      </div>
     </form>
 
     <!-- Séparation -->
@@ -247,13 +386,13 @@
         <div class="w-full border-t border-gray-300"></div>
       </div>
       <div class="relative flex justify-center text-sm">
-        <span class="px-2 bg-white text-gray-500">Ou inscrivez-vous avec</span>
+        <span class="px-3 bg-white text-gray-600 rounded-full">Ou inscrivez-vous avec</span>
       </div>
     </div>
 
     <!-- Boutons sociaux -->
-    <div class="grid grid-cols-2 gap-3">
-      <button class="w-full flex justify-center items-center gap-2 py-2 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+    <div class="grid grid-cols-2 gap-4">
+      <button class="w-full flex justify-center items-center gap-2 py-3 px-4 border border-gray-300 rounded-xl shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] transform active:scale-95">
         <svg class="w-5 h-5" viewBox="0 0 24 24">
           <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
           <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -262,12 +401,13 @@
         </svg>
         Google
       </button>
-      <button class="w-full flex justify-center items-center gap-2 py-2 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+      <button class="w-full flex justify-center items-center gap-2 py-3 px-4 border border-gray-300 rounded-xl shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] transform active:scale-95">
         <svg class="w-5 h-5" fill="#1877F2" viewBox="0 0 24 24">
           <path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.5c-1.5 0-1.96.93-1.96 1.89v2.26h3.32l-.53 3.49h-2.8V24C19.62 23.1 24 18.1 24 12.07z"/>
         </svg>
         Facebook
       </button>
+    </div>
     </div>
   </div>
 </div>

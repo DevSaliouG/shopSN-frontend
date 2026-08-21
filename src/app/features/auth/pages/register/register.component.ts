@@ -15,6 +15,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
 // Validateur personnalisé : confirmation du mot de passe
 const passwordMatchValidator = (control: AbstractControl): ValidationErrors | null => {
   const password = control.get('password')?.value;
@@ -53,7 +54,41 @@ const strongPasswordValidator = (control: AbstractControl): ValidationErrors | n
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('fadeSlideIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(30px)' }),
+        animate('600ms cubic-bezier(0.35, 0, 0.25, 1)', style({ opacity: 1, transform: 'translateY(0)' }))
+      ])
+    ]),
+    trigger('staggerFadeIn', [
+      transition('* => *', [
+        query(':enter', [
+          style({ opacity: 0, transform: 'translateY(20px)' }),
+          stagger(60, [
+            animate('400ms cubic-bezier(0.35, 0, 0.25, 1)', style({ opacity: 1, transform: 'translateY(0)' }))
+          ])
+        ], { optional: true })
+      ])
+    ]),
+    trigger('errorShake', [
+      transition(':enter', [
+        style({ transform: 'translateX(0)' }),
+        animate('400ms', style({ transform: 'translateX(-10px)' })),
+        animate('100ms', style({ transform: 'translateX(10px)' })),
+        animate('100ms', style({ transform: 'translateX(-10px)' })),
+        animate('100ms', style({ transform: 'translateX(10px)' })),
+        animate('100ms', style({ transform: 'translateX(0)' }))
+      ])
+    ]),
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('300ms', style({ opacity: 1 }))
+      ])
+    ])
+  ]
 })
 export class RegisterComponent {
   private readonly fb = inject(FormBuilder);

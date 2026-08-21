@@ -1,0 +1,55 @@
+@if (isListView()) {
+  <!-- === SKELETON LIST VIEW === -->
+  <article class="skeleton-list-card">
+    <div class="skeleton-list-img"></div>
+
+    <div class="skeleton-list-body">
+      <div class="skeleton-content">
+        <div class="skeleton-text skeleton-category"></div>
+        <div class="skeleton-text skeleton-title"></div>
+        <div class="skeleton-text skeleton-title short"></div>
+        <div class="skeleton-text skeleton-desc"></div>
+        <div class="skeleton-text skeleton-desc short"></div>
+      </div>
+
+      <div class="skeleton-list-footer">
+        <div class="skeleton-text skeleton-price"></div>
+        <div class="skeleton-button"></div>
+      </div>
+    </div>
+  </article>
+
+} @else {
+  <!-- === SKELETON GRID VIEW === -->
+  <article class="skeleton-grid-card">
+    <div class="skeleton-image-wrapper">
+      <div class="skeleton-image"></div>
+
+      @if (showBadge()) {
+        <div class="skeleton-badge"></div>
+      }
+
+      <div class="skeleton-wishlist"></div>
+    </div>
+
+    <div class="skeleton-body">
+      <div class="skeleton-text skeleton-category"></div>
+
+      @for (line of [1, 2]; track line) {
+        <div
+          class="skeleton-text skeleton-title"
+          [class.short]="line === titleLines()"
+        ></div>
+      }
+
+      <div class="skeleton-divider"></div>
+
+      <div class="skeleton-price-row">
+        <div class="skeleton-text skeleton-price"></div>
+        <div class="skeleton-text skeleton-stock-badge"></div>
+      </div>
+
+      <div class="skeleton-button"></div>
+    </div>
+  </article>
+}

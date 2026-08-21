@@ -61,7 +61,7 @@ import { NotificationService } from '../../../core/services/notification.service
       position: fixed;
       bottom: 24px;
       right: 24px;
-      z-index: 9999;
+      z-index: var(--z-toast, 600);
       display: flex;
       flex-direction: column-reverse;
       gap: 8px;

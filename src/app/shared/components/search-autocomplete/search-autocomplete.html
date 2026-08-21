@@ -1,0 +1,446 @@
+<!-- Conteneur de recherche avec autocomplétion -->
+<div class="search-autocomplete-wrapper">
+  <!-- Bouton icône (mobile seulement) -->
+  <button
+    type="button"
+    class="mobile-search-trigger"
+    (click)="openMobileSearch()"
+    aria-label="Ouvrir la recherche"
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+  </button>
+
+  <!-- Barre de recherche (desktop) -->
+  <div class="search-input-container desktop-search" [class.is-open]="isOpen()" [class.has-value]="searchQuery().trim()">
+    <!-- Icône de recherche ou spinner -->
+    <div class="search-icon-wrapper">
+      @if (!isLoading()) {
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      } @else {
+        <div class="search-spinner" aria-label="Recherche en cours">
+          <svg class="spinner-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" stroke-opacity="0.25"/>
+            <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/>
+          </svg>
+        </div>
+      }
+    </div>
+
+    <!-- Input de recherche -->
+    <input
+      #searchInput
+      type="search"
+      class="search-input"
+      [placeholder]="placeholder()"
+      [value]="searchQuery()"
+      (input)="onInputChange($any($event.target).value)"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+      (keydown)="onKeyDown($event)"
+      autocomplete="off"
+      spellcheck="false"
+      aria-label="Rechercher des produits"
+      [attr.aria-expanded]="isOpen()"
+      [attr.aria-controls]="isOpen() ? 'search-results' : null"
+      [attr.aria-activedescendant]="selectedIndex() >= 0 ? 'suggestion-' + selectedIndex() : null"
+    />
+
+    <!-- Bouton effacer -->
+    @if (searchQuery().trim()) {
+      <button
+        type="button"
+        class="clear-button"
+        (click)="clearSearch()"
+        aria-label="Effacer la recherche"
+        tabindex="-1"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    }
+  </div>
+
+  <!-- Dropdown de suggestions (très discret) -->
+  @if (showDropdown()) {
+    <div
+      id="search-results"
+      class="search-dropdown"
+      [@dropdownAnimation]="dropdownState()"
+      role="listbox"
+      aria-label="Suggestions de recherche"
+    >
+      <div class="dropdown-content">
+        <!-- Suggestions de recherche -->
+        @if (suggestions().length > 0) {
+          <div class="suggestions-section">
+            @for (suggestion of suggestions(); track suggestion.id; let i = $index) {
+              <button
+                type="button"
+                class="suggestion-item"
+                [id]="'suggestion-' + i"
+                [class.is-selected]="selectedIndex() === i"
+                (click)="selectSuggestion(suggestion)"
+                (mouseenter)="selectedIndex.set(i)"
+                role="option"
+                [attr.aria-selected]="selectedIndex() === i"
+              >
+                <!-- Image produit -->
+                @if (suggestion.image) {
+                  <div class="suggestion-image">
+                    <img [src]="suggestion.image" [alt]="suggestion.name" loading="lazy" />
+                  </div>
+                }
+
+                <!-- Contenu -->
+                <div class="suggestion-content">
+                  <div class="suggestion-name" [innerHTML]="highlightText(suggestion.name, searchQuery())"></div>
+                  @if (suggestion.category) {
+                    <div class="suggestion-category">{{ suggestion.category }}</div>
+                  }
+                </div>
+
+                <!-- Prix -->
+                @if (suggestion.price) {
+                  <div class="suggestion-price">
+                    {{ formatPrice(suggestion.price) }}
+                  </div>
+                }
+              </button>
+            }
+
+            <!-- Voir tous les résultats -->
+            <button
+              type="button"
+              class="view-all-button"
+              (click)="submitSearch()"
+            >
+              <span>Voir tous les résultats</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </button>
+          </div>
+        }
+
+        <!-- Produits populaires (si pas de recherche) -->
+        @if (!searchQuery().trim() && popularProducts().length > 0) {
+          <div class="suggestions-section">
+            <div class="section-header">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+              <span>Produits populaires</span>
+            </div>
+            @for (product of popularProducts(); track product.id; let i = $index) {
+              <button
+                type="button"
+                class="suggestion-item"
+                [id]="'suggestion-' + (suggestions().length + i)"
+                [class.is-selected]="selectedIndex() === (suggestions().length + i)"
+                (click)="selectSuggestion(product)"
+                (mouseenter)="selectedIndex.set(suggestions().length + i)"
+                role="option"
+                [attr.aria-selected]="selectedIndex() === (suggestions().length + i)"
+              >
+                @if (product.image) {
+                  <div class="suggestion-image">
+                    <img [src]="product.image" [alt]="product.name" loading="lazy" />
+                  </div>
+                }
+                <div class="suggestion-content">
+                  <div class="suggestion-name">{{ product.name }}</div>
+                  @if (product.category) {
+                    <div class="suggestion-category">{{ product.category }}</div>
+                  }
+                </div>
+                @if (product.price) {
+                  <div class="suggestion-price">{{ formatPrice(product.price) }}</div>
+                }
+              </button>
+            }
+          </div>
+        }
+
+        <!-- Recherches récentes (si pas de recherche) -->
+        @if (!searchQuery().trim() && recentSearches().length > 0) {
+          <div class="suggestions-section">
+            <div class="section-header">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <span>Recherches récentes</span>
+              <button
+                type="button"
+                class="clear-recents-button"
+                (click)="clearRecentSearches()"
+                aria-label="Effacer l'historique"
+              >
+                Effacer
+              </button>
+            </div>
+            @for (search of recentSearches(); track search; let i = $index) {
+              <button
+                type="button"
+                class="suggestion-item recent-item"
+                [id]="'suggestion-' + (suggestions().length + popularProducts().length + i)"
+                [class.is-selected]="selectedIndex() === (suggestions().length + popularProducts().length + i)"
+                (click)="searchQuery.set(search); submitSearch()"
+                (mouseenter)="selectedIndex.set(suggestions().length + popularProducts().length + i)"
+                role="option"
+                [attr.aria-selected]="selectedIndex() === (suggestions().length + popularProducts().length + i)"
+              >
+                <svg class="recent-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <div class="suggestion-content">
+                  <div class="suggestion-name">{{ search }}</div>
+                </div>
+                <button
+                  type="button"
+                  class="remove-recent-button"
+                  (click)="$event.stopPropagation(); removeRecentSearch(search)"
+                  aria-label="Supprimer de l'historique"
+                  tabindex="-1"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+              </button>
+            }
+          </div>
+        }
+
+        <!-- Message aucun résultat -->
+        @if (searchQuery().trim() && suggestions().length === 0 && !isLoading()) {
+          <div class="no-results">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <div class="no-results-title">Aucun produit trouvé</div>
+            <div class="no-results-subtitle">Essayez avec un autre terme de recherche</div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Overlay Mobile Fullscreen -->
+  @if (isMobileSearchOpen()) {
+    <div class="mobile-search-overlay" (click)="closeMobileSearch()">
+      <div class="mobile-search-content" (click)="$event.stopPropagation()">
+        <!-- Header mobile -->
+        <div class="mobile-search-header">
+          <button
+            type="button"
+            class="mobile-back-button"
+            (click)="closeMobileSearch()"
+            aria-label="Fermer la recherche"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+          </button>
+
+          <!-- Input mobile fullscreen -->
+          <div class="mobile-search-input-wrapper">
+            <svg class="mobile-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input
+              #mobileSearchInput
+              type="search"
+              class="mobile-search-input"
+              placeholder="Rechercher..."
+              [value]="searchQuery()"
+              (input)="onInputChange($any($event.target).value)"
+              (focus)="onFocus()"
+              (keydown)="onKeyDown($event)"
+              autocomplete="off"
+              spellcheck="false"
+              aria-label="Rechercher des produits"
+            />
+            @if (searchQuery().trim()) {
+              <button
+                type="button"
+                class="mobile-clear-button"
+                (click)="clearSearch()"
+                aria-label="Effacer"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            }
+          </div>
+        </div>
+
+        <!-- Résultats mobile -->
+        <div class="mobile-search-results">
+          @if (isLoading()) {
+            <div class="mobile-loading">
+              <div class="spinner-icon-mobile">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10" stroke-opacity="0.25"/>
+                  <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <p>Recherche en cours...</p>
+            </div>
+          } @else {
+            <!-- Suggestions de recherche -->
+            @if (suggestions().length > 0) {
+              <div class="mobile-suggestions-section">
+                <div class="mobile-section-title">Résultats</div>
+                @for (suggestion of suggestions(); track suggestion.id) {
+                  <button
+                    type="button"
+                    class="mobile-suggestion-item"
+                    (click)="selectSuggestion(suggestion); closeMobileSearch()"
+                  >
+                    @if (suggestion.image) {
+                      <div class="mobile-suggestion-image">
+                        <img [src]="suggestion.image" [alt]="suggestion.name" loading="lazy" />
+                      </div>
+                    }
+                    <div class="mobile-suggestion-content">
+                      <div class="mobile-suggestion-name" [innerHTML]="highlightText(suggestion.name, searchQuery())"></div>
+                      @if (suggestion.category) {
+                        <div class="mobile-suggestion-category">{{ suggestion.category }}</div>
+                      }
+                    </div>
+                    @if (suggestion.price) {
+                      <div class="mobile-suggestion-price">{{ formatPrice(suggestion.price) }}</div>
+                    }
+                  </button>
+                }
+
+                <button
+                  type="button"
+                  class="mobile-view-all"
+                  (click)="submitSearch(); closeMobileSearch()"
+                >
+                  Voir tous les résultats
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"/>
+                  </svg>
+                </button>
+              </div>
+            }
+
+            <!-- Produits populaires -->
+            @if (!searchQuery().trim() && popularProducts().length > 0) {
+              <div class="mobile-suggestions-section">
+                <div class="mobile-section-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                  </svg>
+                  Produits populaires
+                </div>
+                @for (product of popularProducts(); track product.id) {
+                  <button
+                    type="button"
+                    class="mobile-suggestion-item"
+                    (click)="selectSuggestion(product); closeMobileSearch()"
+                  >
+                    @if (product.image) {
+                      <div class="mobile-suggestion-image">
+                        <img [src]="product.image" [alt]="product.name" loading="lazy" />
+                      </div>
+                    }
+                    <div class="mobile-suggestion-content">
+                      <div class="mobile-suggestion-name">{{ product.name }}</div>
+                      @if (product.category) {
+                        <div class="mobile-suggestion-category">{{ product.category }}</div>
+                      }
+                    </div>
+                    @if (product.price) {
+                      <div class="mobile-suggestion-price">{{ formatPrice(product.price) }}</div>
+                    }
+                  </button>
+                }
+              </div>
+            }
+
+            <!-- Recherches récentes -->
+            @if (!searchQuery().trim() && recentSearches().length > 0) {
+              <div class="mobile-suggestions-section">
+                <div class="mobile-section-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                  Recherches récentes
+                </div>
+                @for (search of recentSearches(); track search) {
+                  <button
+                    type="button"
+                    class="mobile-suggestion-item mobile-recent-item"
+                    (click)="searchQuery.set(search); submitSearch(); closeMobileSearch()"
+                  >
+                    <svg class="mobile-recent-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"/>
+                      <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <div class="mobile-suggestion-content">
+                      <div class="mobile-suggestion-name">{{ search }}</div>
+                    </div>
+                    <button
+                      type="button"
+                      class="mobile-remove-recent"
+                      (click)="$event.stopPropagation(); removeRecentSearch(search)"
+                      aria-label="Supprimer"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                      </svg>
+                    </button>
+                  </button>
+                }
+              </div>
+            }
+
+            <!-- Aucun résultat -->
+            @if (searchQuery().trim() && suggestions().length === 0) {
+              <div class="mobile-no-results">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <div class="mobile-no-results-title">Aucun produit trouvé</div>
+                <div class="mobile-no-results-subtitle">Essayez avec un autre terme</div>
+              </div>
+            }
+
+            <!-- État vide: ni recherche, ni produits populaires, ni historique -->
+            @if (!searchQuery().trim() && suggestions().length === 0 && popularProducts().length === 0 && recentSearches().length === 0) {
+              <div class="mobile-empty-state">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <div class="mobile-empty-title">Rechercher des produits</div>
+                <div class="mobile-empty-subtitle">Commencez à taper pour trouver des produits</div>
+              </div>
+            }
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>

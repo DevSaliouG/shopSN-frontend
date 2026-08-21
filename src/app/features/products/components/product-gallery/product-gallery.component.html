@@ -1,0 +1,144 @@
+<div class="product-gallery">
+  <!-- Gallery Container -->
+  <div class="gallery-container">
+    <!-- Thumbnails (vertical desktop / horizontal mobile) -->
+    @if (sortedImages().length > 1) {
+      <div class="gallery-thumbs-wrapper">
+        <div class="gallery-thumbs">
+          @for (image of sortedImages(); track image.ordre; let idx = $index) {
+            <button
+              type="button"
+              class="thumb-button"
+              [class.active]="currentImageIndex() === idx"
+              (click)="selectImage(idx)"
+              [attr.aria-label]="'Voir image ' + (idx + 1)"
+              [attr.aria-current]="currentImageIndex() === idx ? 'true' : null"
+            >
+              <img
+                [src]="getImageUrl(image)"
+                [alt]="image.alt_text || 'Miniature ' + (idx + 1)"
+                class="thumb-image"
+                loading="lazy"
+              />
+            </button>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Main Image -->
+    <div class="gallery-main-wrapper">
+      <div
+        class="main-image-container"
+        [class.zoomed]="isZoomed()"
+        (click)="openLightbox()"
+        (mousemove)="onMouseMove($event)"
+        (mouseleave)="onMouseLeave()"
+        role="button"
+        tabindex="0"
+        [attr.aria-label]="'Agrandir l\'image ' + (currentImageIndex() + 1)"
+        (keydown.enter)="openLightbox()"
+        (keydown.space)="openLightbox()"
+      >
+        <img
+          [src]="getImageUrl(currentImage())"
+          [alt]="currentImage().alt_text || 'Image du produit'"
+          class="main-image"
+          [style.transform-origin]="zoomOrigin().x + '% ' + zoomOrigin().y + '%'"
+          loading="eager"
+        />
+
+        <!-- Zoom indicator (desktop) -->
+        <div class="zoom-hint" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+          <span>Cliquer pour agrandir</span>
+        </div>
+
+        <!-- Image counter badge -->
+        @if (sortedImages().length > 1) {
+          <div class="image-counter-badge">
+            {{ currentImageIndex() + 1 }} / {{ sortedImages().length }}
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox Full-Screen -->
+@if (showLightbox()) {
+  <div
+    class="lightbox-overlay"
+    (click)="closeLightbox()"
+    (keydown)="onKeyDown($event)"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Galerie plein écran"
+    tabindex="-1"
+  >
+    <div class="lightbox-container" (click)="$event.stopPropagation()">
+      <!-- Close button -->
+      <button
+        type="button"
+        class="lightbox-close"
+        (click)="closeLightbox()"
+        aria-label="Fermer la galerie"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- Lightbox Swiper -->
+      <div class="swiper lightbox-swiper">
+        <div class="swiper-wrapper">
+          @for (image of sortedImages(); track image.ordre) {
+            <div class="swiper-slide">
+              <div class="swiper-zoom-container">
+                <img
+                  [src]="getImageUrl(image)"
+                  [alt]="image.alt_text || 'Image du produit'"
+                  class="lightbox-image"
+                />
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Navigation -->
+        <button
+          type="button"
+          class="swiper-button-prev lightbox-button-prev"
+          (click)="previousImage($event)"
+          aria-label="Image précédente"
+        >
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="swiper-button-next lightbox-button-next"
+          (click)="nextImage($event)"
+          aria-label="Image suivante"
+        >
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+
+        <!-- Pagination -->
+        <div class="swiper-pagination lightbox-pagination"></div>
+      </div>
+
+      <!-- Image counter -->
+      <div class="lightbox-counter">
+        {{ currentImageIndex() + 1 }} / {{ sortedImages().length }}
+      </div>
+    </div>
+  </div>
+}

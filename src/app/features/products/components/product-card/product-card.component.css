@@ -3,25 +3,29 @@
   height: 100%;
 }
 
-/* ==============================
-   GRID CARD
-   ============================== */
+/* ══════════════════════════════════════════════════════════════
+   GRID CARD - PHASE 1 REDESIGN
+   Amélioration: typography, spacing, hover, accessibility
+   ══════════════════════════════════════════════════════════════ */
 
 .grid-card {
-  background: #fff;
-  border-radius: 18px;
+  background: var(--color-surface, #FFFFFF);
+  border-radius: var(--radius-2xl, 18px);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   height: 100%;
-  box-shadow: 0 2px 12px rgba(26, 43, 60, 0.05);
-  transition: transform 0.28s cubic-bezier(0.25, 0.8, 0.25, 1),
-              box-shadow 0.28s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border: 1px solid rgba(238, 242, 246, 0.8);
+  box-shadow: var(--shadow-soft, 0 2px 8px rgba(0, 0, 0, 0.05));
+  transition: transform var(--transition-base, 0.22s) var(--ease-out, cubic-bezier(0.33, 1, 0.68, 1)),
+              box-shadow var(--transition-base, 0.22s) var(--ease-out, cubic-bezier(0.33, 1, 0.68, 1)),
+              border-color var(--transition-base, 0.22s) ease-out;
 }
 
 .grid-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 14px 36px rgba(26, 43, 60, 0.1);
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: var(--shadow-elevated, 0 10px 32px rgba(0, 0, 0, 0.09));
+  border-color: rgba(255, 102, 0, 0.3);
 }
 
 /* Image area */
@@ -30,61 +34,143 @@
   position: relative;
   overflow: hidden;
   aspect-ratio: 4 / 3;
-  background: #FAFAFA;
+  background: var(--color-neutral-50, #FAFAFA);
   flex-shrink: 0;
+  isolation: isolate; /* Crée un nouveau contexte de stacking pour les boutons */
 }
 
 .grid-card-img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.45s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: transform 0.4s var(--ease-out, cubic-bezier(0.33, 1, 0.68, 1));
 }
 
 .grid-card:hover .grid-card-img img {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
-/* Badges */
+/* ══════════════════════════════════════════════════════════════
+   BADGES - PHASE 1 REDESIGN
+   Amélioration: gradient, shadow, animation entrance
+   ══════════════════════════════════════════════════════════════ */
+
 .badges-wrap {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 12px;
+  left: 12px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
   z-index: 2;
 }
 
 .badge-popular {
   display: inline-block;
-  background: #FF6600;
-  color: #fff;
-  font-size: 0.6rem;
+  background: linear-gradient(135deg, #FF6600 0%, #FF8533 100%);
+  color: white;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  padding: 4px 10px;
-  border-radius: 999px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill, 999px);
+  box-shadow: 0 2px 8px rgba(255, 102, 0, 0.3),
+              0 1px 2px rgba(0, 0, 0, 0.1);
+  animation: badge-entrance 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes badge-entrance {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .badge-stock {
   display: inline-block;
-  background: rgba(255, 102, 0, 0.12);
-  color: #B45309;
-  font-size: 0.6rem;
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FCD34D;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  padding: 4px 10px;
-  border-radius: 999px;
+  padding: 5px 13px;
+  border-radius: var(--radius-pill, 999px);
+  animation: badge-entrance 300ms cubic-bezier(0.34, 1.56, 0.64, 1) 100ms both;
 }
+
+/* ══════════════════════════════════════════════════════════════
+   WISHLIST BUTTON - PHASE 1 REDESIGN
+   Amélioration: focus visible, meilleurs hover effects
+   ══════════════════════════════════════════════════════════════ */
+
+.wishlist-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-base, 0.22s) var(--ease-out, cubic-bezier(0.33, 1, 0.68, 1));
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08),
+              0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.wishlist-btn svg {
+  width: 20px;
+  height: 20px;
+  color: var(--color-text, #1A2B3C);
+  fill: none;
+  transition: all var(--transition-base, 0.22s) ease;
+}
+
+.wishlist-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: white;
+}
+
+.wishlist-btn:focus-visible {
+  outline: 3px solid var(--color-primary, #FF6600);
+  outline-offset: 2px;
+}
+
+.wishlist-btn.active {
+  background: #FFF3E0;
+}
+
+.wishlist-btn.active svg {
+  fill: var(--color-primary, #FF6600);
+  color: var(--color-primary, #FF6600);
+}
+
+.wishlist-btn:active {
+  transform: scale(0.95);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   OUT OF STOCK OVERLAY
+   ══════════════════════════════════════════════════════════════ */
 
 .overlay-sold-out {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(3px);
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(2px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -92,30 +178,35 @@
 }
 
 .overlay-sold-out span {
-  background: #fff;
-  color: #1A2B3C;
-  font-size: 0.78rem;
+  background: white;
+  color: var(--color-text, #1A2B3C);
+  font-size: 14px;
   font-weight: 700;
-  padding: 6px 18px;
-  border-radius: 999px;
+  padding: 8px 20px;
+  border-radius: var(--radius-pill, 999px);
   letter-spacing: 0.02em;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Body */
+/* ══════════════════════════════════════════════════════════════
+   BODY - PHASE 1 REDESIGN
+   Amélioration: padding augmenté, typography améliorée
+   ══════════════════════════════════════════════════════════════ */
+
 .grid-card-body {
-  padding: 14px 16px 16px;
+  padding: 20px 20px 24px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   flex-grow: 1;
 }
 
 .card-category {
-  font-size: 0.65rem;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: #8896A6;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted, #8896A6);
   margin: 0;
 }
 
@@ -124,84 +215,114 @@
 }
 
 .card-title {
-  font-size: 0.92rem;
-  font-weight: 700;
-  color: #1A2B3C;
-  line-height: 1.35;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text, #1A2B3C);
+  line-height: 1.4;
   margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  transition: color 0.18s;
+  transition: color var(--transition-fast, 0.15s) ease-out;
 }
 
 .card-title:hover,
 .card-title-link:hover .card-title {
-  color: #FF6600;
+  color: var(--color-primary, #FF6600);
 }
+
+/* ══════════════════════════════════════════════════════════════
+   BOTTOM SECTION - PHASE 1 REDESIGN
+   Amélioration: prix plus visible, badge stock amélioré
+   ══════════════════════════════════════════════════════════════ */
 
 .card-bottom {
   margin-top: auto;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding-top: 10px;
-  border-top: 1px solid #EEF2F6;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border-light, #EEF2F6);
 }
 
 .card-price-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 10px;
 }
 
 .card-price {
-  font-size: 1.05rem;
+  font-size: 24px;
   font-weight: 800;
-  color: #1A2B3C;
+  color: var(--color-text, #1A2B3C);
   margin: 0;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
 .stock-warning-badge {
-  font-size: 0.65rem;
+  font-size: 11px;
   font-weight: 600;
-  color: #B45309;
-  background: rgba(255, 102, 0, 0.08);
-  padding: 3px 8px;
-  border-radius: 999px;
+  color: #92400E;
+  background: #FEF3C7;
+  border: 1px solid #FCD34D;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill, 999px);
   white-space: nowrap;
 }
 
-/* Buttons */
+/* ══════════════════════════════════════════════════════════════
+   BUTTONS - PHASE 1 REDESIGN
+   Amélioration: pill shape, padding augmenté, meilleur hover
+   ══════════════════════════════════════════════════════════════ */
+
 .btn-order {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  background: #FF6600;
-  color: #fff;
-  font-size: 0.78rem;
+  gap: 8px;
+  background: var(--color-primary, #FF6600);
+  color: white;
+  font-size: 15px;
   font-weight: 600;
-  padding: 10px 16px;
-  border-radius: 999px;
+  padding: 14px 24px;
+  border-radius: var(--radius-pill, 999px);
   text-decoration: none;
   border: none;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  transition: all var(--transition-fast, 0.15s) var(--ease-out, cubic-bezier(0.33, 1, 0.68, 1));
   white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(255, 102, 0, 0.2),
+              0 1px 2px rgba(0, 0, 0, 0.05);
+  min-height: 48px;
+}
+
+.btn-order svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
 }
 
 .btn-order:hover {
-  background: #E65500;
-  transform: translateY(-1px);
-  box-shadow: 0 5px 14px rgba(255, 102, 0, 0.22);
+  background: var(--color-primary-light, #FF8533);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 102, 0, 0.35),
+              0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.btn-order:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 8px rgba(255, 102, 0, 0.25);
 }
 
 .btn-order-full {
   width: 100%;
+}
+
+/* Hover lift pour le button dans card hover */
+.grid-card:hover .btn-order {
+  transform: translateY(-2px);
 }
 
 .btn-unavailable {
@@ -209,18 +330,65 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.78rem;
+  font-size: 14px;
   font-weight: 600;
-  color: #8896A6;
-  background: #FAFAFA;
-  padding: 10px 16px;
-  border-radius: 999px;
+  color: var(--color-text-muted, #8896A6);
+  background: var(--color-neutral-50, #FAFAFA);
+  padding: 12px 20px;
+  border-radius: var(--radius-pill, 999px);
   user-select: none;
+  min-height: 48px;
 }
 
-/* ==============================
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE - GRID CARD
+   ══════════════════════════════════════════════════════════════ */
+
+/* Mobile: ajuster spacing et font sizes */
+@media (max-width: 640px) {
+  .grid-card-body {
+    padding: 16px 16px 20px;
+    gap: 10px;
+  }
+
+  .card-title {
+    font-size: 18px;
+  }
+
+  .card-price {
+    font-size: 22px;
+  }
+
+  .btn-order {
+    font-size: 14px;
+    padding: 12px 20px;
+    min-height: 44px;
+  }
+
+  .btn-order svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 375px) {
+  .grid-card-body {
+    padding: 14px 14px 18px;
+  }
+
+  .card-title {
+    font-size: 17px;
+  }
+
+  .card-price {
+    font-size: 20px;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
    LIST CARD
-   ============================== */
+   ══════════════════════════════════════════════════════════════ */
 
 .list-card {
   background: #fff;

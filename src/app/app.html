@@ -1,7 +1,13 @@
-<app-header />
-<main class="min-h-screen">
+<!-- Skip Links pour accessibilité -->
+<a href="#main-content" class="skip-link">Aller au contenu principal</a>
+<a href="#navigation" class="skip-link">Aller à la navigation</a>
+
+<app-header id="navigation" />
+<main id="main-content" class="min-h-screen" role="main">
   <router-outlet />
 </main>
 <app-footer />
-<app-toast />
-<app-notification-center />
+<app-toast aria-live="polite" aria-atomic="true" />
+<app-toast-container />
+<app-notification-center aria-live="polite" />
+<app-cookie-consent />

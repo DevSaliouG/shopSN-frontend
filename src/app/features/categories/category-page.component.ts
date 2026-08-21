@@ -81,6 +81,15 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(slug => {
+        // Réinitialiser les filtres et la page quand on change de catégorie
+        this.filters.set({
+          q: '',
+          prix_min: undefined,
+          prix_max: undefined,
+          sort: undefined,
+          en_stock: false
+        });
+        this.currentPage.set(1);
         this.slug.set(slug);
       });
   }
@@ -132,7 +141,15 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
   }
 
   applyFilters(newFilters: ProductFilters): void {
-    this.filters.update(f => ({ ...f, ...newFilters }));
+    // Remplacer complètement les filtres au lieu de les fusionner
+    // pour que les valeurs undefined/false remplacent bien les anciennes valeurs
+    this.filters.set({
+      q: newFilters.q ?? '',
+      prix_min: newFilters.prix_min,
+      prix_max: newFilters.prix_max,
+      sort: newFilters.sort,
+      en_stock: newFilters.en_stock ?? false
+    });
     this.currentPage.set(1);
     this.loadCategoryAndProducts();
   }

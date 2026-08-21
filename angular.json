@@ -17,14 +17,44 @@
           "builder": "@angular/build:application",
           "options": {
             "polyfills": [
-            "zone.js"
-          ],
+              "zone.js"
+            ],
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/assets",
+                "output": "/assets/"
+              },
+              {
+                "glob": "robots.txt",
+                "input": "src",
+                "output": "/"
+              },
+              {
+                "glob": "sitemap.xml",
+                "input": "src",
+                "output": "/"
+              },
+              {
+                "glob": "image-sitemap.xml",
+                "input": "src",
+                "output": "/"
+              },
+              {
+                "glob": "service-worker.js",
+                "input": "src",
+                "output": "/"
+              },
+              {
+                "glob": "manifest.json",
+                "input": "src",
+                "output": "/"
               }
             ],
             "styles": [
@@ -67,7 +97,9 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
-            "allowedHosts": true
+            "hmr": false,
+            "allowedHosts": true,
+            "proxyConfig": "proxy.conf.json"
           },
           "configurations": {
             "production": {

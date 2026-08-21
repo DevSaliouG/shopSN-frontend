@@ -1,30 +1,493 @@
-:host {
-  display: block;
-  animation: slideUp 0.4s ease-out;
+/* Animated gradient background */
+.animated-gradient {
+  background: linear-gradient(-45deg, #FF6600, #FF8533, #FFA500, #FFB347, #FF6600);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
 
-/* Style pour les messages d'exigence du mot de passe */
+/* Floating animation for icon */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Gradient animation for button */
+@keyframes gradient-x {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 3s ease infinite;
+}
+
+/* Enhanced glassmorphism container - White version */
+.glass-container-white {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.15),
+    0 20px 60px 0 rgba(255, 102, 0, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+}
+
+/* Input focus glow effect */
+input:focus {
+  box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.3), 0 8px 16px -4px rgba(0, 0, 0, 0.3);
+}
+
+/* Input glassmorphism */
+input {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Checkbox custom styling */
+input[type="checkbox"] {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+input[type="checkbox"]:checked {
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+  animation: checkBounce 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes checkBounce {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Password requirement indicators */
 .password-requirement {
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .password-requirement.valid {
   color: #10b981;
   text-decoration: line-through;
+  opacity: 0.6;
 }
 
-/* Animation du bouton de validation */
-button[type="submit"]:active {
-  transform: scale(0.98);
+/* Button pulse on hover */
+button[type="submit"]:not(:disabled):hover {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 102, 0, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 15px rgba(255, 102, 0, 0);
+  }
+}
+
+/* Loading spinner enhancement */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Personnalisation des inputs autocomplétés */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: #111827 !important;
+  -webkit-box-shadow: 0 0 0 30px #F9FAFB inset !important;
+  box-shadow: 0 0 0 30px #F9FAFB inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Assurer la lisibilité du texte dans tous les inputs */
+input[type="email"],
+input[type="password"],
+input[type="text"],
+input[type="tel"] {
+  color: #111827 !important;
+}
+
+input::placeholder {
+  color: #9CA3AF !important;
+  opacity: 1;
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition-property: color, background-color, border-color, transform, box-shadow, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
+/* Link hover effect */
+a {
+  position: relative;
+}
+
+a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(to right, #FF6600, #FF8533);
+  transition: width 0.3s ease;
+}
+
+a:hover::after {
+  width: 100%;
+}
+
+/* Password strength indicator animation */
+@keyframes strengthPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Form field success checkmark */
+.success-checkmark {
+  animation: checkmarkBounce 0.5s ease;
+}
+
+@keyframes checkmarkBounce {
+  0% {
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.2) rotate(180deg);
+  }
+  100% {
+    transform: scale(1) rotate(360deg);
+  }
+}
+
+/* Bubbles container */
+.bubbles-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Bubble base styles */
+.bubble {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+/* Bubble patterns */
+.bubble-pattern {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  opacity: 0.6;
+}
+
+/* Pattern 1: Dots */
+.pattern-dots {
+  background-image: radial-gradient(circle, rgba(255, 102, 0, 0.3) 2px, transparent 2px);
+  background-size: 15px 15px;
+}
+
+/* Pattern 2: Lines */
+.pattern-lines {
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(255, 133, 51, 0.3) 10px,
+    rgba(255, 133, 51, 0.3) 12px
+  );
+}
+
+/* Pattern 3: Circles */
+.pattern-circles {
+  background-image:
+    radial-gradient(circle at 25% 25%, transparent 20%, rgba(255, 102, 0, 0.2) 21%, transparent 22%),
+    radial-gradient(circle at 75% 75%, transparent 20%, rgba(255, 133, 51, 0.2) 21%, transparent 22%);
+  background-size: 40px 40px;
+}
+
+/* Pattern 4: Grid */
+.pattern-grid {
+  background-image:
+    linear-gradient(rgba(255, 102, 0, 0.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 133, 51, 0.2) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Pattern 5: Waves */
+.pattern-waves {
+  background-image: repeating-radial-gradient(
+    circle at 0 0,
+    transparent 0,
+    rgba(255, 165, 0, 0.3) 10px,
+    transparent 20px
+  );
+}
+
+/* Pattern 6: Triangles */
+.pattern-triangles {
+  background-image:
+    linear-gradient(135deg, rgba(255, 102, 0, 0.3) 25%, transparent 25%),
+    linear-gradient(225deg, rgba(255, 133, 51, 0.3) 25%, transparent 25%),
+    linear-gradient(45deg, rgba(255, 165, 0, 0.3) 25%, transparent 25%),
+    linear-gradient(315deg, rgba(255, 102, 0, 0.3) 25%, transparent 25%);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 0, 15px -15px, 0 15px;
+}
+
+/* Pattern 7: Hexagon */
+.pattern-hexagon {
+  background-image:
+    radial-gradient(circle farthest-side at 0% 50%, rgba(255, 102, 0, 0.3) 23.5%, transparent 0),
+    radial-gradient(circle farthest-side at 0% 50%, rgba(255, 133, 51, 0.2) 24%, transparent 0);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 26px;
+}
+
+/* Pattern 8: Stars */
+.pattern-stars {
+  background-image:
+    radial-gradient(2px 2px at 20% 30%, rgba(255, 102, 0, 0.4), transparent),
+    radial-gradient(2px 2px at 60% 70%, rgba(255, 133, 51, 0.4), transparent),
+    radial-gradient(1px 1px at 50% 50%, rgba(255, 165, 0, 0.3), transparent),
+    radial-gradient(1px 1px at 80% 10%, rgba(255, 102, 0, 0.3), transparent);
+  background-size: 50px 50px;
+}
+
+/* Individual bubble animations */
+.bubble-1 {
+  width: 150px;
+  height: 150px;
+  left: 10%;
+  top: 20%;
+  animation: float-bubble-1 20s infinite;
+}
+
+.bubble-2 {
+  width: 100px;
+  height: 100px;
+  right: 15%;
+  top: 10%;
+  animation: float-bubble-2 15s infinite;
+}
+
+.bubble-3 {
+  width: 180px;
+  height: 180px;
+  left: 60%;
+  bottom: 10%;
+  animation: float-bubble-3 25s infinite;
+}
+
+.bubble-4 {
+  width: 120px;
+  height: 120px;
+  right: 5%;
+  bottom: 30%;
+  animation: float-bubble-4 18s infinite;
+}
+
+.bubble-5 {
+  width: 90px;
+  height: 90px;
+  left: 5%;
+  bottom: 15%;
+  animation: float-bubble-5 22s infinite;
+}
+
+.bubble-6 {
+  width: 130px;
+  height: 130px;
+  right: 30%;
+  top: 5%;
+  animation: float-bubble-6 17s infinite;
+}
+
+.bubble-7 {
+  width: 110px;
+  height: 110px;
+  left: 30%;
+  top: 5%;
+  animation: float-bubble-7 19s infinite;
+}
+
+.bubble-8 {
+  width: 95px;
+  height: 95px;
+  right: 10%;
+  top: 50%;
+  animation: float-bubble-8 21s infinite;
+}
+
+/* Bubble float animations */
+@keyframes float-bubble-1 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  25% {
+    transform: translate(30px, -30px) scale(1.1) rotate(90deg);
+  }
+  50% {
+    transform: translate(60px, 10px) scale(0.9) rotate(180deg);
+  }
+  75% {
+    transform: translate(20px, 40px) scale(1.05) rotate(270deg);
+  }
+}
+
+@keyframes float-bubble-2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  33% {
+    transform: translate(-40px, 30px) scale(1.15) rotate(120deg);
+  }
+  66% {
+    transform: translate(30px, -40px) scale(0.85) rotate(240deg);
+  }
+}
+
+@keyframes float-bubble-3 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  30% {
+    transform: translate(-50px, -20px) scale(1.08) rotate(108deg);
+  }
+  60% {
+    transform: translate(40px, 30px) scale(0.92) rotate(216deg);
+  }
+}
+
+@keyframes float-bubble-4 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  40% {
+    transform: translate(35px, -35px) scale(1.12) rotate(144deg);
+  }
+  80% {
+    transform: translate(-30px, 25px) scale(0.88) rotate(288deg);
+  }
+}
+
+@keyframes float-bubble-5 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  20% {
+    transform: translate(25px, 35px) scale(1.1) rotate(72deg);
+  }
+  40% {
+    transform: translate(-20px, -25px) scale(0.9) rotate(144deg);
+  }
+  60% {
+    transform: translate(35px, 15px) scale(1.05) rotate(216deg);
+  }
+  80% {
+    transform: translate(-30px, 20px) scale(0.95) rotate(288deg);
+  }
+}
+
+@keyframes float-bubble-6 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  35% {
+    transform: translate(-45px, 40px) scale(1.13) rotate(126deg);
+  }
+  70% {
+    transform: translate(40px, -35px) scale(0.87) rotate(252deg);
+  }
+}
+
+@keyframes float-bubble-7 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  28% {
+    transform: translate(38px, 28px) scale(1.09) rotate(100.8deg);
+  }
+  56% {
+    transform: translate(-32px, -38px) scale(0.91) rotate(201.6deg);
+  }
+  84% {
+    transform: translate(28px, -20px) scale(1.04) rotate(302.4deg);
+  }
+}
+
+@keyframes float-bubble-8 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  24% {
+    transform: translate(-42px, 33px) scale(1.11) rotate(86.4deg);
+  }
+  48% {
+    transform: translate(36px, -29px) scale(0.89) rotate(172.8deg);
+  }
+  72% {
+    transform: translate(-28px, 42px) scale(1.06) rotate(259.2deg);
+  }
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .bubble {
+    animation: none !important;
+  }
+
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

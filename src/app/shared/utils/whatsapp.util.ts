@@ -54,17 +54,19 @@ export class WhatsAppUtil {
     quantity?: number
   ): string {
     const priceFormatted = new Intl.NumberFormat('fr-SN').format(price) + ' FCFA';
-    let message = `Bonjour, je souhaite commander le produit :\n\n`;
-    message += `Nom : ${productName}\n`;
-    message += `Prix : ${priceFormatted}\n`;
-    message += `Référence : #${productId}`;
-    
+    let message = `*DkrOnlineStore*\n\n`;
+    message += `Bonjour,\n\n`;
+    message += `Je suis intéressé(e) par :\n`;
+    message += `📦 *${productName}*\n`;
+    message += `💰 ${priceFormatted}`;
+
     if (quantity && quantity > 1) {
-      message += `\nQuantité : ${quantity}`;
+      message += `\n📊 Quantité : ${quantity}`;
     }
-    
-    message += `\n\nEst-ce disponible ?`;
-    
+
+    message += `\n\nEst-il disponible ?\n\n`;
+    message += `Cordialement.`;
+
     return message;
   }
 

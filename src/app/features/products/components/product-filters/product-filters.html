@@ -1,0 +1,251 @@
+<aside class="filters-panel">
+  <!-- Header -->
+  <header class="filters-header">
+    <div class="header-content">
+      <h3 class="filters-title">Filtres</h3>
+      @if (hasActiveFilters()) {
+        <button class="reset-btn" (click)="resetFilters()" @chipAnimation>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="1 4 1 10 7 10"/>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+          </svg>
+          Réinitialiser
+        </button>
+      }
+    </div>
+    @if (activeFiltersCount() > 0) {
+      <p class="active-filters-count">{{ activeFiltersCount() }} filtre(s) actif(s)</p>
+    }
+  </header>
+
+  <!-- Active Filters Chips -->
+  @if (hasActiveFilters()) {
+    <div class="active-chips">
+      @for (catId of selectedCategories(); track catId) {
+        <span class="filter-chip" @chipAnimation>
+          {{ getCategoryName(catId) }}
+          <button (click)="removeCategory(catId)" aria-label="Supprimer">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </span>
+      }
+      @for (brandId of selectedBrands(); track brandId) {
+        <span class="filter-chip" @chipAnimation>
+          {{ getBrandName(brandId) }}
+          <button (click)="removeBrand(brandId)" aria-label="Supprimer">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </span>
+      }
+      @if (inStockOnly()) {
+        <span class="filter-chip" @chipAnimation>
+          En stock uniquement
+          <button (click)="inStockOnly.set(false)" aria-label="Supprimer">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </span>
+      }
+    </div>
+  }
+
+  <!-- Filters Content -->
+  <div class="filters-content">
+    <!-- Price Range Filter -->
+    <section class="filter-section">
+      <button
+        class="section-header"
+        (click)="toggleSection('price')"
+        [class.expanded]="priceExpanded()">
+        <h4 class="section-title">Prix</h4>
+        <svg class="expand-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+
+      <div class="section-content" [@expandCollapse]="priceExpanded() ? 'expanded' : 'collapsed'">
+        <div class="price-range-display">
+          <span class="price-value">{{ formatPrice(currentPriceMin()) }}</span>
+          <span class="price-separator">-</span>
+          <span class="price-value">{{ formatPrice(currentPriceMax()) }}</span>
+        </div>
+
+        <div class="range-sliders">
+          <input
+            type="range"
+            class="range-slider range-min"
+            [min]="minPrice()"
+            [max]="maxPrice()"
+            [value]="currentPriceMin()"
+            (input)="onPriceMinChange(+$any($event.target).value)"
+            aria-label="Prix minimum">
+          <input
+            type="range"
+            class="range-slider range-max"
+            [min]="minPrice()"
+            [max]="maxPrice()"
+            [value]="currentPriceMax()"
+            (input)="onPriceMaxChange(+$any($event.target).value)"
+            aria-label="Prix maximum">
+        </div>
+
+        <div class="price-inputs">
+          <div class="input-group">
+            <label for="price-min">Min</label>
+            <input
+              id="price-min"
+              type="number"
+              [min]="minPrice()"
+              [max]="currentPriceMax()"
+              [value]="currentPriceMin()"
+              (change)="onPriceMinChange(+$any($event.target).value)">
+          </div>
+          <div class="input-group">
+            <label for="price-max">Max</label>
+            <input
+              id="price-max"
+              type="number"
+              [min]="currentPriceMin()"
+              [max]="maxPrice()"
+              [value]="currentPriceMax()"
+              (change)="onPriceMaxChange(+$any($event.target).value)">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories Filter -->
+    <section class="filter-section">
+      <button
+        class="section-header"
+        (click)="toggleSection('categories')"
+        [class.expanded]="categoriesExpanded()">
+        <h4 class="section-title">
+          Catégories
+          @if (selectedCategories().length > 0) {
+            <span class="selected-count">{{ selectedCategories().length }}</span>
+          }
+        </h4>
+        <svg class="expand-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+
+      <div class="section-content" [@expandCollapse]="categoriesExpanded() ? 'expanded' : 'collapsed'">
+        @if (categories().length > 5) {
+          <div class="search-box">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input
+              type="text"
+              placeholder="Rechercher..."
+              [(ngModel)]="categorySearch"
+              (ngModelChange)="categorySearch.set($event)">
+          </div>
+        }
+
+        <div class="options-list">
+          @for (category of filteredCategories(); track category.id) {
+            <label class="filter-option">
+              <input
+                type="checkbox"
+                [checked]="selectedCategories().includes(category.id)"
+                (change)="toggleCategory(category.id)">
+              <span class="option-label">
+                {{ category.name }}
+                <span class="option-count">({{ category.count }})</span>
+              </span>
+            </label>
+          }
+          @if (filteredCategories().length === 0) {
+            <p class="no-results">Aucune catégorie trouvée</p>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Brands Filter -->
+    <section class="filter-section">
+      <button
+        class="section-header"
+        (click)="toggleSection('brands')"
+        [class.expanded]="brandsExpanded()">
+        <h4 class="section-title">
+          Marques
+          @if (selectedBrands().length > 0) {
+            <span class="selected-count">{{ selectedBrands().length }}</span>
+          }
+        </h4>
+        <svg class="expand-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+
+      <div class="section-content" [@expandCollapse]="brandsExpanded() ? 'expanded' : 'collapsed'">
+        @if (brands().length > 5) {
+          <div class="search-box">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input
+              type="text"
+              placeholder="Rechercher..."
+              [(ngModel)]="brandSearch"
+              (ngModelChange)="brandSearch.set($event)">
+          </div>
+        }
+
+        <div class="options-list">
+          @for (brand of filteredBrands(); track brand.id) {
+            <label class="filter-option">
+              <input
+                type="checkbox"
+                [checked]="selectedBrands().includes(brand.id)"
+                (change)="toggleBrand(brand.id)">
+              <span class="option-label">
+                {{ brand.name }}
+                <span class="option-count">({{ brand.count }})</span>
+              </span>
+            </label>
+          }
+          @if (filteredBrands().length === 0) {
+            <p class="no-results">Aucune marque trouvée</p>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Stock Filter -->
+    <section class="filter-section">
+      <label class="filter-option stock-filter">
+        <input
+          type="checkbox"
+          [checked]="inStockOnly()"
+          (change)="inStockOnly.set($any($event.target).checked)">
+        <span class="option-label">
+          En stock uniquement
+        </span>
+      </label>
+    </section>
+  </div>
+
+  <!-- Results Count -->
+  @if (totalProducts() > 0) {
+    <footer class="filters-footer">
+      <p class="results-count">
+        <strong>{{ totalProducts() }}</strong> produit{{ totalProducts() > 1 ? 's' : '' }} trouvé{{ totalProducts() > 1 ? 's' : '' }}
+      </p>
+    </footer>
+  }
+</aside>

@@ -13,16 +13,46 @@ const app = express();
 const angularApp = new AngularNodeAppEngine();
 
 /**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/{*splat}', (req, res) => {
- *   // Handle API request
- * });
- * ```
+ * Proxy API requests to Laravel backend (SSR compatibility)
+ * Uses environment variable API_URL or falls back to localhost for development
  */
+const API_BACKEND_URL = process.env['API_URL'] || 'http://127.0.0.1:8000';
+
+app.use('/api', async (req, res) => {
+  const backendUrl = `${API_BACKEND_URL}${req.originalUrl}`;
+
+  try {
+    // Préparer les headers en excluant ceux qui causent des problèmes
+    const headers: Record<string, string> = {};
+    Object.keys(req.headers).forEach(key => {
+      const value = req.headers[key];
+      // Exclure les headers de connexion et host
+      if (!['host', 'connection', 'content-length'].includes(key.toLowerCase()) && typeof value === 'string') {
+        headers[key] = value;
+      }
+    });
+
+    // Ajouter le bon host
+    headers['host'] = new URL(API_BACKEND_URL).host;
+
+    const response = await fetch(backendUrl, {
+      method: req.method,
+      headers,
+      body: ['POST', 'PUT', 'PATCH'].includes(req.method) && req.body ? JSON.stringify(req.body) : undefined,
+    });
+
+    // Copier les headers de réponse
+    response.headers.forEach((value, key) => {
+      res.setHeader(key, value);
+    });
+
+    const data = await response.text();
+    res.status(response.status).send(data);
+  } catch (error) {
+    console.error('SSR API Proxy Error:', backendUrl, error);
+    res.status(503).json({ error: 'Backend unavailable during SSR' });
+  }
+});
 
 /**
  * Serve static files from /browser

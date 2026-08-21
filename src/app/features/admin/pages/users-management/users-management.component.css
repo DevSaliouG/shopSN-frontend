@@ -1,3 +1,81 @@
 :host {
   display: block;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.users-page {
+  min-width: 0;
+}
+
+.users-table-shell,
+.users-modal-shell {
+  min-width: 0;
+}
+
+.users-table-shell {
+  overflow: hidden;
+  border-radius: 1rem;
+  box-shadow: var(--shadow-soft, 0 2px 8px rgba(0, 0, 0, 0.04));
+  border: 1px solid var(--color-border, #F5F5F5);
+}
+
+.users-table-shell .overflow-x-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+.users-table-shell table {
+  min-width: 860px;
+}
+
+.users-table-shell td,
+.users-table-shell th {
+  vertical-align: middle;
+}
+
+.users-table-shell td {
+  word-break: break-word;
+}
+
+.users-table-shell img {
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.users-modal-shell {
+  max-width: min(100%, 42rem);
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+}
+
+.users-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.users-actions-row,
+.users-pagination {
+  flex-wrap: wrap;
+}
+
+.users-modal-shell input,
+.users-modal-shell select {
+  min-width: 0;
+}
+
+@media (max-width: 768px) {
+  .users-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .users-table-shell table {
+    min-width: 760px;
+  }
+}
+
+@media (max-width: 640px) {
+  .users-table-shell table {
+    min-width: 700px;
+  }
 }

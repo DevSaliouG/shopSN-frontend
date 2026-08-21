@@ -12,11 +12,14 @@
  * - SEO dynamique
  */
 
-import { Component, inject, OnInit, signal, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy, DestroyRef, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { forkJoin, of } from 'rxjs';
+import { catchError, tap, shareReplay } from 'rxjs/operators';
 import { ProductStore } from '../products/store/product.store';
 import { CategoryService } from '../services/category.service';
 import { ProductCardComponent } from '../products/components/product-card/product-card.component';
@@ -38,6 +41,16 @@ export class HomeComponent implements OnInit {
   private readonly categoryService = inject(CategoryService);
   private readonly seoService = inject(SeoService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly platformId = inject(PLATFORM_ID);
+
+  // Cache statique pour éviter les rechargements
+  private static homeDataCache: {
+    categories: Category[];
+    popularProducts: Product[];
+    recentProducts: Product[];
+    timestamp: number;
+  } | null = null;
+  private static readonly CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
   categories = signal<Category[]>([]);
   popularProducts = signal<Product[]>([]);
@@ -54,60 +67,136 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.seoService.setHomeMeta();
-    this.loadCategories();
-    this.loadPopularProducts();
-    this.loadRecentProducts();
+
+    // Vérifier si on peut utiliser le cache
+    if (this.canUseCache()) {
+      this.loadFromCache();
+    } else {
+      this.loadAllData();
+    }
   }
 
-  private loadCategories(): void {
-    this.isLoadingCategories.set(true);
-    this.categoryService
-      .getCategories()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response: ApiResponse<Category[]>) => {
-          this.categories.set(response.data.slice(0, 8));
-          this.isLoadingCategories.set(false);
-        },
-        error: (error) => {
+  /**
+   * Vérifie si le cache est valide
+   */
+  private canUseCache(): boolean {
+    if (!isPlatformBrowser(this.platformId) || !HomeComponent.homeDataCache) {
+      return false;
+    }
+
+    const now = Date.now();
+    const cacheAge = now - HomeComponent.homeDataCache.timestamp;
+    return cacheAge < HomeComponent.CACHE_DURATION;
+  }
+
+  /**
+   * Charge les données depuis le cache
+   */
+  private loadFromCache(): void {
+    if (!HomeComponent.homeDataCache) return;
+
+    // Charger instantanément depuis le cache
+    this.categories.set(HomeComponent.homeDataCache.categories);
+    this.popularProducts.set(HomeComponent.homeDataCache.popularProducts);
+    this.recentProducts.set(HomeComponent.homeDataCache.recentProducts);
+
+    // Désactiver les loaders
+    this.isLoadingCategories.set(false);
+    this.isLoadingPopular.set(false);
+    this.isLoadingRecent.set(false);
+
+    // Optionnel : rafraîchir en arrière-plan si le cache est ancien
+    const cacheAge = Date.now() - HomeComponent.homeDataCache.timestamp;
+    if (cacheAge > HomeComponent.CACHE_DURATION / 2) {
+      this.refreshDataInBackground();
+    }
+  }
+
+  /**
+   * Charge toutes les données en parallèle (optimisé)
+   */
+  private loadAllData(): void {
+    // Lancer les 3 requêtes en parallèle avec forkJoin
+    forkJoin({
+      categories: this.categoryService.getCategories().pipe(
+        catchError(error => {
           console.error('Erreur chargement catégories:', error);
-          this.isLoadingCategories.set(false);
-        },
-      });
-  }
-
-  private loadPopularProducts(): void {
-    this.isLoadingPopular.set(true);
-    this.productStore
-      .getPopularProducts()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response: ApiResponse<Product[]>) => {
-          this.popularProducts.set(response.data.slice(0, 8));
-          this.isLoadingPopular.set(false);
-        },
-        error: (error) => {
+          return of({ success: false, data: [] } as ApiResponse<Category[]>);
+        })
+      ),
+      popular: this.productStore.getPopularProducts().pipe(
+        catchError(error => {
           console.error('Erreur chargement produits populaires:', error);
-          this.isLoadingPopular.set(false);
-        },
-      });
+          return of({ success: false, data: [] } as ApiResponse<Product[]>);
+        })
+      ),
+      recent: this.productStore.getRecentProducts().pipe(
+        catchError(error => {
+          console.error('Erreur chargement produits récents:', error);
+          return of({ success: false, data: [] } as ApiResponse<Product[]>);
+        })
+      )
+    })
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe(results => {
+      // Extraire et limiter les données
+      const categories = results.categories.data.slice(0, 8);
+      const popularProducts = results.popular.data.slice(0, 8);
+      const recentProducts = results.recent.data.slice(0, 8);
+
+      // Mettre à jour les signals
+      this.categories.set(categories);
+      this.popularProducts.set(popularProducts);
+      this.recentProducts.set(recentProducts);
+
+      // Sauvegarder dans le cache
+      if (isPlatformBrowser(this.platformId)) {
+        HomeComponent.homeDataCache = {
+          categories,
+          popularProducts,
+          recentProducts,
+          timestamp: Date.now()
+        };
+      }
+
+      // Désactiver les loaders
+      this.isLoadingCategories.set(false);
+      this.isLoadingPopular.set(false);
+      this.isLoadingRecent.set(false);
+    });
   }
 
-  private loadRecentProducts(): void {
-    this.isLoadingRecent.set(true);
-    this.productStore
-      .getRecentProducts()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response: ApiResponse<Product[]>) => {
-          this.recentProducts.set(response.data.slice(0, 8));
-          this.isLoadingRecent.set(false);
-        },
-        error: (error) => {
-          console.error('Erreur chargement produits récents:', error);
-          this.isLoadingRecent.set(false);
-        },
-      });
+  /**
+   * Rafraîchit les données en arrière-plan sans bloquer l'UI
+   */
+  private refreshDataInBackground(): void {
+    forkJoin({
+      categories: this.categoryService.getCategories(),
+      popular: this.productStore.getPopularProducts(),
+      recent: this.productStore.getRecentProducts()
+    })
+    .pipe(
+      takeUntilDestroyed(this.destroyRef),
+      catchError(() => of(null))
+    )
+    .subscribe(results => {
+      if (!results) return;
+
+      // Mettre à jour silencieusement
+      this.categories.set(results.categories.data.slice(0, 8));
+      this.popularProducts.set(results.popular.data.slice(0, 8));
+      this.recentProducts.set(results.recent.data.slice(0, 8));
+
+      // Mettre à jour le cache
+      if (isPlatformBrowser(this.platformId)) {
+        HomeComponent.homeDataCache = {
+          categories: results.categories.data.slice(0, 8),
+          popularProducts: results.popular.data.slice(0, 8),
+          recentProducts: results.recent.data.slice(0, 8),
+          timestamp: Date.now()
+        };
+      }
+    });
   }
 
   /**
