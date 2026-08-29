@@ -5,7 +5,17 @@ import { App } from './app/app';
 bootstrapApplication(App, appConfig)
   .catch((err) => console.error(err));
 
-// Service Worker désactivé temporairement (cause des problèmes de cache)
+// Service Worker désactivé - Force unregister pour les utilisateurs existants
+if ('serviceWorker' in navigator && !location.hostname.includes('localhost')) {
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    registrations.forEach((registration) => {
+      registration.unregister();
+      console.log('[SW] Désactivé:', registration.scope);
+    });
+  });
+}
+
+// Ancien code SW désactivé (cause des problèmes de cache)
 // if ('serviceWorker' in navigator && !location.hostname.includes('localhost')) {
 //   window.addEventListener('load', () => {
 //     navigator.serviceWorker
