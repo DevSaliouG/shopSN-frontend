@@ -170,6 +170,10 @@
 .block-dark .block-subtext { color: var(--color-text-muted, #7A7A7A); }
 
 @media (min-width: 1024px) {
+  .dashboard-wrapper {
+    padding-right: 1rem;
+  }
+
   .stats-asymmetric-grid {
     grid-template-columns: repeat(4, 1fr);
   }

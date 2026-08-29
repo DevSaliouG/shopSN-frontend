@@ -23,13 +23,13 @@
       http-equiv="Content-Security-Policy"
       content="
     default-src 'self';
-    connect-src 'self' http://localhost:8000 https://api.onlinestore.sn https://*.onlinestore.sn ws: wss:;
-    script-src 'self';
+    connect-src 'self' http://localhost:8000 https://api.dkronlinestore.sn https://*.dkronlinestore.sn https://www.googletagmanager.com https://www.google-analytics.com ws: wss:;
+    script-src 'self' https://www.googletagmanager.com 'unsafe-inline';
     style-src 'self' 'unsafe-inline';
     font-src 'self';
-    img-src 'self' data: blob: http://localhost:8000 https://api.onlinestore.sn;
+    img-src 'self' data: blob: http://localhost:8000 https://api.dkronlinestore.sn https://www.googletagmanager.com https://www.google-analytics.com;
     media-src 'self' http://localhost:8000;
-    frame-src 'none';
+    frame-src https://www.googletagmanager.com;
     object-src 'none';
     base-uri 'self';
     form-action 'self';
@@ -49,8 +49,8 @@
     <link rel="apple-touch-icon" href="/assets/icons/icon-192x192.png" />
 
     <!-- Resource Hints pour performance -->
-    <link rel="preconnect" href="https://api.onlinestore.sn" crossorigin />
-    <link rel="dns-prefetch" href="https://api.onlinestore.sn" />
+    <link rel="preconnect" href="https://api.dkronlinestore.sn" crossorigin />
+    <link rel="dns-prefetch" href="https://api.dkronlinestore.sn" />
 
     <!-- Police Inter auto-hébergée via styles.css — aucun CDN externe -->
 

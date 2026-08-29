@@ -331,6 +331,10 @@
 }
 
 /* ===== Responsive ===== */
+@media (min-width: 1024px) {
+  .categories-container { padding-right: 1rem; }
+}
+
 @media (max-width: 640px) {
   .categories-container { padding: 1rem; }
   .page-header { flex-direction: column; align-items: stretch; }
