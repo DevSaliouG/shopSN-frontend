@@ -47,6 +47,11 @@
                 "output": "/"
               },
               {
+                "glob": "google775db9603498316b.html",
+                "input": "src",
+                "output": "/"
+              },
+              {
                 "glob": "service-worker.js",
                 "input": "src",
                 "output": "/"
