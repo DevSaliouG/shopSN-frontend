@@ -10,6 +10,11 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
+      // Ne pas rediriger pour les endpoints analytics (non critiques)
+      if (req.url.includes('/api/analytics')) {
+        return throwError(() => error);
+      }
+
       if (req.url.includes('/api/auth/refresh') && error.status === 401) {
         authService.logout();
         return throwError(() => error);

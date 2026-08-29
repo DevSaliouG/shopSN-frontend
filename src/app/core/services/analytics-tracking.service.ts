@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, NavigationEnd } from '@angular/router';
-import { filter, interval, switchMap } from 'rxjs';
+import { filter } from 'rxjs';
 import { ENVIRONMENT } from '../tokens/environment.token';
 
 @Injectable({
@@ -23,12 +23,12 @@ export class AnalyticsTrackingService {
         this.trackPageView(event.url);
       });
 
-    // Heartbeat toutes les 30 secondes (garder session active)
-    interval(30000)
-      .pipe(switchMap(() => this.http.post(`${this.apiUrl}/heartbeat`, {})))
-      .subscribe({
-        error: () => {} // Ignorer erreurs heartbeat
-      });
+    // Heartbeat désactivé (causait des redirections intempestives)
+    // interval(30000)
+    //   .pipe(switchMap(() => this.http.post(`${this.apiUrl}/heartbeat`, {})))
+    //   .subscribe({
+    //     error: () => {} // Ignorer erreurs heartbeat
+    //   });
   }
 
   /**
